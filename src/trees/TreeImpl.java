@@ -65,6 +65,10 @@ public class TreeImpl {
 		
 		// Leaf tree nodes count
 		System.out.println("Total no. of leaf tree nodes: " + tree.countLeafTreeNodes(root));
+		
+		// Spiral tree traversal
+		System.out.println("Spiral tree traversal:");
+		tree.spiralTreeTraversal(root);
 	}
 	
 	public static TreeNode createTree(TreeImpl tree) {
@@ -301,6 +305,38 @@ public class TreeImpl {
 			countLeafTreeNodes(root.right);
 		}
 		return cntLeaf;
+	}
+	
+	public void spiralTreeTraversal(TreeNode root) {
+		if (root == null) {
+			return;
+		}
+		Stack<TreeNode> stack1 = new Stack<TreeNode>();
+		Stack<TreeNode> stack2 = new Stack<TreeNode>();
+		
+		stack1.push(root);
+		while(!stack1.isEmpty() || !stack2.isEmpty()) {
+			while(!stack1.isEmpty()) {
+				TreeNode ele = stack1.pop();
+				System.out.print(ele.data + " ");
+				if (ele.right != null) {
+					stack2.push(ele.right);
+				}
+				if (ele.left != null) {
+					stack2.push(ele.left);
+				}
+			}
+			while(!stack2.isEmpty()) {
+				TreeNode ele = stack2.pop();
+				System.out.print(ele.data + " ");
+				if (ele.left != null) {
+					stack1.push(ele.left);
+				}
+				if (ele.right != null) {
+					stack1.push(ele.right);
+				}
+			}
+		}
 	}
 	
 	private int max(int a, int b) {
