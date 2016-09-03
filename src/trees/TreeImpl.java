@@ -3,7 +3,6 @@ package trees;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
-import java.lang.*;
 
 public class TreeImpl {
 
@@ -85,7 +84,7 @@ public class TreeImpl {
 		}
 		
 		// Max Span of a tree
-		tree.findTreeSpan(root, tree.lspan, tree.rspan);
+		tree.findTreeSpan(root, 0, 0);
 		int maxSpan = Math.abs(tree.lspan) + Math.abs(tree.rspan) + 1;
 		System.out.println("Left span: " + tree.lspan + "; Right span: " + tree.rspan);
 		
@@ -97,6 +96,13 @@ public class TreeImpl {
 		for (int i=0; i<maxSpan; i++) {
 			System.out.println(vsum[i] + " ");
 		}
+		
+		// Max path sum of tree from the root to any leaf node
+		tree.maxPathTreeSum(root, 0);
+		System.out.println("Max path sum of a tree: " + tree.maxPathSum);
+		
+		// Print max path route from root to a leaf node
+		tree.pathToMaxPathTree(root, tree.maxPathLeafNode);
 		
 	}
 	
@@ -415,6 +421,32 @@ public class TreeImpl {
 			verticalLevelTreeSum(root.right, sum, midval+1);
 		}
 	}
+	
+	public void maxPathTreeSum(TreeNode root, int sum) {
+		if (root != null) {
+			sum += root.data;
+			if (root.left == null && root.right == null) {
+				if (maxPathSum < sum) {
+					maxPathSum = sum;
+					maxPathLeafNode = root;
+				}
+			}
+			maxPathTreeSum(root.left, sum);
+			maxPathTreeSum(root.right, sum);
+		}
+	}
+	
+	public boolean pathToMaxPathTree(TreeNode root, TreeNode leaf) {
+		if (root == null) {
+			return false;
+		}
+		if (root == leaf || pathToMaxPathTree(root.left, leaf) || pathToMaxPathTree(root.right, leaf)) {
+			System.out.print(root.data + "->");
+			return true;
+		}
+		
+		return false;
+	}
 
 	private int max(int a, int b) {
 		if (a>b) {
@@ -445,4 +477,7 @@ public class TreeImpl {
 	
 	private int rspan;
 
+	private int maxPathSum;
+	
+	private TreeNode maxPathLeafNode;
 }
