@@ -53,6 +53,9 @@ public class TreeImpl {
 		
 		// BST check
 		System.out.println("Tree is a BST tree : " + tree.bstCheck(root));
+		
+		// Level Order Traversal with level wise display
+		tree.levelOrderTraversal(root);
 	}
 	
 	public static TreeNode createTree(TreeImpl tree) {
@@ -231,6 +234,36 @@ public class TreeImpl {
 			bstCheck(root.right);
 		}
 		return true;
+	}
+	
+	public void levelOrderTraversal(TreeNode root) {
+		if (root == null) {
+			return;
+		}
+		int curLevel = 0;
+		int nxtLevel = 0;
+		Queue<TreeNode> queue = new LinkedList<TreeNode>();
+		queue.add(root);
+		curLevel++;
+		
+		while(!queue.isEmpty()) {
+			TreeNode ele = queue.remove();
+			curLevel--;
+			System.out.print(ele.data + " ");
+			if (ele.left != null) {
+				queue.add(ele.left);
+				nxtLevel++;
+			}
+			if (ele.right != null) {
+				queue.add(ele.right);
+				nxtLevel++;
+			}
+			if (curLevel == 0) {
+				System.out.println();
+				curLevel = nxtLevel;
+				nxtLevel = 0;
+			}
+		}	
 	}
 	
 	private class TreeNode {
