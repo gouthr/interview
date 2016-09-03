@@ -1,10 +1,9 @@
 package trees;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
+import java.lang.*;
 
 public class TreeImpl {
 
@@ -79,11 +78,26 @@ public class TreeImpl {
 		// Horizontal level tree sum
 		System.out.println("Horizontal level tree sum:");
 		int index = 0;
-		int[] sum = new int[10];
-		tree.horizontalLevelTreeSum(root, sum, index);
-		for (int i=0; i<sum.length; i++) {
-			System.out.println(sum[i] + " ");
+		int[] hsum = new int[10];
+		tree.horizontalLevelTreeSum(root, hsum, index);
+		for (int i=0; i<hsum.length; i++) {
+			System.out.println(hsum[i] + " ");
 		}
+		
+		// Max Span of a tree
+		tree.findTreeSpan(root, tree.lspan, tree.rspan);
+		int maxSpan = Math.abs(tree.lspan) + Math.abs(tree.rspan) + 1;
+		System.out.println("Left span: " + tree.lspan + "; Right span: " + tree.rspan);
+		
+		// Vertical level tree sum
+		System.out.println("Vertical level tree sum:");
+		int midVal = Math.abs(tree.lspan);
+		int[] vsum = new int[maxSpan];
+		tree.verticalLevelTreeSum(root, vsum, midVal);
+		for (int i=0; i<maxSpan; i++) {
+			System.out.println(vsum[i] + " ");
+		}
+		
 	}
 	
 	public static TreeNode createTree(TreeImpl tree) {
@@ -381,6 +395,27 @@ public class TreeImpl {
 		}
 	}
 	
+	public void findTreeSpan(TreeNode root, int lspan, int rspan) {
+		if (root != null) {
+			if (lspan < this.lspan) {
+				this.lspan = lspan;
+			}
+			if (rspan > this.rspan) {
+				this.rspan = rspan;
+			}
+			findTreeSpan(root.left, lspan-1, rspan);
+			findTreeSpan(root.right, lspan, rspan+1);
+		}
+	}
+	
+	public void verticalLevelTreeSum(TreeNode root, int[] sum, int midval) {
+		if (root != null) {
+			sum[midval] += root.data;
+			verticalLevelTreeSum(root.left, sum, midval-1);
+			verticalLevelTreeSum(root.right, sum, midval+1);
+		}
+	}
+
 	private int max(int a, int b) {
 		if (a>b) {
 			return a;
@@ -405,5 +440,9 @@ public class TreeImpl {
 	private static int cntNodes;
 	
 	private static int cntLeaf;
+	
+	private int lspan;
+	
+	private int rspan;
 
 }
