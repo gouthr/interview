@@ -56,6 +56,9 @@ public class TreeImpl {
 		
 		// Level Order Traversal with level wise display
 		tree.levelOrderTraversal(root);
+		
+		// Height of the tree
+		System.out.println("Height of the tree: " + tree.height(root));
 	}
 	
 	public static TreeNode createTree(TreeImpl tree) {
@@ -264,6 +267,22 @@ public class TreeImpl {
 				nxtLevel = 0;
 			}
 		}	
+	}
+	
+	public int height(TreeNode root) {
+		if (root == null) {
+			return 0;
+		} else {
+			return 1 + max(height(root.left), height(root.right));
+		}
+	}
+	
+	private int max(int a, int b) {
+		if (a>b) {
+			return a;
+		} else {
+			return b;
+		}
 	}
 	
 	private class TreeNode {
