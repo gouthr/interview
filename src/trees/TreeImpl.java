@@ -1,6 +1,8 @@
 package trees;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -73,6 +75,15 @@ public class TreeImpl {
 		// LCA of 2 nodes in a tree
 		System.out.println();
 		System.out.println("LCA of 2 nodes in a tree: " + tree.lca(root, root.left.left, root.left.left.right).data);
+	
+		// Horizontal level tree sum
+		System.out.println("Horizontal level tree sum:");
+		int index = 0;
+		int[] sum = new int[10];
+		tree.horizontalLevelTreeSum(root, sum, index);
+		for (int i=0; i<sum.length; i++) {
+			System.out.println(sum[i] + " ");
+		}
 	}
 	
 	public static TreeNode createTree(TreeImpl tree) {
@@ -359,6 +370,14 @@ public class TreeImpl {
 			} else {
 				return r;
 			}
+		}
+	}
+	
+	public void horizontalLevelTreeSum(TreeNode root, int[] sum, int index) {
+		if (root != null) {
+			sum[index]+=root.data;
+			horizontalLevelTreeSum(root.left, sum, index+1);
+			horizontalLevelTreeSum(root.right, sum, index+1);
 		}
 	}
 	
