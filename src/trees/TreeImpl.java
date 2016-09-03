@@ -59,6 +59,12 @@ public class TreeImpl {
 		
 		// Height of the tree
 		System.out.println("Height of the tree: " + tree.height(root));
+		
+		// Tree nodes count
+		System.out.println("Total no. of tree nodes: " + tree.countTreeNodes(root));
+		
+		// Leaf tree nodes count
+		System.out.println("Total no. of leaf tree nodes: " + tree.countLeafTreeNodes(root));
 	}
 	
 	public static TreeNode createTree(TreeImpl tree) {
@@ -277,6 +283,26 @@ public class TreeImpl {
 		}
 	}
 	
+	public int countTreeNodes(TreeNode root) {
+		if (root != null) {
+			countTreeNodes(root.left);
+			cntNodes++;
+			countTreeNodes(root.right);
+		}
+		return cntNodes;
+	}
+	
+	public int countLeafTreeNodes(TreeNode root) {
+		if (root != null) {
+			countLeafTreeNodes(root.left);
+			if (root.left == null && root.right == null) {
+			cntLeaf++;
+			}
+			countLeafTreeNodes(root.right);
+		}
+		return cntLeaf;
+	}
+	
 	private int max(int a, int b) {
 		if (a>b) {
 			return a;
@@ -297,5 +323,9 @@ public class TreeImpl {
 	}
 	
 	private TreeNode prev;
+	
+	private static int cntNodes;
+	
+	private static int cntLeaf;
 
 }
