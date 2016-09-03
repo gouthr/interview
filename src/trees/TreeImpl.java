@@ -69,6 +69,10 @@ public class TreeImpl {
 		// Spiral tree traversal
 		System.out.println("Spiral tree traversal:");
 		tree.spiralTreeTraversal(root);
+		
+		// LCA of 2 nodes in a tree
+		System.out.println();
+		System.out.println("LCA of 2 nodes in a tree: " + tree.lca(root, root.left.left, root.left.left.right).data);
 	}
 	
 	public static TreeNode createTree(TreeImpl tree) {
@@ -335,6 +339,25 @@ public class TreeImpl {
 				if (ele.right != null) {
 					stack1.push(ele.right);
 				}
+			}
+		}
+	}
+	
+	public TreeNode lca(TreeNode root, TreeNode a, TreeNode b) {
+		if (root == null) {
+			return null;
+		}
+		if (root.left == a || root.right == a || root.left == b || root.right == b) {
+			return root;
+		} else {
+			TreeNode l = lca(root.left, a, b);
+			TreeNode r = lca(root.right, a, b);
+			if (l != null && r != null) {
+				return root;
+			} else if (l != null) {
+				return l;
+			} else {
+				return r;
 			}
 		}
 	}
