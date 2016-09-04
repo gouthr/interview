@@ -140,6 +140,14 @@ public class TreeImpl {
 		System.out.println("Preorder after tree creation:");
 		tree.dfs_preorder(newRoot2);
 		System.out.println();
+		
+		// Mirror check
+		System.out.println("Mirror check:" + tree.mirrorCheck(root.left, root.right));
+		System.out.println();
+		
+		// Deepest leaf node level
+		System.out.println("Deepest leaf node level: " + tree.deepestLeafNode(root, 0));
+		System.out.println();
 	}
 	
 	public static TreeNode createTree(TreeImpl tree) {
@@ -542,6 +550,28 @@ public class TreeImpl {
 		root.right = createTreeFromPreOrderInOrder(preorder, inorder, index+1, endInorder);
 		
 		return root;
+	}
+	
+	public boolean mirrorCheck(TreeNode root1, TreeNode root2) {
+		if (root1 == null || root2 == null) {
+			return (root1 == null && root2 == null);
+		}
+		
+		if (root1.data == root2.data && mirrorCheck(root1.left, root2.right) && mirrorCheck(root1.right, root2.left)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+	
+	public int deepestLeafNode(TreeNode root, int level) {
+		if (root == null) {
+			return level;
+		}
+		if (root.left == null && root.right == null) {
+			return level;
+		}
+		return max(deepestLeafNode(root.left, level+1), deepestLeafNode(root.right, level+1));
 	}
 	
 	private int findNodeInInOrder(int[] inorder, int data, int st, int end) {
