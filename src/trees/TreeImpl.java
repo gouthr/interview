@@ -4,6 +4,18 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
+/* Binary search tree time complexity
+Insertion, deletion and searching in a binary search tree are:
+	•	O(N) in the worst case; (as the BST could be all nodes to the right of the root node)
+	•	O(log(N)) in the average case.
+Complexity of inserting n numbers into a binary search tree
+	•	It could be O(n^2) even if the tree is balanced.
+	•	Suppose you're adding a sorted list of numbers, all larger than the largest number in the tree. In that case, all numbers will be added to the right child of the rightmost leaf in the tree, Hence O(n^2).
+	•	In general, if you'd like to keep the insertion and retrieval at O(nlogn), you need to use Self Balancing trees.
+
+Time efficiency of building a heap is O(n)
+Time efficiency to heapify k elements is O(k*logn)*/
+
 public class TreeImpl {
 
 	public static void main(String[] args) {
