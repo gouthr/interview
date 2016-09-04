@@ -104,6 +104,9 @@ public class TreeImpl {
 		// Print max path route from root to a leaf node
 		tree.pathToMaxPathTree(root, tree.maxPathLeafNode);
 		
+		// Balanced tree check
+		System.out.println();
+		System.out.println("Balanced tree check: " + tree.balancedTreeCheck(root));
 	}
 	
 	public static TreeNode createTree(TreeImpl tree) {
@@ -448,6 +451,27 @@ public class TreeImpl {
 		return false;
 	}
 
+	/**
+	 * An empty tree is height-balanced. A non-empty binary tree T is balanced if:
+	 * 1) Left subtree of T is balanced
+	 * 2) Right subtree of T is balanced
+	 * 3) The difference between heights of left subtree and right subtree is not more than 1.
+	 */
+	public boolean balancedTreeCheck(TreeNode root) {
+		if (root == null) {
+			return true;
+		}
+		
+		int lh = this.height(root.left);
+		int rh = this.height(root.right);
+		
+		if (Math.abs(lh - rh) <= 1 && balancedTreeCheck(root.left) && balancedTreeCheck(root.right)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	private int max(int a, int b) {
 		if (a>b) {
 			return a;
