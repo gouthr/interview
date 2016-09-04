@@ -118,7 +118,28 @@ public class TreeImpl {
 		String[] treeRep = "5 3 1 # 2 # # # 7 # 8 # 10 # 12 # #".split(" ");
 		TreeNode newRoot = tree.new TreeNode(); 
 		newRoot = tree.deserializeTree(newRoot, treeRep);
+		System.out.println("Deserialized tree: ");
 		tree.dfs_preorder(newRoot);
+		System.out.println();
+		
+		// Create a tree from preorder and inorder traversals
+		System.out.println("Inorder before tree creation:");
+		tree.dfs_inorder(root);
+		System.out.println();
+		System.out.println("Preorder before tree creation:");
+		tree.dfs_preorder(root);
+		System.out.println();
+		
+		int[] preorder = new int[]{5, 3, 1, 2, 7, 8, 10, 12};
+		int[] inorder = new int[]{1, 2, 3, 5, 7, 8, 10, 12};
+		TreeNode newRoot2 = tree.createTreeFromPreOrderInOrder(preorder, inorder, 0, inorder.length-1);
+		
+		System.out.println("Inorder after tree creation:");
+		tree.dfs_inorder(newRoot2);
+		System.out.println();
+		System.out.println("Preorder after tree creation:");
+		tree.dfs_preorder(newRoot2);
+		System.out.println();
 	}
 	
 	public static TreeNode createTree(TreeImpl tree) {
@@ -508,6 +529,30 @@ public class TreeImpl {
 		return root;
 	}
 	
+	public TreeNode createTreeFromPreOrderInOrder(int[] preorder, int[] inorder, int startInorder, int endInorder) {
+		if (startInorder > endInorder) {
+			return null;
+		}
+		TreeNode root = new TreeNode(preorder[preIndex++]);	
+		if (startInorder == endInorder) {
+			return root;
+		}	
+		int index = findNodeInInOrder(inorder, root.data, startInorder, endInorder);
+		root.left = createTreeFromPreOrderInOrder(preorder, inorder, startInorder, index-1);
+		root.right = createTreeFromPreOrderInOrder(preorder, inorder, index+1, endInorder);
+		
+		return root;
+	}
+	
+	private int findNodeInInOrder(int[] inorder, int data, int st, int end) {
+		for (int i=st; i<=end; i++) {
+			if (inorder[i] == data) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	private int max(int a, int b) {
 		if (a>b) {
 			return a;
@@ -546,4 +591,6 @@ public class TreeImpl {
 	private TreeNode maxPathLeafNode;
 	
 	private int index;
+	
+	private int preIndex;
 }
