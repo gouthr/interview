@@ -107,6 +107,18 @@ public class TreeImpl {
 		// Balanced tree check
 		System.out.println();
 		System.out.println("Balanced tree check: " + tree.balancedTreeCheck(root));
+		
+		// Serialize a tree
+		System.out.println();
+		System.out.println("Serialized tree: ");
+		tree.serializeTree(root);
+		System.out.println();
+		
+		// Deserialize a tree
+		String[] treeRep = "5 3 1 # 2 # # # 7 # 8 # 10 # 12 # #".split(" ");
+		TreeNode newRoot = tree.new TreeNode(); 
+		newRoot = tree.deserializeTree(newRoot, treeRep);
+		tree.dfs_preorder(newRoot);
 	}
 	
 	public static TreeNode createTree(TreeImpl tree) {
@@ -472,6 +484,30 @@ public class TreeImpl {
 		}
 	}
 	
+	public void serializeTree(TreeNode root) {
+		if (root != null) {
+			System.out.print(root.data + " ");
+			serializeTree(root.left);
+			serializeTree(root.right);
+		} else {
+			System.out.print("#" + " ");
+		}
+	}
+	
+	public TreeNode deserializeTree(TreeNode root, String[] treeRep) {
+		if (index == treeRep.length || treeRep[index].equals("#")) {
+			return null;
+		}
+		
+		root = new TreeNode(Integer.parseInt(treeRep[index]));
+		index++;
+		root.left = deserializeTree(root.left, treeRep);
+		index++;
+		root.right = deserializeTree(root.right, treeRep);
+		
+		return root;
+	}
+	
 	private int max(int a, int b) {
 		if (a>b) {
 			return a;
@@ -489,6 +525,10 @@ public class TreeImpl {
 			this.data = data;
 			this.left = this.right = null;
 		}
+		
+		public TreeNode() {
+			
+		}
 	}
 	
 	private TreeNode prev;
@@ -504,4 +544,6 @@ public class TreeImpl {
 	private int maxPathSum;
 	
 	private TreeNode maxPathLeafNode;
+	
+	private int index;
 }
