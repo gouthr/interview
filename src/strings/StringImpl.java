@@ -12,7 +12,16 @@ public class StringImpl {
 		
 		// length of the longest palindromic subsequence
 		str = "geeks4geeks";
-		System.out.println("Length of the longest palindromic subsequence of the string: " + str + " is:" + strImpl.lps(str, 0, str.length()-1));		
+		System.out.println("Length of the longest palindromic subsequence of the string: " 
+				+ str + " is:" + strImpl.lps(str, 0, str.length()-1));
+		
+		// Longest common substring of 2 given strings
+		System.out.println("Longest common substring of 2 given strings ABCDGH and AERTCDOR is: "
+				+ strImpl.lcs("ABCDOH", "AERTCDOR"));
+		
+		// Longest common subsequence of 2 given strings
+		System.out.println("Longest common subsequence of 2 given strings AGGTAB and GXTXAYB is: "
+				+ strImpl.lcsubsequence("AGGTAB", "GXTXAYB"));
 		
 	}
 	
@@ -34,6 +43,52 @@ public class StringImpl {
 		} else {
 			return Math.max(lps(str, st+1, end), lps(str, st, end-1));
 		}
+	}
+	
+	/* 
+	 * Length of longest common SUBSTRING of 2 given strings.
+	 */
+	public int lcs(String str1, String str2) {
+		int m = str1.length();
+		int n = str2.length();
+		int[][] arr = new int[m+1][n+1];
+		int maxLen = 0;
+		
+		for(int i=0; i<=m; i++) {
+			for (int j=0; j<=n; j++) {
+				if (i==0 || j==0) {
+					arr[i][j] = 0;
+				} else if (str1.charAt(i-1) == str2.charAt(j-1)) {
+						arr[i][j] = 1 + arr[i-1][j-1];
+						maxLen = Math.max(maxLen, arr[i][j]);
+				} else {
+					arr[i][j] = 0;
+				}
+			}
+		}
+		return maxLen;		
+	}
+	
+	/* 
+	 * Length of longest common SUBSEQUENCE of 2 given strings.
+	 */
+	public int lcsubsequence(String str1, String str2) {
+		int m = str1.length();
+		int n = str2.length();
+		int[][] arr = new int[m+1][n+1];
+		
+		for(int i=0; i<=m; i++) {
+			for (int j=0; j<=n; j++) {
+				if (i==0 || j==0) {
+					arr[i][j] = 0;
+				} else if (str1.charAt(i-1) == str2.charAt(j-1)) {
+					arr[i][j] = 1 + arr[i-1][j-1];
+				} else {
+					arr[i][j] = Math.max(arr[i-1][j], arr[i][j-1]);
+				}
+			}
+		}
+		return arr[m][n];		
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
