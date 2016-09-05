@@ -1,6 +1,8 @@
 package strings;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class StringImpl {
 
@@ -31,6 +33,29 @@ public class StringImpl {
 		System.out.println("Isomorphic string check for aab and xzy: " 
 				+ strImpl.isomorphicStrings("aab", "xzy"));
 		
+		// Min distance between 2 strings in a list of strings
+		List<String> list = new ArrayList<String>();
+		list.add("cat");
+		list.add("rat");
+		list.add("squirrel");;
+		list.add("giraffe");
+		list.add("dog");
+		list.add("elephant");
+		int res = strImpl.minDistanceBwWords(list, "dog", "cat");
+		System.out.println("Min distance between 2 words: " + res);	
+		
+	}
+	
+	public void permute(StringBuilder str, int start, int end) {
+		if (start == end) {
+			System.out.println(str);
+		} else {
+			for (int i=start; i<=end; i++) {
+				str = swap(str, start, i);
+				permute(str, start+1, end);
+				str = swap(str, start, i); //backtrack
+			}
+		}
 	}
 	
 	/*
@@ -99,18 +124,6 @@ public class StringImpl {
 		return arr[m][n];		
 	}
 	
-	public void permute(StringBuilder str, int start, int end) {
-		if (start == end) {
-			System.out.println(str);
-		} else {
-			for (int i=start; i<=end; i++) {
-				str = swap(str, start, i);
-				permute(str, start+1, end);
-				str = swap(str, start, i); //backtrack
-			}
-		}
-	}
-	
 	/*
 	 * Two strings str1 and str2 are called isomorphic if there is a one to one mapping possible 
 	 * for every character of str1 to every character of str2. And all occurrences of every character
@@ -146,6 +159,25 @@ public class StringImpl {
 			}
 		}		
 		return true;	
+	}
+	
+	public int minDistanceBwWords(List<String> list, String str1, String str2) {
+		int prev = -1;
+		int minDist = Integer.MAX_VALUE;
+		for(int i=0; i<list.size(); i++) {
+			if (!list.get(i).equals(str1) && !list.get(i).equals(str2)) {
+				continue;
+			}
+			if (prev == -1) {
+				prev = i;
+			} else {
+				if (list.get(prev) != list.get(i) && minDist > (i - prev)) {
+					minDist = i - prev;
+				}
+				prev = i;
+			}
+		}		
+		return minDist;
 	}
 	
 	private StringBuilder swap(StringBuilder str, int i, int j) {
