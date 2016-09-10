@@ -1,6 +1,8 @@
 package numbers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class NumberImpl {
 
@@ -18,6 +20,22 @@ public class NumberImpl {
 		// Sum of 2 nos. equal to key in less than O(n2)
 		System.out.println("2 nos. in an array sum up to the given key: " + numImpl.sumTwoNumbers(arr, 9));
 		System.out.println("2 nos. in an array sum up to the given key: " + numImpl.sumTwoNumbers(arr, 14));
+		
+		// Union and intersection of 2 sorted arrays
+		int[] arr1 = {1, 3, 4, 5, 7};
+		int[] arr2 = {2, 3, 5, 6};
+		int[] res = numImpl.unionSortedArrays(arr1, arr2);
+		System.out.println("Union of 2 sorted arrays:");
+		for(int i=0; i<res.length; i++) {
+			System.out.print(res[i] + " ");
+		}
+		System.out.println();
+		List<Integer> resList = numImpl.intersectionSortedArrays(arr1, arr2);
+		System.out.println("Intersection of 2 sorted arrays:");
+		for(int resEle : resList) {
+			System.out.print(resEle + " ");
+		}
+		System.out.println();
 	}
 
 	/* 
@@ -65,6 +83,51 @@ public class NumberImpl {
 			}
 		}
 		return false;
+	}
+	
+	public int[] unionSortedArrays(int[] arr1, int[] arr2) {
+		int[] res = new int[arr1.length + arr2.length];
+		int i = 0, j = 0, k = 0;
+		while(i<arr1.length && j<arr2.length) {
+			if (arr1[i] < arr2[j]) {
+				res[k] = arr1[i];
+				k++;
+				i++;
+			} else if (arr1[i] > arr2[j]) {
+				res[k] = arr2[j];
+				k++;
+				j++;
+			} else {
+				res[k] = arr1[i];
+				i++;
+				j++;
+				k++;
+			}
+		}
+		while(i<arr1.length) {
+			res[k++] = arr1[i++];
+		}
+		while(j<arr2.length) {
+			res[k++] = arr2[j++];
+		}
+		return res;
+	}
+	
+	public List<Integer> intersectionSortedArrays(int[] arr1, int[] arr2) {
+		List<Integer> res = new ArrayList<Integer>();
+		int i=0, j=0;
+		while(i<arr1.length && j<arr2.length) {
+			if (arr1[i] < arr2[j]) {
+				i++;
+			} else if (arr1[i] > arr2[j]) {
+				j++;
+			} else {
+				res.add(arr1[i]);
+				i++;
+				j++;
+			}
+		}
+		return res;
 	}
 
 }
