@@ -36,6 +36,10 @@ public class NumberImpl {
 			System.out.print(resEle + " ");
 		}
 		System.out.println();
+		
+		// Max contiguous sum
+		int[] arr3 = {3, 5, -9, 2, 4, -1, 7 };
+		System.out.println("Max contiguous sum of the array: " + numImpl.maxContiguousSum(arr3));
 	}
 
 	/* 
@@ -128,6 +132,19 @@ public class NumberImpl {
 			}
 		}
 		return res;
+	}
+	
+	public int maxContiguousSum(int[] arr) {
+		int sum = 0;
+		int maxsum = 0;
+		for(int i=0; i<arr.length; i++) {
+			sum += arr[i];
+			if (sum < 0) {
+				sum = 0;
+			}
+			maxsum = Math.max(maxsum, sum);
+		}
+		return maxsum;
 	}
 
 }
