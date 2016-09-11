@@ -40,6 +40,15 @@ public class NumberImpl {
 		// Max contiguous sum
 		int[] arr3 = {3, 5, -9, 2, 4, -1, 7 };
 		System.out.println("Max contiguous sum of the array: " + numImpl.maxContiguousSum(arr3));
+		
+		// Separate even odd numbers in an array
+		numImpl.separateEvenOdd(arr3);
+		System.out.println("Separation of even odd nos in an array:");
+		for(int resEle : arr3) {
+			System.out.print(resEle + " ");
+		}
+		System.out.println();
+		
 	}
 
 	/* 
@@ -145,6 +154,25 @@ public class NumberImpl {
 			maxsum = Math.max(maxsum, sum);
 		}
 		return maxsum;
+	}
+	
+	public void separateEvenOdd(int[] arr) {
+		int n = arr.length;
+		int i = 0;
+		int j = n-1;
+		while(i<j) {
+			while(i<n && arr[i]%2 != 0) {
+				i++;
+			}
+			while(j>=0 && arr[j]%2 == 0) {
+				j--;
+			}
+			if (i<j) {
+				int tmp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = tmp;
+			}
+		}
 	}
 
 }
