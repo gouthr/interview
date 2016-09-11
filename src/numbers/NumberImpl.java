@@ -49,6 +49,14 @@ public class NumberImpl {
 		}
 		System.out.println();
 		
+		// Remove duplicates in an array without using a map
+		int[] arr4 = {1, 3, 5, 9, 7, 8, 3, 2, 1};
+		int arrLen = numImpl.removeDuplicates(arr4);
+		System.out.println("Remove suplicates in an array:");
+		for(int i=0; i<arrLen; i++) {
+			System.out.print(arr4[i] + " ");
+		}
+		System.out.println();		
 	}
 
 	/* 
@@ -173,6 +181,28 @@ public class NumberImpl {
 				arr[j] = tmp;
 			}
 		}
+	}
+	
+	// {1, 3, 5, 9, 7, 8, 3, 2, 1};
+	// {1, 1, 2, 3, 3, 5, 7, 8, 9}
+	// {1, 2, 3, 5, 7, 8, 9}
+	public int removeDuplicates(int[] arr) {
+		Arrays.sort(arr);
+		int n = arr.length;
+		int[] tmp = arr;
+		int i = 0;
+		int j = 0;
+		while(i<n-1) {
+			if (tmp[i] == tmp[i+1]) {
+				i++;
+			} else {
+				arr[j++] = tmp[i++];
+			}
+		}
+		if (tmp[n-2] != tmp[n-1]) {
+			arr[j++] = tmp[n-1];
+		}
+		return j;
 	}
 
 }
