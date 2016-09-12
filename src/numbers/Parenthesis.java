@@ -77,6 +77,4 @@ public class Parenthesis {
 			return false;
 		}
 	}
-	
-	private String parenthesis;
 }
