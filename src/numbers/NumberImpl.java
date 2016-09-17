@@ -2,6 +2,7 @@ package numbers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class NumberImpl {
@@ -65,6 +66,16 @@ public class NumberImpl {
 			System.out.print(arr3[i] + " ");
 		}
 		System.out.println();
+		
+		// Intersection of 2 unsorted arrays
+		int[] arr5 = {1, 3, 4, 5, 7, 3};
+		int[] arr6 = {2, 3, 5, 6, 3, 3};
+		resList = numImpl.intersection(arr5, arr6);
+		System.out.println("Intersection of 2 UN-sorted arrays:");
+		for(int resEle : resList) {
+			System.out.print(resEle + " ");
+		}
+		System.out.println();		
 	}
 
 	/* 
@@ -223,4 +234,24 @@ public class NumberImpl {
 		}
 	}
 
+	public List<Integer> intersection(int arr1[], int arr2[]) {
+		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+		for(int i=0; i<arr1.length; i++) {
+			Integer cnt = map.get(arr1[i]) ;
+			if (cnt == null) {
+				map.put(arr1[i], 1);
+			} else {
+				map.put(arr1[i], cnt+1);
+			}
+		}		
+		List<Integer> resList = new ArrayList<Integer>();
+		for(int i=0; i<arr2.length; i++) {
+			Integer cnt = map.get(arr2[i]) ;
+			if (cnt != null && cnt != 0) {
+				resList.add(arr2[i]);
+				map.put(arr2[i], cnt-1);
+			}
+		}
+		return resList;
+	}
 }
