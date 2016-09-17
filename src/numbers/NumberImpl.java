@@ -56,7 +56,15 @@ public class NumberImpl {
 		for(int i=0; i<arrLen; i++) {
 			System.out.print(arr4[i] + " ");
 		}
-		System.out.println();		
+		System.out.println();	
+		
+		// Randomize an array of nos.
+		System.out.println("Randomize: ");
+		numImpl.randomize(arr3);
+		for(int i=0; i<arr3.length; i++) {
+			System.out.print(arr3[i] + " ");
+		}
+		System.out.println();
 	}
 
 	/* 
@@ -203,6 +211,16 @@ public class NumberImpl {
 			arr[j++] = tmp[n-1];
 		}
 		return j;
+	}
+	
+	public void randomize(int[] arr) {
+		int n = arr.length -1;
+		for(int i=n-1; i>0; i--) {
+			int random = (int)Math.round(Math.random()*10) % i;
+			int tmp = arr[i];
+			arr[i] = arr[random];
+			arr[random] = tmp;
+		}
 	}
 
 }
