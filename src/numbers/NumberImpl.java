@@ -75,7 +75,15 @@ public class NumberImpl {
 		for(int resEle : resList) {
 			System.out.print(resEle + " ");
 		}
-		System.out.println();		
+		System.out.println();
+		
+		// Stock buy sell profit - 1 time
+		int[] stock = {1, 2, 6, 80, 100};
+		numImpl.stockBuySell1Time(stock);
+		
+		// Stock buy sell profit - 1 time
+		int[] stock1 = {100, 180, 260, 310, 40, 535, 695};
+		numImpl.stockBuySellNTimes(stock1);
 	}
 
 	/* 
@@ -254,4 +262,60 @@ public class NumberImpl {
 		}
 		return resList;
 	}
+	
+	public void stockBuySell1Time(int[] arr) {
+		int max = 0;
+		int n = arr.length;
+		int buy = 0, sell = 0;
+		for(int i=n-1; i>0; i--) {
+			for (int j=i-1; j>=0; j--) {
+				if (arr[i] - arr[j] > max) {
+					max = arr[i] - arr[j];
+					buy = j;
+					sell = i;
+				}
+			}
+		}
+		System.out.println("Max profit is by buying on day " + (buy+1) + " and selling on day " + (sell+1) + " ; Profit: " + max);
+	}
+	
+	// {100, 180, 260, 310, 40, 535, 695}
+	public void stockBuySellNTimes(int[] arr) {
+		int n = arr.length;
+		int i = 0;
+		Interval[] inter = new Interval[n/2 + 1];
+		int cnt = 0;
+		while(i<n-1) {
+			// Find local minima
+			while(i<n-1 && arr[i+1]<=arr[i]) {
+				i++;
+			}
+			
+			if (i==n-1) {
+				break;
+			}
+			
+			inter[cnt] = new Interval();
+			inter[cnt].buy = i++;
+			
+			//Find local maxima
+			while(i<n && arr[i]>arr[i-1]) {
+				i++;
+			}
+			inter[cnt].sell = i-1;
+			cnt++;
+		}
+		if (cnt == 0) {
+			System.out.println("No profit.");
+		} else {
+			for (int k=0; k<cnt; k++) {
+				System.out.print("{" + inter[k].buy + ", " + inter[k].sell + "}, ");
+			}
+		}
+	}
+	
+	private class Interval {
+		int buy;
+		int sell;
+	};
 }
