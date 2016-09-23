@@ -160,6 +160,21 @@ public class TreeImpl {
 		// Deepest leaf node level
 		System.out.println("Deepest leaf node level: " + tree.deepestLeafNode(root, 0));
 		System.out.println();
+		
+		// Return mirror of the tree
+		System.out.println("Mirror of a given tree:");
+		System.out.println("Given Tree:");
+		tree.levelOrderTraversal(root);
+		System.out.println("Mirror tree:");
+		TreeNode newRoot1 = tree.mirrorTree(root);
+		tree.levelOrderTraversal(newRoot1);
+		System.out.println("Mirror tree in place:");
+		tree.mirrorTreeInPlace(root);
+		tree.levelOrderTraversal(root);
+		System.out.println("Back to normal:");
+		tree.mirrorTreeInPlace(root);
+		tree.levelOrderTraversal(root);
+
 	}
 	
 	public static TreeNode createTree(TreeImpl tree) {
@@ -584,6 +599,28 @@ public class TreeImpl {
 			return level;
 		}
 		return max(deepestLeafNode(root.left, level+1), deepestLeafNode(root.right, level+1));
+	}
+	
+	public TreeNode mirrorTree(TreeNode root) {
+		if (root == null) {
+			return null;
+		}
+		TreeNode newRoot = new TreeNode(root.data);
+		newRoot.left = mirrorTree(root.right);
+		newRoot.right = mirrorTree(root.left);
+		
+		return newRoot;
+	}
+	
+	public void mirrorTreeInPlace(TreeNode root) {
+		if (root == null) {
+			return;
+		}
+		mirrorTreeInPlace(root.left);
+		mirrorTreeInPlace(root.right);
+		TreeNode tmp = root.left;
+		root.left = root.right;
+		root.right = tmp;
 	}
 	
 	private int findNodeInInOrder(int[] inorder, int data, int st, int end) {
