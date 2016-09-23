@@ -51,13 +51,22 @@ public class NumberImpl {
 		System.out.println();
 		
 		// Remove duplicates in an array without using a map
-		int[] arr4 = {1, 3, 5, 9, 7, 8, 3, 2, 1};
+		int[] arr4 = {1, 3, 5, 9, 7, 8, 3, 2, 1, 3, 13, 3};
 		int arrLen = numImpl.removeDuplicates(arr4);
 		System.out.println("Remove suplicates in an array:");
 		for(int i=0; i<arrLen; i++) {
 			System.out.print(arr4[i] + " ");
 		}
-		System.out.println();	
+		System.out.println();
+		
+		// Find indices start and end for a particular value in a sorted integer array with duplicates
+		int[] arr7 = {1, 3, 5, 9, 7, 8, 3, 2, 1, 3, 13, 3};
+		Arrays.sort(arr7);
+		for(int i=0; i<arr7.length; i++) {
+			System.out.print(arr7[i] + " ");
+		}
+		System.out.println();
+		numImpl.findIndicesOfDuplicates(arr7, 3);
 		
 		// Randomize an array of nos.
 		System.out.println("Randomize: ");
@@ -81,9 +90,9 @@ public class NumberImpl {
 		int[] stock = {1, 2, 6, 80, 100};
 		numImpl.stockBuySell1Time(stock);
 		
-		// Stock buy sell profit - 1 time
+		// Stock buy sell profit - k times
 		int[] stock1 = {100, 180, 260, 310, 40, 535, 695};
-		numImpl.stockBuySellNTimes(stock1);
+		numImpl.stockBuySellKTimes(stock1);
 	}
 
 	/* 
@@ -232,6 +241,27 @@ public class NumberImpl {
 		return j;
 	}
 	
+	// Find indices start and end for a particular value in a sorted integer array with duplicates
+	// 1 1 2 3 3 3 3 5 7 8 9 13 
+	public void findIndicesOfDuplicates(int[] arr, int key) {
+		int n = arr.length;
+		int[] tmp = arr;
+		int i = 0;
+		int st = -1;
+		while(i<n) {
+			if (tmp[i] == key) {
+				if (st==-1) {
+					st = i;
+				}
+			}else if (st != -1) {
+				break;
+			}
+			i++;
+		}
+		
+		System.out.println("Indices of start and end of duplicate sorted array: Start= " + st + "; end=" + (i-1));
+	}
+	
 	public void randomize(int[] arr) {
 		int n = arr.length -1;
 		for(int i=n-1; i>0; i--) {
@@ -280,7 +310,7 @@ public class NumberImpl {
 	}
 	
 	// {100, 180, 260, 310, 40, 535, 695}
-	public void stockBuySellNTimes(int[] arr) {
+	public void stockBuySellKTimes(int[] arr) {
 		int n = arr.length;
 		int i = 0;
 		Interval[] inter = new Interval[n/2 + 1];
