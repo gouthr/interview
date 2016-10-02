@@ -2,7 +2,11 @@ package strings;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class StringImpl {
 
@@ -43,6 +47,14 @@ public class StringImpl {
 		list.add("elephant");
 		int res = strImpl.minDistanceBwWords(list, "dog", "cat");
 		System.out.println("Min distance between 2 words: " + res);	
+		
+		// Generate palindromic substrings of a string
+		System.out.println("Palindromic substrings of the given string:");	
+		Set<String> palinSubStrings = strImpl.generatePalindromicSubstrings("abcbad");
+		for (final String s : palinSubStrings) {
+			System.out.print(s + " ");
+		}
+		System.out.println();
 		
 	}
 	
@@ -178,6 +190,39 @@ public class StringImpl {
 			}
 		}		
 		return minDist;
+	}
+
+	/*
+	 * The idea is to simply pick every character and move both the sides till
+	 * the characters are same on the end. If they are not, then you break of
+	 * the loop because if the substring is not a palindrome than the bigger
+	 * string will not be a plaindrome too. TimeComplexity: O(n^2). Brute force
+	 * is O(n^3). Generation of all substring of a string is itself O(n^2),
+	 * hence this is an optimal solution.
+	 */
+	public Set<String> generatePalindromicSubstrings(String str) {
+		Set<String> res = new LinkedHashSet<String>();
+		for(int i=0; i<str.length(); i++) {
+			StringBuilder sb = new StringBuilder();
+			int j = i;
+			int k = i+1;
+			res.add(str.charAt(i)+"");
+			for (int it=0; it<2; it++) {
+				if (it == 1) {
+					sb.setLength(0);
+					sb.append(str.charAt(i));
+					j = i-1;
+					k = i+1;
+				}
+				while (j >=0 && k<str.length() && str.charAt(j) == str.charAt(k)) {
+					sb.insert(0, str.charAt(j));
+					res.add(sb.append(str.charAt(k)).toString());
+					j--;
+					k++;
+				}
+			}
+		}
+		return res;
 	}
 	
 	private StringBuilder swap(StringBuilder str, int i, int j) {
