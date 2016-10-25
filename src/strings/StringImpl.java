@@ -2,15 +2,13 @@ package strings;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 public class StringImpl {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		StringImpl strImpl = new StringImpl();
 		
 		// Permutations of a given string
@@ -55,6 +53,10 @@ public class StringImpl {
 			System.out.print(s + " ");
 		}
 		System.out.println();
+		
+		// Convert string to int
+		String n = "123";
+		System.out.println("String to int of " + n + " :" + strImpl.convertStringToInt(n));
 		
 	}
 	
@@ -220,6 +222,22 @@ public class StringImpl {
 					j--;
 					k++;
 				}
+			}
+		}
+		return res;
+	}
+	
+	/*
+	 * Convert String to integer
+	 */
+	public int convertStringToInt(String number) throws Exception {
+		int res = 0;
+		for(int i=0; i<number.length(); i++) {
+			char c = number.charAt(i);
+			if (c >= '0' && c <= '9') {
+				res = (res*10) + (c - '0');
+			} else {
+				throw new Exception("Invalid input " + number);
 			}
 		}
 		return res;
