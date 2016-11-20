@@ -90,6 +90,10 @@ public class NumberImpl {
 		int[] stock = {1, 2, 6, 80, 100};
 		numImpl.stockBuySell1Time(stock);
 		
+		// Stock buy sell profit - 1 time optimized
+		int[] stock2 = {100, 80, 6, 2, 1};
+		numImpl.stockBuySell1TimeOptimized(stock2);
+		
 		// Stock buy sell profit - k times
 		int[] stock1 = {100, 180, 260, 310, 40, 535, 695};
 		numImpl.stockBuySellKTimes(stock1);
@@ -307,6 +311,25 @@ public class NumberImpl {
 			}
 		}
 		System.out.println("Max profit is by buying on day " + (buy+1) + " and selling on day " + (sell+1) + " ; Profit: " + max);
+	}
+	
+	// {1, 2, 6, 80, 100}
+	// {100, 80, 6, 2, 1}
+	public void stockBuySell1TimeOptimized(int[] arr) {
+		int min_val = arr[0];
+		int max_profit = arr[1] - arr[0];
+		int n = arr.length;
+		
+		for(int i=1; i<n; i++) {
+			int diff = arr[i] - min_val;
+			if (diff > max_profit) {
+				max_profit = diff;
+			}
+			if (arr[i] < min_val) {
+				min_val = arr[i];
+			}
+		}
+		System.out.println("Max profit (optimized): " + max_profit);
 	}
 	
 	// {100, 180, 260, 310, 40, 535, 695}
