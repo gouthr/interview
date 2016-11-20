@@ -174,6 +174,8 @@ public class TreeImpl {
 		System.out.println("Back to normal:");
 		tree.mirrorTreeInPlace(root);
 		tree.levelOrderTraversal(root);
+		
+		tree.kLargestInBST(root, 4);
 
 	}
 	
@@ -623,6 +625,21 @@ public class TreeImpl {
 		root.right = tmp;
 	}
 	
+	/*
+	 * Given a BST, find the kth largest node.
+	 */
+	public void kLargestInBST(TreeNode root, int k) {
+		if (root == null || i>=k) {
+			return;
+		}
+		kLargestInBST(root.right, k);
+		i++;
+		if (i == k) {
+			System.out.println(k + "th largest node: " + root.data);
+		}
+		kLargestInBST(root.left, k);
+	}
+	
 	private int findNodeInInOrder(int[] inorder, int data, int st, int end) {
 		for (int i=st; i<=end; i++) {
 			if (inorder[i] == data) {
@@ -672,4 +689,6 @@ public class TreeImpl {
 	private int index;
 	
 	private int preIndex;
+	
+	private int i;
 }
