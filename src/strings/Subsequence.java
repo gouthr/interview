@@ -24,14 +24,14 @@ public class Subsequence {
  
                 // drop kth character in the substring
                 // and if its not in the set then recur
-                for (int k = 1; k < sub_str.length() - 1; k++) {
+                for (int k = 0; k < sub_str.length(); k++) {
                     StringBuffer sb = new StringBuffer(sub_str);
  
                     // drop character from the string
                     sb.deleteCharAt(k);
-                    if (!st.contains(sb))
-                        ;
-                    subsequence(sb.toString());
+                    if (!st.contains(sb)) {
+                    	subsequence(sb.toString());
+                    }
                 }
             }
         }
@@ -50,10 +50,10 @@ public class Subsequence {
     // Driver code
     public static void main(String[] args)
     {
-        String s = "aabc";
+        String s = "fund";
         subsequence(s);
         System.out.println(st);
-        subStrings("fun");
+        subStrings(s);
         System.out.println(st1);
     }
 }
