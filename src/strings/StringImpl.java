@@ -58,6 +58,9 @@ public class StringImpl {
 		String n = "123";
 		System.out.println("String to int of " + n + " :" + strImpl.convertStringToInt(n));
 		
+		// Print substrings of a given string
+		strImpl.generateSubstrings("abc");
+		
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -226,6 +229,23 @@ public class StringImpl {
 		}
 		return res;
 	}
+	
+	/**
+	 * Generate substrings of a given string.
+	 * 
+	 * @param str input string
+	 */
+	public void generateSubstrings(final String str) {
+		int len = str.length();
+		
+		for (int i=0; i<len; i++) {
+			for(int j=i+1; j<=len; j++) {
+				String res = str.substring(i, j);
+				System.out.println(res);
+			}
+		}
+	}
+	
 	
 	/*
 	 * Convert String to integer
