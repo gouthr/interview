@@ -1,0 +1,432 @@
+http://www.journaldev.com/1827/java-design-patterns-example-tutorial#creational-patterns
+
+Creational Pattern:
+====================
+1. Java Singleton Pattern
+Singleton pattern restricts the instantiation of a class and ensures that only one instance of the class exists in the java virtual machine. The singleton class must provide a global access point to get the instance of the class. Singleton pattern is used for logging, drivers objects, caching and thread pool.
+
+Private constructor to restrict instantiation of the class from other classes.
+Private static variable of the same class that is the only instance of the class.
+Public static method that returns the instance of the class, this is the global access point for outer world to get the instance of the singleton class.
+
+package com.journaldev.singleton;
+
+public class BillPughSingleton {
+
+    private BillPughSingleton(){}
+    
+    private static class SingletonHelper{
+        private static final BillPughSingleton INSTANCE = new BillPughSingleton();
+    }
+    
+    public static BillPughSingleton getInstance(){
+        return SingletonHelper.INSTANCE;
+    }
+}
+
+2. Factory design pattern
+Factory design pattern is used when we have a super class with multiple sub-classes and based on input, we need to return one of the sub-class. This pattern take out the responsibility of instantiation of a class from client program to the factory class.
+
+Factory Design Pattern Advantages
+
+Factory design pattern provides approach to code for interface rather than implementation.
+Factory pattern removes the instantiation of actual implementation classes from client code. Factory pattern makes our code more robust, less coupled and easy to extend. For example, we can easily change PC class implementation because client program is unaware of this.
+Factory pattern provides abstraction between implementation and client classes through inheritance.
+
+package com.journaldev.design.model;
+
+public abstract class Computer {
+	
+	public abstract String getRAM();
+	public abstract String getHDD();
+	public abstract String getCPU();
+	
+	@Override
+	public String toString(){
+		return "RAM= "+this.getRAM()+", HDD="+this.getHDD()+", CPU="+this.getCPU();
+	}
+}
+
+package com.journaldev.design.model;
+
+public class PC extends Computer {
+
+	private String ram;
+	private String hdd;
+	private String cpu;
+	
+	public PC(String ram, String hdd, String cpu){
+		this.ram=ram;
+		this.hdd=hdd;
+		this.cpu=cpu;
+	}
+	@Override
+	public String getRAM() {
+		return this.ram;
+	}
+
+	@Override
+	public String getHDD() {
+		return this.hdd;
+	}
+
+	@Override
+	public String getCPU() {
+		return this.cpu;
+	}
+
+}
+Notice that both the classes are extending Computer super class.
+
+package com.journaldev.design.model;
+
+public class Server extends Computer {
+
+	private String ram;
+	private String hdd;
+	private String cpu;
+	
+	public Server(String ram, String hdd, String cpu){
+		this.ram=ram;
+		this.hdd=hdd;
+		this.cpu=cpu;
+	}
+	@Override
+	public String getRAM() {
+		return this.ram;
+	}
+
+	@Override
+	public String getHDD() {
+		return this.hdd;
+	}
+
+	@Override
+	public String getCPU() {
+		return this.cpu;
+	}
+
+}
+
+package com.journaldev.design.factory;
+
+import com.journaldev.design.model.Computer;
+import com.journaldev.design.model.PC;
+import com.journaldev.design.model.Server;
+
+public class ComputerFactory {
+
+	public static Computer getComputer(String type, String ram, String hdd, String cpu){
+		if("PC".equalsIgnoreCase(type)) return new PC(ram, hdd, cpu);
+		else if("Server".equalsIgnoreCase(type)) return new Server(ram, hdd, cpu);
+		
+		return null;
+	}
+}
+
+package com.journaldev.design.test;
+
+import com.journaldev.design.abstractfactory.PCFactory;
+import com.journaldev.design.abstractfactory.ServerFactory;
+import com.journaldev.design.factory.ComputerFactory;
+import com.journaldev.design.model.Computer;
+
+public class TestFactory {
+
+	public static void main(String[] args) {
+		Computer pc = ComputerFactory.getComputer("pc","2 GB","500 GB","2.4 GHz");
+		Computer server = ComputerFactory.getComputer("server","16 GB","1 TB","2.9 GHz");
+		System.out.println("Factory PC Config::"+pc);
+		System.out.println("Factory Server Config::"+server);
+	}
+
+}
+
+3. Abstract Factory pattern
+In Abstract Factory pattern, we get rid of if-else block and have a factory class for each sub-class. Then an Abstract Factory class that will return the sub-class based on the input factory class.
+
+ComputerAbstractFactory.java
+
+package com.journaldev.design.abstractfactory;
+
+import com.journaldev.design.model.Computer;
+
+public interface ComputerAbstractFactory {
+
+	public Computer createComputer();
+
+}
+Notice that createComputer() method is returning an instance of super class Computer. Now our factory classes will implement this interface and return their respective sub-class.
+
+package com.journaldev.design.abstractfactory;
+
+import com.journaldev.design.model.Computer;
+import com.journaldev.design.model.PC;
+
+public class PCFactory implements ComputerAbstractFactory {
+
+	private String ram;
+	private String hdd;
+	private String cpu;
+	
+	public PCFactory(String ram, String hdd, String cpu){
+		this.ram=ram;
+		this.hdd=hdd;
+		this.cpu=cpu;
+	}
+	@Override
+	public Computer createComputer() {
+		return new PC(ram,hdd,cpu);
+	}
+
+}
+Similarly we will have a factory class for Server subclass.
+
+ServerFactory.java
+
+package com.journaldev.design.abstractfactory;
+
+import com.journaldev.design.model.Computer;
+import com.journaldev.design.model.Server;
+
+public class ServerFactory implements ComputerAbstractFactory {
+
+	private String ram;
+	private String hdd;
+	private String cpu;
+	
+	public ServerFactory(String ram, String hdd, String cpu){
+		this.ram=ram;
+		this.hdd=hdd;
+		this.cpu=cpu;
+	}
+	
+	@Override
+	public Computer createComputer() {
+		return new Server(ram,hdd,cpu);
+	}
+
+}
+Now we will create a consumer class that will provide the entry point for the client classes to create sub-classes.
+
+ComputerFactory.java
+
+package com.journaldev.design.abstractfactory;
+
+import com.journaldev.design.model.Computer;
+
+public class ComputerFactory {
+
+	public static Computer getComputer(ComputerAbstractFactory factory){
+		return factory.createComputer();
+	}
+}
+
+package com.journaldev.design.test;
+
+import com.journaldev.design.abstractfactory.PCFactory;
+import com.journaldev.design.abstractfactory.ServerFactory;
+import com.journaldev.design.factory.ComputerFactory;
+import com.journaldev.design.model.Computer;
+
+public class TestDesignPatterns {
+
+	public static void main(String[] args) {
+		testAbstractFactory();
+	}
+
+	private static void testAbstractFactory() {
+		Computer pc = com.journaldev.design.abstractfactory.ComputerFactory.getComputer(new PCFactory("2 GB","500 GB","2.4 GHz"));
+		Computer server = com.journaldev.design.abstractfactory.ComputerFactory.getComputer(new ServerFactory("16 GB","1 TB","2.9 GHz"));
+		System.out.println("AbstractFactory PC Config::"+pc);
+		System.out.println("AbstractFactory Server Config::"+server);
+	}
+}
+
+Abstract Factory Design Pattern Banefits
+
+Abstract Factory design pattern provides approach to code for interface rather than implementation.
+Abstract Factory pattern is “factory of factories” and can be easily extended to accommodate more products, for example we can add another sub-class Laptop and a factory LaptopFactory.
+Abstract Factory pattern is robust and avoid conditional logic of Factory pattern.
+
+4. Builder Design pattern
+Builder pattern was introduced to solve some of the problems with Factory and Abstract Factory design patterns when the Object contains a lot of attributes.
+
+There are three major issues with Factory and Abstract Factory design patterns when the Object contains a lot of attributes.
+
+Too Many arguments to pass from client program to the Factory class that can be error prone because most of the time, the type of arguments are same and from client side its hard to maintain the order of the argument.
+Some of the parameters might be optional but in Factory pattern, we are forced to send all the parameters and optional parameters need to send as NULL.
+If the object is heavy and its creation is complex, then all that complexity will be part of Factory classes that is confusing.
+We can solve the issues with large number of parameters by providing a constructor with required parameters and then different setter methods to set the optional parameters. The problem with this approach is that the Object state will be inconsistent until unless all the attributes are set explicitly.
+
+Builder pattern solves the issue with large number of optional parameters and inconsistent state by providing a way to build the object step-by-step and provide a method that will actually return the final Object.
+
+First of all you need to create a static nested class and then copy all the arguments from the outer class to the Builder class. We should follow the naming convention and if the class name is Computer then builder class should be named as ComputerBuilder.
+Java Builder class should have a public constructor with all the required attributes as parameters.
+Java Builder class should have methods to set the optional parameters and it should return the same Builder object after setting the optional attribute.
+The final step is to provide a build() method in the builder class that will return the Object needed by client program. For this we need to have a private constructor in the Class with Builder class as argument.
+
+package com.journaldev.design.builder;
+
+public class Computer {
+	
+	//required parameters
+	private String HDD;
+	private String RAM;
+	
+	//optional parameters
+	private boolean isGraphicsCardEnabled;
+	private boolean isBluetoothEnabled;
+	
+
+	public String getHDD() {
+		return HDD;
+	}
+
+	public String getRAM() {
+		return RAM;
+	}
+
+	public boolean isGraphicsCardEnabled() {
+		return isGraphicsCardEnabled;
+	}
+
+	public boolean isBluetoothEnabled() {
+		return isBluetoothEnabled;
+	}
+	
+	private Computer(ComputerBuilder builder) {
+		this.HDD=builder.HDD;
+		this.RAM=builder.RAM;
+		this.isGraphicsCardEnabled=builder.isGraphicsCardEnabled;
+		this.isBluetoothEnabled=builder.isBluetoothEnabled;
+	}
+	
+	//Builder Class
+	public static class ComputerBuilder{
+
+		// required parameters
+		private String HDD;
+		private String RAM;
+
+		// optional parameters
+		private boolean isGraphicsCardEnabled;
+		private boolean isBluetoothEnabled;
+		
+		public ComputerBuilder(String hdd, String ram){
+			this.HDD=hdd;
+			this.RAM=ram;
+		}
+
+		public ComputerBuilder setGraphicsCardEnabled(boolean isGraphicsCardEnabled) {
+			this.isGraphicsCardEnabled = isGraphicsCardEnabled;
+			return this;
+		}
+
+		public ComputerBuilder setBluetoothEnabled(boolean isBluetoothEnabled) {
+			this.isBluetoothEnabled = isBluetoothEnabled;
+			return this;
+		}
+		
+		public Computer build(){
+			return new Computer(this);
+		}
+
+	}
+
+}
+
+package com.journaldev.design.test;
+
+import com.journaldev.design.builder.Computer;
+
+public class TestBuilderPattern {
+
+	public static void main(String[] args) {
+		//Using builder to get the object in a single line of code and 
+                //without any inconsistent state or arguments management issues		
+		Computer comp = new Computer.ComputerBuilder(
+				"500 GB", "2 GB").setBluetoothEnabled(true)
+				.setGraphicsCardEnabled(true).build();
+	}
+
+}
+
+5. Prototype Design Pattern
+Prototype design pattern is used when the Object creation is a costly affair and requires a lot of time and resources and you have a similar object already existing.
+
+Prototype pattern provides a mechanism to copy the original object to a new object and then modify it according to our needs. Prototype design pattern uses java cloning to copy the object.
+
+Prototype Design Pattern Example
+
+It would be easy to understand prototype design pattern with an example. Suppose we have an Object that loads data from database. Now we need to modify this data in our program multiple times, so it’s not a good idea to create the Object using new keyword and load all the data again from database.
+
+The better approach would be to clone the existing object into a new object and then do the data manipulation.
+
+Prototype design pattern mandates that the Object which you are copying should provide the copying feature. It should not be done by any other class. However whether to use shallow or deep copy of the Object properties depends on the requirements and its a design decision.
+
+package com.journaldev.design.prototype;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Employees implements Cloneable{
+
+	private List<String> empList;
+	
+	public Employees(){
+		empList = new ArrayList<String>();
+	}
+	
+	public Employees(List<String> list){
+		this.empList=list;
+	}
+	public void loadData(){
+		//read all employees from database and put into the list
+		empList.add("Pankaj");
+		empList.add("Raj");
+		empList.add("David");
+		empList.add("Lisa");
+	}
+	
+	public List<String> getEmpList() {
+		return empList;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException{
+			List<String> temp = new ArrayList<String>();
+			for(String s : this.getEmpList()){
+				temp.add(s);
+			}
+			return new Employees(temp);
+	}
+	
+}
+
+package com.journaldev.design.test;
+
+import java.util.List;
+
+import com.journaldev.design.prototype.Employees;
+
+public class PrototypePatternTest {
+
+	public static void main(String[] args) throws CloneNotSupportedException {
+		Employees emps = new Employees();
+		emps.loadData();
+		
+		//Use the clone method to get the Employee object
+		Employees empsNew = (Employees) emps.clone();
+		Employees empsNew1 = (Employees) emps.clone();
+		List<String> list = empsNew.getEmpList();
+		list.add("John");
+		List<String> list1 = empsNew1.getEmpList();
+		list1.remove("Pankaj");
+		
+		System.out.println("emps List: "+emps.getEmpList());
+		System.out.println("empsNew List: "+list);
+		System.out.println("empsNew1 List: "+list1);
+	}
+
+}
