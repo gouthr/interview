@@ -1,88 +1,205 @@
 package numbers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 public class NestedInteger {
+	Integer data;
+	List<NestedInteger> list;
 	
-	NestedInteger() {
-		lni = new ArrayList<NestedInteger>();
+	public NestedInteger(int data) {
+		this.data = data;
+		this.list = new ArrayList<NestedInteger>();
 	}
 	
-	NestedInteger(Integer integer) {
-		this.integer = integer;
-		this.lni = new ArrayList<NestedInteger>();
+	public void addInteger(NestedInteger ni) {
+		list.add(ni);
 	}
 	
-	NestedInteger(List<NestedInteger> lni) {
-		this.lni = lni;
-	}
-	
-	public void addNestedInteger(NestedInteger ni) {
-		lni.add(ni);
-	}
-	
-	public Integer getInteger() {
-		return integer;
-	}
-	
-	public List<NestedInteger> getListNestedInteger() {
-		return lni;
+	public List<NestedInteger> getList() {
+		return list;
 	}
 	
 	public boolean isInteger() {
-		return integer != null;
-	}
-	
-	public String printListNestedInteger(NestedInteger ni, StringBuilder sb) {
-
-        if (ni.isInteger()) {
-            sb.append(ni.integer);
-            sb.append(", ");
-        }
-        for (NestedInteger eni : ni.lni) {
-            sb.append("[");
-            printListNestedInteger(eni, sb);
-            sb.append("]");
-        }
-        return sb.toString();
-	}
-	
-	public int getWeightedSum(List<NestedInteger> ni, int depth) {
-		if (ni == null || ni.size() == 0) {
-			return 0;
+		if (data != null) {
+			return true;
 		}
-		int sum = 0;
-        for (NestedInteger eni : ni) {
-            if (eni.isInteger()) {
-            	sum += eni.getInteger() * depth;
-            }
-            sum += getWeightedSum(eni.getListNestedInteger(), depth + 1);
-        }
-        return sum;
+		return false;
+	}
+	
+	public Integer getInteger() {
+		return data;
 	}
 	
 	
 	public static void main(String args[]) {
-		NestedInteger ni1 = new NestedInteger(1);
-		NestedInteger ni2 = new NestedInteger(2);
-		NestedInteger ni3 = new NestedInteger(3);
+		/**
+		 * Example input = [1, [2, 3, [4, 5]], 6]
+		 */
+		List<NestedInteger> input = new ArrayList<NestedInteger>();
+
+		NestedInteger ni6 = new NestedInteger(6);
 		NestedInteger ni4 = new NestedInteger(4);
 		NestedInteger ni5 = new NestedInteger(5);
-		NestedInteger ni6 = new NestedInteger(6);
-		ni1.addNestedInteger(ni2);
-		ni2.addNestedInteger(ni3);
-		ni3.addNestedInteger(ni4);
-		ni2.addNestedInteger(ni5);
-		ni1.addNestedInteger(ni6);
-		List<NestedInteger> list = new ArrayList<NestedInteger>();
-		list.add(ni1);
-		System.out.println(ni1.printListNestedInteger(ni1, new StringBuilder()));
-		System.out.println(ni1.getWeightedSum(list, 1));
+		NestedInteger ni2 = new NestedInteger(2);
+		
+		NestedInteger ni3 = new NestedInteger(3);
+		ni3.addInteger(ni4);
+		ni3.addInteger(ni5);
+		
+		NestedInteger ni1 = new NestedInteger(1);
+		ni1.addInteger(ni2);
+		ni1.addInteger(ni3);
+		
+		input.add(ni1);
+		input.add(ni6);
+		
+		System.out.println("Weighted sum (recursive solution): " + weightedSum(input, 1));
+		System.out.println("Weighted sum (non-recursive solution): " + weightedSumNonRecursive(input));
+		System.out.println("Inverse weighted sum (non-recursive solution): " + inverseWeightedSum(input));
+		System.out.println("Inverse weighted sum (non-recursive solution): " + inverseWeightedSum2(input));
+	}
+	
+	public static int weightedSum(List<NestedInteger> list, int level) {
+		if (list == null || list.isEmpty()) {
+			return 0;
+		}
+		
+		int sum = 0;
+		for(NestedInteger ni : list) {
+			if (ni.isInteger()) {
+				sum += ni.getInteger() * level;
+			}
+			sum += weightedSum(ni.getList(), level+1);
+
+		}
+		return sum;		
+	}
+	
+	public static int weightedSumNonRecursive(List<NestedInteger> list) {
+		if (list == null || list.isEmpty()) {
+			return 0;
+		}
+		
+		LinkedList<NestedInteger> queue = new LinkedList<NestedInteger>();
+		LinkedList<Integer> depth = new LinkedList<Integer>();
+		for (NestedInteger ni : list) {
+			queue.add(ni);
+			depth.add(1);
+		}
+		
+		int sum = 0;
+		while(!queue.isEmpty()) {
+			NestedInteger top = queue.remove();
+			Integer level = depth.remove();
+			if (top.isInteger()) {
+				sum += top.getInteger() * level;
+			} 
+			for (NestedInteger ni : top.getList()) {
+				queue.add(ni);
+				depth.add(level+1);
+			}
+		}
+		return sum;		
+	}
+	
+	public static int inverseWeightedSum(List<NestedInteger> list) {
+		if (list == null || list.isEmpty()) {
+			return 0;
+		}
+		
+		HashMap<Integer, ArrayList<Integer>> map = new HashMap<Integer, ArrayList<Integer>>();
+		
+		Stack<NestedInteger> st1 = new Stack<NestedInteger>();
+		Stack<Integer> st2 = new Stack<Integer>();
+		int maxLevel = Integer.MIN_VALUE;
+		int sum = 0;
+		
+		for (NestedInteger ni : list) {
+			st1.push(ni);
+			st2.push(1);
+		}
+		
+		while(!st1.isEmpty()) {
+			NestedInteger top = st1.pop();
+			Integer level = st2.pop();
+			
+			maxLevel = Math.max(level, maxLevel);
+			
+			if (top.isInteger()) {
+				if (map.containsKey(level)) {
+					map.get(level).add(top.getInteger());
+				} else {
+					ArrayList<Integer> vals = new ArrayList<Integer>();
+					vals.add(top.getInteger());
+					map.put(level, vals);
+				}
+			}
+			for (NestedInteger ni : top.getList()) {
+				st1.push(ni);
+				st2.push(level+1);
+			}			
+		}
+		
+		for (int i=maxLevel; i>0; i--) {
+			if (map.get(i) != null) {
+				for (Integer val : map.get(i)) {
+					sum += val * (maxLevel-i + 1);
+				}
+			}
+		}		
+		return sum;
 	}
 
-	private Integer integer;
-	
-	private List<NestedInteger> lni;
+	public static int inverseWeightedSum2(List<NestedInteger> list) {
+		if (list == null || list.isEmpty()) {
+			return 0;
+		}
+		
+		HashMap<Integer, ArrayList<Integer>> map = new HashMap<Integer, ArrayList<Integer>>();
+		
+		LinkedList<NestedInteger> st1 = new LinkedList<NestedInteger>();
+		LinkedList<Integer> st2 = new LinkedList<Integer>();
+		int maxLevel = Integer.MIN_VALUE;
+		int sum = 0;
+		
+		for (NestedInteger ni : list) {
+			st1.add(ni);
+			st2.add(1);
+		}
+		
+		while(!st1.isEmpty()) {
+			NestedInteger top = st1.remove();
+			Integer level = st2.remove();
+			
+			maxLevel = Math.max(level, maxLevel);
+			
+			if (top.isInteger()) {
+				if (map.containsKey(level)) {
+					map.get(level).add(top.getInteger());
+				} else {
+					ArrayList<Integer> vals = new ArrayList<Integer>();
+					vals.add(top.getInteger());
+					map.put(level, vals);
+				}
+			}
+			for (NestedInteger ni : top.getList()) {
+				st1.add(ni);
+				st2.add(level+1);
+			}			
+		}
+		
+		for (int i=maxLevel; i>0; i--) {
+			if (map.get(i) != null) {
+				for (Integer val : map.get(i)) {
+					sum += val * (maxLevel-i + 1);
+				}
+			}
+		}		
+		return sum;
+	}
 
 }
