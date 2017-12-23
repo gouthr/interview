@@ -17,6 +17,29 @@ import java.util.Set;
  * threads, use a StringBuffer because StringBuffer is synchronous so you have
  * thread-safety.
  * 
+ * Let me first highlight three different ways for similar purpose.
+ * 
+ * length -- arrays (int[], double[], String[]) -- to know the length of the
+ * arrays
+ * 
+ * length() -- String related Object (String, StringBuilder, etc) -- to know the
+ * length of the String
+ * 
+ * size() -- Collection Object (ArrayList, Set, etc) -- to know the size of the
+ * Collection
+ * 
+ * Now forget about length() consider just length and size().
+ * 
+ * length is not a method, so it completely makes sense that it will not work on
+ * objects. It only works on arrays. size() its name describes it better and as
+ * it is a method, it will be used in the case of those objects who work with
+ * collection (collection frameworks) as I said up there.
+ * 
+ * Now come to length(): String is not a primitive array (so we can't use
+ * .length) and also not a Collection (so we cant use .size()) that's why we
+ * also need a different one which is length() (keep the differences and serve
+ * the purpose).
+ * 
  * @author gouthr
  *
  */
