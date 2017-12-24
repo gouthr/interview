@@ -1,5 +1,12 @@
 package numbers;
 
+/**
+ * Time efficiency of building a heap is O(n) Time efficiency to heapify k
+ * elements is O(k*logn)
+ * 
+ * @author gouthr
+ *
+ */
 public class Heap {
 
 	public static void main(String[] args) {
