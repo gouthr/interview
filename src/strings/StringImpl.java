@@ -2,6 +2,7 @@ package strings;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -97,6 +98,11 @@ public class StringImpl {
 		
 		// Print substrings of a given string
 		strImpl.generateSubstrings("abc");
+		
+		// Check if 2 strings are anagrams
+		System.out.println("Anagram check: " + strImpl.anagramCheck("abcde", "adecb"));
+		System.out.println("Anagram check: " + strImpl.anagramCheck("abaaa", "aaaab"));
+		System.out.println("Anagram check: " + strImpl.anagramCheck("abaaa", "aaabb"));
 		
 	}
 	
@@ -283,6 +289,45 @@ public class StringImpl {
 		}
 	}
 	
+	public boolean anagramCheck(final String str1, final String str2) {
+		int m = str1.length();
+		int n  = str2.length();
+		
+		if (m != n) {
+			return false;
+		}
+		
+		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+		Iterator<Integer> it = str1.chars().iterator();
+		while(it.hasNext()) {
+			Integer key = it.next();
+			Integer val = map.get(key);
+			if (val == null) {
+				map.put(key, 1);
+			} else {
+				map.put(key, val+1);
+			}
+		}
+		
+		Iterator<Integer> it2 = str2.chars().iterator();
+		while(it2.hasNext()) {
+			Integer key = it2.next();
+			Integer val = map.get(key);
+			if (val == null || val == 0) {
+				return false;
+			} else if (val == 1) {
+				map.remove(key);
+			} else {
+				map.put(key, val-1);
+			}
+		}
+		
+		if (!map.isEmpty()) {
+			return false;
+		}
+		
+		return true;
+	}
 	
 	/*
 	 * Convert String to integer
