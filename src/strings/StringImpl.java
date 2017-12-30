@@ -104,6 +104,11 @@ public class StringImpl {
 		System.out.println("Anagram check: " + strImpl.anagramCheck("abaaa", "aaaab"));
 		System.out.println("Anagram check: " + strImpl.anagramCheck("abaaa", "aaabb"));
 		
+		// All possible combinations of binary expressions
+		System.out.println("All possible combinations of binary expressions: ");
+		String inputStr = "10?1?";
+		strImpl.combinationsOfExpressions(inputStr.toCharArray(), 0);
+		
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -118,7 +123,35 @@ public class StringImpl {
 		}
 	}
 	
-	/*
+	/**
+	 * Given an expression, find all possible combinations of expressions where
+	 * '?' can be replaced by either 0 or 1. The expression is a binary
+	 * expression. Eg: For the expression "10?1", the output would be "1001" and "1011".
+	 * 
+	 * @param res
+	 * @param str
+	 * @param index
+	 */
+	public void combinationsOfExpressions(char[] str, int index) {
+		if (index == str.length) {
+			System.out.println(str);
+			return;
+		}
+		
+		char ch = str[index];
+		if (ch == '0' || ch == '1') {
+			combinationsOfExpressions(str,index+1);
+		} else if (ch == '?') {
+			str[index] = '0';
+			combinationsOfExpressions(str, index+1);
+			str[index] = '1';
+			combinationsOfExpressions(str, index+1);
+			str[index] = '?'; // We can get back to this branch because of an earlier '?'
+		}
+
+	}
+	
+	/**
 	 * Length of the longest palindromic subsequence in a given string.
 	 * 
 	 * Given a sequence, find the length of the longest palindromic subsequence in it. 
