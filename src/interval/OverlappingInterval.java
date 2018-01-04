@@ -1,6 +1,8 @@
 package interval;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Stack;
 
@@ -25,12 +27,14 @@ import java.util.Stack;
  */
 
 public class OverlappingInterval {
-	private static Stack<Interval> st = new Stack<Interval>();
+	private Stack<Interval> st = new Stack<Interval>();
 	
-	public static void mergeOverlappingIntervals(Interval[] arr) {
-		// Arrays.sort(arr); // Using Interval implemented Comparable
+	public void mergeOverlappingIntervals(List<Interval> intervalList) {		
+		// Collections.sort(intervalList); // Using Interval implemented Comparable
 		
-		Arrays.sort(arr, new IntervalComparator()); // Using IntervalComparator
+		Collections.sort(intervalList, new IntervalComparator()); // Using IntervalComparator
+		
+		Interval[] arr = (Interval[]) intervalList.toArray();
 		
 		st.push(arr[0]);
 		
@@ -47,7 +51,7 @@ public class OverlappingInterval {
 		}		
 	}
 	
-	public static void printOverlappingIntervals() {
+	public void printOverlappingIntervals() {
 		while(!st.isEmpty()) {
 			Interval node = st.pop();
 			System.out.println("Interval start: " + node.start + " , interval end: " + node.end);
@@ -65,7 +69,18 @@ public class OverlappingInterval {
 		
 		List<Interval> list = Arrays.asList(node1, node2, node3, node4, node5, node6, node7);
 		
-		mergeOverlappingIntervals((Interval[]) list.toArray());
-		printOverlappingIntervals();
+		OverlappingInterval overlapInterval = new OverlappingInterval();
+		
+		overlapInterval.mergeOverlappingIntervals(list);
+		overlapInterval.printOverlappingIntervals();
+	}
+	
+	private class IntervalComparator implements Comparator<Interval> {
+
+		@Override
+		public int compare(Interval o1, Interval o2) {
+			return o1.start - o2.start;
+		}
+		
 	}
 }
