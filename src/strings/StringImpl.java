@@ -2,6 +2,7 @@ package strings;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -108,6 +109,25 @@ public class StringImpl {
 		System.out.println("All possible combinations of binary expressions: ");
 		String inputStr = "10?1?";
 		strImpl.combinationsOfExpressions(inputStr.toCharArray(), 0);
+		
+		// String decodings
+		System.out.println("String Decodings: ");
+	    HashSet<String> result = new HashSet<String>();
+	    strImpl.strDecodings("", "1123", result);
+	    for (String s : result) {
+	    	System.out.print(s + ", ");
+	    }
+	    System.out.println();
+	    
+	    // Word break problem
+	    final List<String> dict = new ArrayList<String>();
+	    dict.add("take");
+	    dict.add("bat");
+	    dict.add("bath");
+	    dict.add("and");
+	    dict.add("hand");
+	    dict.add("come");
+	    System.out.println("Word break problem soln: " + strImpl.wordBreak("takebathandcome", dict));
 		
 	}
 	
@@ -322,6 +342,36 @@ public class StringImpl {
 		}
 	}
 	
+	/**
+	 * If a=1, b=2, c=3,....z=26. Given a string, find all possible codes that
+	 * string can generate. Give a count as well as print the strings.
+	 * 
+	 * @param prefix
+	 * @param code
+	 * @param res
+	 */
+	public void strDecodings(String prefix, String code, HashSet<String> res) {
+		int len = code.length();
+		
+		if (len == 0) {
+			res.add(prefix);
+			return;
+		}
+		
+		if (code.charAt(0) == 0) {
+			return;
+		}
+		
+		strDecodings(prefix + (char)(code.charAt(0) - '1' + 'a'), code.substring(1), res);
+		
+		if (len >= 2) {
+			int value = Integer.parseInt(code.substring(0, 2));
+			if (value <= 26) {
+				strDecodings(prefix + (char)(value  - 1 + 'a'), code.substring(2), res);
+			}
+		}
+	}
+	
 	public boolean anagramCheck(final String str1, final String str2) {
 		int m = str1.length();
 		int n  = str2.length();
@@ -362,7 +412,33 @@ public class StringImpl {
 		return true;
 	}
 	
-	/*
+	/**
+	 * Word Break problem - Given a string s and a dictionary, check whether the
+	 * string can be broken down to valid words. Initially I was asked to return
+	 * true or false based on whether string can be broken down or not. Later I
+	 * was asked to modify my code to return the number of possible ways to
+	 * break the string. Like for eg : "takebathandcome" can be broken down in 2
+	 * ways
+	 * 
+	 * "take bath and come" "take bat hand come" So the modified function should
+	 * return 2
+	 */
+	public int wordBreak(final String str, final List<String> dict) {
+		if (str.length() == 0) {
+			return 1;
+		}
+		int count = 0;
+		for (int i=1; i<=str.length(); i++) {
+			final String tmp = str.substring(0,i);
+			if (dict.contains(tmp) && wordBreak(str.substring(i), dict) > 0) {
+				count = count + wordBreak(str.substring(i), dict);
+			}
+		}
+		
+		return count;
+	}
+	
+	/**
 	 * Convert String to integer
 	 */
 	public int convertStringToInt(String number) throws Exception {

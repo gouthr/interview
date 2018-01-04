@@ -520,6 +520,35 @@ public class TreeImpl {
 		
 		return false;
 	}
+	
+	/**
+	 * Find distance between 2 nodes in a binary tree.
+	 */
+	public int distanceBwNodes(TreeNode root, TreeNode a, TreeNode b) {
+		TreeNode lca = lca(root, a, b);
+		
+		int dist1 = findLevel(lca, a, 0);
+		
+		int dist2 = findLevel(lca, b, 0);
+		
+		return dist1 + dist2;
+		
+	}
+	
+	private int findLevel(TreeNode root, TreeNode a, int level) {
+		if (root == null) {
+			return -1;
+		}
+		if (root == a) {
+			return level;
+		}
+		int left = findLevel(root.left, a, level+1);
+		if (left == -1) {
+			int right = findLevel(root.right, a, level+1);
+			return right;
+		}
+		return left;
+	}
 
 	/**
 	 * An empty tree is height-balanced. A non-empty binary tree T is balanced if:
