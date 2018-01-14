@@ -128,6 +128,9 @@ public class StringImpl {
 	    dict.add("hand");
 	    dict.add("come");
 	    System.out.println("Word break problem soln: " + strImpl.wordBreak("takebathandcome", dict));
+	    
+	    System.out.println("Contiguous character occurence count: ");
+	    strImpl.charContiguousOccurence("aaabbcbbaacz");
 		
 	}
 	
@@ -436,6 +439,28 @@ public class StringImpl {
 		}
 		
 		return count;
+	}
+	
+	/**
+	 * Another one was say you had the following string: aaabbcbbaacc you have
+	 * to print strings like that in the following format: a3b2c1b2a2c2
+	 * 
+	 * @param str
+	 */
+	public void charContiguousOccurence(final String str) {
+		int count  = 1;
+		int i;
+		for (i=0; i<str.length()-1; i++) {
+			if (str.charAt(i) == str.charAt(i+1)) {
+				count++;
+			} else {
+				System.out.print(str.charAt(i));
+				System.out.print(count);
+				count = 1;
+			}
+		}
+		System.out.print(str.charAt(i));
+		System.out.print(count);
 	}
 	
 	/**
