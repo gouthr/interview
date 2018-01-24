@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class NumberImpl {
 
@@ -105,6 +107,10 @@ public class NumberImpl {
 		// max sub array product
 		int[] arr8 = {2, 3, -5, 1, 0, -17, 23, 3};
 		System.out.println("Max sub-array product: " + numImpl.maxProductSubarray(arr8));
+		
+		// kth largest number in an array
+		// {-17, -5, 0, 1, 2, 3, 3, 23}
+		System.out.println("5th largest number in arr = " + numImpl.kLargestNum(arr8, 5));
 	}
 
 	/* 
@@ -385,6 +391,21 @@ public class NumberImpl {
 		}
 		System.out.println("Max profit (optimized): " + max_profit);
 	}
+	
+	// kth largest number in an array
+	// Efficiency: O(nlogk) - nlogk to heapify k elemnets n times
+	public int kLargestNum(int[] arr, int k) {
+		Queue<Integer> q = new PriorityQueue<Integer>(k);
+		
+		for (int num : arr) {
+			q.add(num);
+			if (q.size() > k) {
+				q.remove();
+			}
+		}
+		return q.peek();
+	}
+	
 	
 	// {100, 180, 260, 310, 40, 535, 695}
 	public void stockBuySellKTimes(int[] arr) {
