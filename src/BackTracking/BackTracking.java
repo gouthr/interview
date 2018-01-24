@@ -24,6 +24,11 @@ public class BackTracking {
 		List<List<Integer>> res2 = new ArrayList<List<Integer>>();
 		bt.powerset(arr, new ArrayList<Integer>(), 0, res2);
 		System.out.println(res2);
+		
+		System.out.println("All possible strings from a phone number pad digits combination: ");
+		List<String> res3 = new ArrayList<>();
+		bt.phoneNumberPadMapper("23", "", res3, 0);
+		System.out.println(res3);
 	}
 	
 	/**
@@ -81,6 +86,23 @@ public class BackTracking {
 			tmp.add(arr[i]);
 			powerset(arr, tmp, i+1, res);
 			tmp.remove(tmp.size()-1);
+		}
+	}
+	
+	/**
+	 * Map mobile number pad keyboard to all possible strings that can be formed
+	 * from the given digits.
+	 */
+	public void phoneNumberPadMapper(String digits, String tmp, List<String> res, int offset) {
+		final String[] mapper = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+		
+		if (offset == digits.length()) {
+			res.add(tmp);
+			return;
+		}
+		
+		for (char ch : mapper[digits.charAt(offset)-'0'].toCharArray()) {			
+			phoneNumberPadMapper(digits, tmp+ch, res, offset+1);
 		}
 	}
 
