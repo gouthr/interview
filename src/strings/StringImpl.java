@@ -1,11 +1,13 @@
 package strings;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -131,7 +133,12 @@ public class StringImpl {
 	    
 	    System.out.println("Contiguous character occurence count: ");
 	    strImpl.charContiguousOccurence("aaabbcbbaacz");
-		
+	    
+	    System.out.println();
+	    System.out.println("List of list of anagrams from the input list: ");
+		List<String> input = Arrays.asList("cat", "dog", "dam", "mad", "donk", "key", "act", "god", "atc");
+		System.out.println(strImpl.anagramList(input));
+
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -461,6 +468,32 @@ public class StringImpl {
 		}
 		System.out.print(str.charAt(i));
 		System.out.print(count);
+	}
+	
+	/**
+	 * Return List<List<String>> which are anagrams of an List<String>
+	 */
+	public List<List<String>> anagramList(List<String> inputList) {
+		Map<String, List<String>> map = new HashMap<>();
+		for (String str : inputList) {
+			char[] chArr = str.toCharArray();
+			Arrays.sort(chArr);
+			String key = String.valueOf(chArr);
+			List<String> keyValue = map.get(key);
+			if (keyValue == null) {
+				List<String> value = new ArrayList<String>();
+				value.add(str);		
+				map.put(key, value);
+			} else {
+				keyValue.add(str);
+				map.put(key, keyValue);
+			}
+		}
+		List<List<String>> res = new ArrayList<List<String>>();
+		for(List<String> tmp : map.values()) {
+			res.add(tmp);
+		}
+		return res;
 	}
 	
 	/**
