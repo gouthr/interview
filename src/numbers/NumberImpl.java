@@ -442,6 +442,32 @@ public class NumberImpl {
 		}
 	}
 	
+	/**
+	 * The API: int read4(char *buf) reads 4 characters at a time from a file.
+	 * The return value is the actual number of characters read. For example, it
+	 * returns 3 if there is only 3 characters left in the file. By using the
+	 * read4 API, implement the function int read(char *buf, int n) that reads n
+	 * characters from the file.
+	 */
+	public int read(char[] buf, int n) {
+		boolean eof = false;
+		int count = 0;
+		int total = 0;
+		char[] tmp = new char[4];	
+		
+		while(!eof && total < n) {
+			// count = read4(tmp); // Commenting since it cannot be compiled. This line exists in actual code.
+			eof = count < 4;
+			
+			count = Math.min(count, n-total);
+			
+			for(int i=0; i<count; i++) {
+				buf[total++] = tmp[i];
+			}
+		}
+		return total;
+	}
+	
 	private class Interval {
 		int buy;
 		int sell;
