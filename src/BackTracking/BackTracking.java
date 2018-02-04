@@ -41,6 +41,9 @@ public class BackTracking {
 		List<String> res3 = new ArrayList<>();
 		bt.phoneNumberPadMapper("23", "", res3, 0);
 		System.out.println(res3);
+		
+		System.out.println("Permutations of a string: ");
+		bt.strPermutations("ABC");
 	}
 	
 	/**
@@ -145,6 +148,30 @@ public class BackTracking {
 		}
 	}
 	
-	
+	/** 
+	 * Generate all permutations of a string.
+	 * 
+	 * @param str
+	 */
+	public void strPermutations(String str) {
+		List<Character> tmp = new ArrayList<>();
+		List<List<Character>> res = new ArrayList<>();
+		strPermutationsUtil(str.toCharArray(), tmp, res);
+		System.out.println(res);
+	}
 
+	private void strPermutationsUtil(char[] str, List<Character> tmp, List<List<Character>> res) {
+		if (str.length == tmp.size()) {
+			res.add(new ArrayList<>(tmp));
+			return;
+		}
+		for (int i=0; i<str.length; i++) {
+			if (tmp.contains(str[i])) {
+				continue;
+			}
+			tmp.add(str[i]);
+			strPermutationsUtil(str, tmp, res);
+			tmp.remove(tmp.size()-1);
+		}
+	}
 }
