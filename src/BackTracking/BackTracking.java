@@ -26,6 +26,12 @@ public class BackTracking {
 		bt.combinations(arr, new ArrayList<Integer>(), 0, 2, res1);
 		System.out.println(res1);
 		
+		System.out.println("Combinations of numbers that add upto the given target: ");
+		int[] arr4 = {1, 3, 2};
+		List<List<Integer>> res4 = new ArrayList<List<Integer>>();
+		bt.combinationSum(arr4, 5, new ArrayList<Integer>(), res4, 0);
+		System.out.println(res4);
+		
 		System.out.println("Powerset of the given int array: ");
 		List<List<Integer>> res2 = new ArrayList<List<Integer>>();
 		bt.powerset(arr, new ArrayList<Integer>(), 0, res2);
@@ -64,6 +70,33 @@ public class BackTracking {
 			tmp.remove(tmp.size()-1);
 		}
 	}
+	
+	/**
+	 * Given an integer array, generate all possible combinations of numbers
+	 * that add up to the target value. Same number can be used multiple times.
+	 * Same as the coins problem, given a set of coins, how many ways can the
+	 * target amount be paid.
+	 * 
+	 * @param arr
+	 * @param target
+	 * @param tmp
+	 * @param res
+	 * @param st
+	 */
+	public void combinationSum(int[] arr, int target, List<Integer> tmp, List<List<Integer>> res, int st) {
+		if (target < 0) {
+			return;
+		} else if (target == 0) {
+			res.add(new ArrayList<Integer>(tmp));
+		} else {
+			for (int i=st; i<arr.length; i++) {
+				tmp.add(arr[i]);
+				combinationSum(arr, target - arr[i], tmp, res, i);
+				tmp.remove(tmp.size()-1);
+			}
+		}
+	}
+	
 	
 	/**
 	 * Given an int array, find all combinations of size k. Assume unique ints.
@@ -111,5 +144,7 @@ public class BackTracking {
 			phoneNumberPadMapper(digits, tmp+ch, res, offset+1);
 		}
 	}
+	
+	
 
 }
