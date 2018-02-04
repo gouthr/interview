@@ -138,6 +138,9 @@ public class StringImpl {
 	    System.out.println("List of list of anagrams from the input list: ");
 		List<String> input = Arrays.asList("cat", "dog", "dam", "mad", "donk", "key", "act", "god", "atc");
 		System.out.println(strImpl.anagramList(input));
+		
+		// Edit distance between 2 strings
+		System.out.println("Edit distance between 2 strings: " + strImpl.editDistance("sunday", "saturday"));
 
 	}
 	
@@ -303,7 +306,7 @@ public class StringImpl {
 		return minDist;
 	}
 
-	/*
+	/**
 	 * The idea is to simply pick every character and move both the sides till
 	 * the characters are same on the end. If they are not, then you break of
 	 * the loop because if the substring is not a palindrome than the bigger
@@ -494,6 +497,54 @@ public class StringImpl {
 			res.add(tmp);
 		}
 		return res;
+	}
+	
+	/**
+	 * Given two strings str1 and str2 and below operations that can performed
+	 * on str1. Find minimum number of edits (operations) required to convert
+	 * ‘str1’ into ‘str2’.
+	 * 
+	 * Insert Remove Replace
+	 * 
+	 * @param str1
+	 * @param str2
+	 * @return int
+	 * 
+	 * 		The time complexity of above solution is exponential. In worst
+	 *         case, we may end up doing O(3m) operations. The worst case
+	 *         happens when none of characters of two strings match.
+	 */
+	public int editDistance(String str1, String str2) {
+		int m = str1.length();
+		int n = str2.length();
+		return editDistanceUtil(str1, str2, m, n);
+	}
+	
+	private int editDistanceUtil(String str1, String str2, int m, int n) {
+		if (m == 0) {
+			return n;
+		}
+		if (n == 0) {
+			return m;
+		}
+		
+		if (str1.charAt(m-1) == str2.charAt(n-1)) {
+			return editDistanceUtil(str1, str2, m-1, n-1);
+		} else {
+			return 1 + min(editDistanceUtil(str1, str2, m-1, n),
+					editDistanceUtil(str1, str2, m, n-1),
+					editDistanceUtil(str1, str2, m-1, n-1));
+		}
+	}
+	
+	private int min(int a, int b, int c) {
+		if (a <= b && a <= c) {
+			return a;
+		} else if (b <= a && b <=c ) {
+			return b;
+		} else {
+			return c;
+		}
 	}
 	
 	/**
