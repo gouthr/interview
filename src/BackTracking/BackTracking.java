@@ -3,6 +3,12 @@ package BackTracking;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Arrays.sort() vs Collections.sort() Arrays.sort works for arrays which can be
+ * of primitive data type also. Collections.sort() works for objects - Collections
+ * like ArrayList, LinkedList, etc.
+ *
+ */
 public class BackTracking {
 	
 	public static void main(String[] args) {
