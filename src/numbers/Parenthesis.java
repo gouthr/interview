@@ -1,5 +1,9 @@
 package numbers;
 
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Set;
 import java.util.Stack;
 
 public class Parenthesis {
@@ -16,10 +20,16 @@ public class Parenthesis {
 		System.out.println("Possible combinations of braces for cnt: " + cnt + "  is :");
 		p.printParenthesis(cnt);
 		
+		// Print all valid parenthesis combinations by removing invalid parenthesis
+		System.out.println("Valid parenthesis combinations: ");
+		p.removeInvalidParenthesis("()())()");
 
 	}
 	
 	public boolean isParenthesisBalanced(String paran) {
+		if (paran == null) {
+			return false;
+		}
 		Stack<Character> st = new Stack<Character>();
 		int i = 0;
 		while(i < paran.length()) {
@@ -48,6 +58,43 @@ public class Parenthesis {
 		if (cnt > 0) {
 			char[] str = new char[50];
 			_printParenthesis(str, 0, cnt, 0, 0);
+		}
+	}
+	
+	/**
+	 * Print all valid parenthesis combinations by removing invalid
+	 * parenthesis.We need to remove minimum number of parentheses to make the
+	 * input string valid. If more than one valid output are possible removing
+	 * same number of parentheses then print all such output.
+	 * 
+	 * @param paren
+	 */
+	public void removeInvalidParenthesis(String paren) {
+		Queue<String> q = new LinkedList<String>();
+		Set<String> visited = new HashSet<String>();
+		boolean level = false;
+		q.add(paren);
+		visited.add(paren);
+		
+		while(!q.isEmpty()) {
+			String tmp = q.remove();
+			if (isParenthesisBalanced(tmp)) {
+				System.out.println(tmp);
+				// If answer is found, make level true
+	            // so that valid string of only that level
+	            // are processed.
+				level = true;
+			}
+			if (level) {
+				continue;
+			}
+			for (int i=0; i<tmp.length(); i++) {
+				String newParen = tmp.substring(0,i) + tmp.substring(i+1);
+				if (!visited.contains(newParen)) {
+					q.add(newParen);
+					visited.add(newParen);
+				}
+			}
 		}
 	}
 	
