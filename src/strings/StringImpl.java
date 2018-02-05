@@ -141,6 +141,9 @@ public class StringImpl {
 		
 		// Edit distance between 2 strings
 		System.out.println("Edit distance between 2 strings: " + strImpl.editDistance("sunday", "saturday"));
+		
+		// Edit distance between 2 strings
+		System.out.println("Edit distance between 2 strings optimized: " + strImpl.editDistanceDP("sunday", "saturday"));
 
 	}
 	
@@ -545,6 +548,36 @@ public class StringImpl {
 		} else {
 			return c;
 		}
+	}
+	
+	/** 
+	 * Edit distance bw 2 strings optimized - O(mn).
+	 * 
+	 * @param str1
+	 * @param str2
+	 * @return
+	 */
+	public int editDistanceDP(String str1, String str2) {
+		int m = str1.length();
+		int n = str2.length();
+		int arr[][] = new int[m+1][n+1];
+		
+		for (int i=0; i<=m; i++) {
+			for (int j=0; j<=n; j++) {
+				if (i == 0) {
+					arr[i][j] = j;
+				} else if (j == 0) {
+					arr[i][j] = j;
+				} else if (str1.charAt(i-1) == str2.charAt(j-1)) {
+					arr[i][j] = arr[i-1][j-1];
+				} else {
+					arr[i][j] = 1 + min(arr[i-1][j],
+										arr[i][j-1],
+										arr[i-1][j-1]);
+				}
+			}
+		}		
+		return arr[m][n];
 	}
 	
 	/**
