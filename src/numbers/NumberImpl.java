@@ -111,6 +111,9 @@ public class NumberImpl {
 		// kth largest number in an array
 		// {-17, -5, 0, 1, 2, 3, 3, 23}
 		System.out.println("5th largest number in arr = " + numImpl.kLargestNum(arr8, 5));
+		
+		int[] arr9 = {5,  5, 10, 40, 50, 35};
+		System.out.println("Max non-consecutive sum: " + numImpl.maxNonConsecutiveSum(arr9));
 	}
 
 	/* 
@@ -466,6 +469,39 @@ public class NumberImpl {
 			}
 		}
 		return total;
+	}
+	
+	/**
+	 * Given an array of positive numbers, find the maximum sum of a subsequence
+	 * with the constraint that no 2 numbers in the sequence should be adjacent
+	 * in the array. So 3 2 7 10 should return 13 (sum of 3 and 10) or 3 2 5 10
+	 * 7 should return 15 (sum of 3, 5 and 7).Answer the question in most
+	 * efficient way.
+	 * 
+	 * @param arr
+	 * @return
+	 */
+	// {5,  5, 10, 40, 50, 35}
+	public int maxNonConsecutiveSum(int[] arr) {
+		
+		if (arr.length < 1) {
+			return 0;
+		}
+		
+		int previncl = arr[0]; //max sum including the previous element
+		int prevexcl = 0; // max sum excluding the previous element
+		
+		int excl = 0;
+		int incl = 0;
+		
+		for (int i=1; i<arr.length; i++) {
+			excl = Math.max(previncl, prevexcl); // max sum excluding the current element
+			incl = prevexcl + arr[i]; // max sum including the current element
+			previncl = incl;
+			prevexcl = excl;
+		}
+		
+		return Math.max(incl, excl);
 	}
 	
 	private class Interval {
