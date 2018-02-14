@@ -1,7 +1,11 @@
 package trees;
 
 public class SortedLinkedListToBST {
-	static LNode head;
+	private static LNode head;
+	
+	private static TNode prev;
+	
+	private TNode tHead;
 	
 	class LNode {
 		int data;
@@ -43,6 +47,42 @@ public class SortedLinkedListToBST {
 		return root;
 	}
 	
+	/**
+	 * Convert a given binary tree to doubly linked list in place.
+	 */
+	public void treeToDLL(TNode root) {
+		if (root == null) {
+			return;
+		}
+		treeToDLL(root.left);
+		
+		if (prev == null) {
+			tHead = root;
+		} else {
+			root.left = prev;
+			prev.right = root;
+		}
+		prev = root;
+		
+		treeToDLL(root.right);
+	}
+	
+	/**
+	 * Given a sorted array, convert to balanced BST.
+	 */
+	public TNode arrToTree(int[] arr, int st, int end) {
+		
+		if (st > end) {
+			return null;
+		}
+		int mid = (st + end)/2;
+		TNode root = new TNode(arr[mid]);
+		root.left = arrToTree(arr, st, mid-1);
+		root.right = arrToTree(arr, mid+1, end);
+		
+		return root;
+	}
+	
 	void insertLNode(int data) {
 		LNode tmp = new LNode(data);
 		tmp.prev = null;
@@ -51,6 +91,20 @@ public class SortedLinkedListToBST {
 			head.prev = tmp;
 		}
 		head = tmp;
+	}
+	
+	/**
+	 * Print the tree converted to DLL in place.
+	 * @param head
+	 */
+	void printTNodeList(TNode head) {
+		TNode tmp = head;
+		
+		while(tmp != null) {
+			System.out.print(tmp.data + " ");
+			tmp = tmp.right;
+		}
+		System.out.println();
 	}
 	
 	void printLNodeList() {
@@ -79,12 +133,23 @@ public class SortedLinkedListToBST {
 		lList.insertLNode(2);
 		lList.insertLNode(1);
 		
+		System.out.println("Input linked list: ");
 		lList.printLNodeList();
 		
 		int n = lList.countNodes(head);
 		TNode root = lList.listToBST(n);
+		System.out.println("Convert sorted linked list to BST (inorder traversal display): ");
 		lList.printInorderTree(root);
 		System.out.println();
+		
+		lList.treeToDLL(root);
+		System.out.println("Convert tree to doubly linked list in place: ");
+		lList.printTNodeList(lList.tHead);
+		
+		int arr[] = {1, 2, 3, 4, 5};
+		TNode newRoot = lList.arrToTree(arr, 0, arr.length -1);
+		System.out.println("Sorted array to balanced BST (inorder traversal display): ");
+		lList.printInorderTree(newRoot);
 	}
 
 }
