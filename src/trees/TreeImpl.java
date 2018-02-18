@@ -1,6 +1,8 @@
 package trees;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -176,7 +178,11 @@ public class TreeImpl {
 		tree.levelOrderTraversal(root);
 		
 		tree.kLargestInBST(root, 4);
-
+		
+		System.out.println("k(3) closest nodes to target (6): ");
+		List<Integer> res = new ArrayList<Integer>();
+		tree.kClosestNodes(root, 6, 3, res);
+		System.out.println(res);
 	}
 	
 	public static TreeNode createTree(TreeImpl tree) {
@@ -654,7 +660,7 @@ public class TreeImpl {
 		root.right = tmp;
 	}
 	
-	/*
+	/**
 	 * Given a BST, find the kth largest node.
 	 */
 	public void kLargestInBST(TreeNode root, int k) {
@@ -667,6 +673,26 @@ public class TreeImpl {
 			System.out.println(k + "th largest node: " + root.data);
 		}
 		kLargestInBST(root.left, k);
+	}
+	
+	/**
+	 * Given a target value, find k closest nodes.
+	 * 
+	 */
+	public void kClosestNodes(TreeNode root, int target, int k, List<Integer> res) {
+		if (root == null) {
+			return;
+		}
+		kClosestNodes(root.left, target, k, res);
+		if (res.size() < k) {
+			res.add(root.data);
+		} else {
+			if (Math.abs(target - root.data) < Math.abs(target - res.get(0))) {
+				res.remove(0);
+				res.add(root.data);
+			}
+		}
+		kClosestNodes(root.right, target, k, res);		
 	}
 	
 	private int findNodeInInOrder(int[] inorder, int data, int st, int end) {
