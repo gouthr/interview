@@ -44,6 +44,9 @@ public class BackTracking {
 		
 		System.out.println("Permutations of a string: ");
 		bt.strPermutations("ABC");
+		
+		System.out.println("Add operators to evaluate an expression to a target value:");
+		bt.insertOpToEvaluateToTarget("105", 5);
 	}
 	
 	/**
@@ -172,6 +175,60 @@ public class BackTracking {
 			tmp.add(str[i]);
 			strPermutationsUtil(str, tmp, res);
 			tmp.remove(tmp.size()-1);
+		}
+	}
+	
+	/**
+	 * Given a string that contains only digits 0-9 and a target value, return
+	 * all possibilities to add binary operators (not unary) +, -, or * between
+	 * the digits so they evaluate to the target value.
+	 * 
+	 * This problem has a lot of edge cases to be considered:
+	 * overflow: we use a long type once it is larger than Integer.MAX_VALUE or
+	 * minimum, we get over it. 
+	 * 0 sequence: because we can’t have numbers with multiple digits started with zero, we have to deal with it too.
+	 * a little trick is that we should save the value that is to be multiplied in the next recursion.
+	 */
+	public void insertOpToEvaluateToTarget(String exp, int target) {
+		String resExp = "";
+		List<String> resList = new ArrayList<>();
+		insertOpToEvaluateToTargetUtil(exp, resExp, resList, target, 0, 0, 0);
+		System.out.println(resList);
+	}
+	
+	/**
+	 * if(i != pos && num.charAt(pos) == ‘0’) break;
+	 * 
+	 * I think this condition it to exclude numbers with leading zeros
+	 * 
+	 * Valid answers are:
+	 * 
+	 * "105", 5 -> ["1*0+5","10-5"] "00", 0 -> ["0+0", "0-0", "0*0"] but with
+	 * leading zeros we will have
+	 * 
+	 * "105", 5 -> ["1*0+5","10-5", "1*05"] "00", 0 -> ["0+0", "0-0", "0*0",
+	 * "00"]
+	 */
+	private void insertOpToEvaluateToTargetUtil(String exp, String resExp, List<String> resList, int target, int pos,
+			int eval, int lastOperand) {
+		if (pos == exp.length() && eval == target) {
+			resList.add(resExp);
+			return;
+		}
+
+		for (int i = pos; i < exp.length(); i++) {
+			if (i != pos && exp.charAt(pos) == '0') {
+				break;
+			}
+			int val = Integer.parseInt(exp.substring(pos, i + 1));
+			if (pos == 0) {
+				insertOpToEvaluateToTargetUtil(exp, resExp + val, resList, target, i + 1, val, val);
+			} else {
+				insertOpToEvaluateToTargetUtil(exp, resExp + "+" + val, resList, target, i + 1, eval + val, val);
+				insertOpToEvaluateToTargetUtil(exp, resExp + "-" + val, resList, target, i + 1, eval - val, -val);
+				insertOpToEvaluateToTargetUtil(exp, resExp + "*" + val, resList, target, i + 1,
+						eval - lastOperand + (lastOperand * val), lastOperand * val);
+			}
 		}
 	}
 }
