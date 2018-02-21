@@ -145,6 +145,8 @@ public class StringImpl {
 		// Edit distance between 2 strings
 		System.out.println("Edit distance between 2 strings optimized: " + strImpl.editDistanceDP("sunday", "saturday"));
 
+		// Longest substring of str (pwwkew)with no repeating characters
+		System.out.println("Longest substring of str (pwwkew)with no repeating characters: " + strImpl.longestSubstringWithoutRepeatingChars("pwwkew"));
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -578,6 +580,33 @@ public class StringImpl {
 			}
 		}		
 		return arr[m][n];
+	}
+	
+	/**
+	 * Longest substring with no repeating characters.
+	 * 
+	 * Given "pwwkew", the answer is "wke", with the length of 3. Note that the
+	 * answer must be a substring, "pwke" is a subsequence and not a substring.
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public String longestSubstringWithoutRepeatingChars(String str) {
+		Map<Character, Integer> map = new HashMap<>();
+		String res = "";
+		int max = 0;
+		int index = 0;
+		for (int i=0; i<str.length(); i++) {
+			if (map.containsKey(str.charAt(i))) {
+				index = map.get(str.charAt(i)) + 1;
+			} 
+			map.put(str.charAt(i), i);
+			if (max < i-index+1) {
+				res = str.substring(index, i+1);
+				max = i-index+1;
+			}			
+		}
+		return res;
 	}
 	
 	/**
