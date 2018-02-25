@@ -123,6 +123,11 @@ public class NumberImpl {
 			System.out.print(each + " ");
 		}
 		System.out.println();
+		
+		System.out.println("k most frequent elements in O(n): ");
+		int[] arr11 = {1,1,1,1,2,3,3,3,3,4,4,4,4,5,5,5};
+		System.out.print(numImpl.kMostFrequent(arr11, 2));
+		System.out.println();
 	}
 
 	/* 
@@ -536,6 +541,42 @@ public class NumberImpl {
 		}
 		
 		return Math.max(incl, excl);
+	}
+	
+	/**
+	 * Find k most frequent occurring elements in the array.
+	 * 
+	 */
+	public List<Integer> kMostFrequent(int[] arr,  int k) {
+		HashMap<Integer, Integer> map = new HashMap<>();
+		int n = arr.length;
+		List<Integer>[] freqMap = new List[n+1];
+		
+		for(int i=0; i<n; i++) {
+			Integer val = map.get(arr[i]);
+			if (val == null) {
+				map.put(arr[i], 1);
+			} else {
+				map.put(arr[i], val+1);
+			}
+		}
+		
+		for(Integer key : map.keySet()) {
+			int freq = map.get(key);
+			if (freqMap[freq] == null) {
+				freqMap[freq] = new ArrayList();
+			}
+			freqMap[freq].add(key);
+		}
+		
+		List<Integer> res = new ArrayList();
+		for(int i=freqMap.length-1; i>=0; i--) {
+			if (freqMap[i] != null) {
+				res.addAll(freqMap[i]);
+			}
+		}
+		
+		return res.subList(0, k);
 	}
 	
 	private class Interval {
