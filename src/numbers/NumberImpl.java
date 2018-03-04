@@ -128,6 +128,9 @@ public class NumberImpl {
 		int[] arr11 = {1,1,1,1,2,3,3,3,3,4,4,4,4,5,5,5};
 		System.out.print(numImpl.kMostFrequent(arr11, 2));
 		System.out.println();
+		
+		// Add 2 nos. without arithmetic operators
+		System.out.println("Sum: " + numImpl.addNoArithmeticOperators(2, 3));
 	}
 
 	/* 
@@ -577,6 +580,28 @@ public class NumberImpl {
 		}
 		
 		return res.subList(0, k);
+	}
+	
+	/**
+	 * Add 2 numbers without using arithmetic operators.
+	 *
+	 */
+	public int addNoArithmeticOperators(int x, int y) {
+		int carry = 0;
+		while(y != 0) {
+            // carry now contains common
+            // set bits of x and y
+			carry = x & y;
+            // Sum of bits of x and 
+            // y where at least one 
+            // of the bits is not set
+			x = x ^ y;
+            // Carry is shifted by 
+            // one so that adding it 
+            // to x gives the required sum
+			y = carry << 1;
+		}		
+		return x;
 	}
 	
 	private class Interval {
