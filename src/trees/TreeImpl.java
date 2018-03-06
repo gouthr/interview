@@ -695,6 +695,34 @@ public class TreeImpl {
 		kClosestNodes(root.right, target, k, res);		
 	}
 	
+	/**
+	 * Size of a tree.
+	 * 
+	 * @param root
+	 * @return
+	 */
+	public int size(TreeNode root) {
+		if (root == null) {
+			return 0;
+		}
+		
+		return size(root.left) + 1 + size(root.right);
+	}
+	
+	/**
+	 * Largest BST in a given BT.
+	 * Time Complexity: The worst case time complexity of this method will be O(n^2)
+	 * 
+	 * @param root
+	 * @return
+	 */
+	public int largestBSTinBT(TreeNode root) {
+		if (bstCheck(root)) {
+			return size(root);
+		}
+		return Math.max(largestBSTinBT(root.left), largestBSTinBT(root.right));
+	}
+	
 	private int findNodeInInOrder(int[] inorder, int data, int st, int end) {
 		for (int i=st; i<=end; i++) {
 			if (inorder[i] == data) {
