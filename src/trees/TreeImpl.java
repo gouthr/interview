@@ -747,6 +747,83 @@ public class TreeImpl {
 	}
 	
 	/**
+	 * Boundary traversal of a given tree.
+	 * 
+	 * We break the problem in 3 parts: 1. Print the left boundary in top-down
+	 * manner. 2. Print all leaf nodes from left to right, which can again be
+	 * sub-divided into two sub-parts: …..2.1 Print all leaf nodes of left
+	 * sub-tree from left to right. …..2.2 Print all leaf nodes of right subtree
+	 * from left to right. 3. Print the right boundary in bottom-up manner.
+	 * 
+	 * We need to take care of one thing that nodes are not printed again. e.g.
+	 * The left most node is also the leaf node of the tree.
+	 * 
+	 * @param root
+	 */
+	public void boundaryTraversal(TreeNode root) {
+		if (root != null) {
+			System.out.print(root.data + " ");
+			leftBoundary(root.left);
+			leafNodes(root.left);
+			leafNodes(root.right);
+			rightBoundary(root.right);
+		}
+	}
+	
+	/**
+	 * Print left boundary nodes of a tree except the leaf node.
+	 * 
+	 * Print top-down
+	 * 
+	 * @param root
+	 */
+	private void leftBoundary(TreeNode root) {
+		if (root != null) {
+			if (root.left != null) {
+				System.out.print(root.data + " ");
+				leftBoundary(root.left);
+			} else if (root.right != null) {
+				System.out.print(root.data + " ");
+				leftBoundary(root.right);
+			}
+		}
+	}
+	
+	/** 
+	 * Print right boundary nodes of a tree except the leaf node.
+	 * 
+	 * Print bottom-up
+	 * 
+	 * @param root
+	 */
+	private void rightBoundary(TreeNode root) {
+		if (root != null) {
+			if (root.right != null) {
+				rightBoundary(root.right);
+				System.out.print(root.data + " ");
+			} else if (root.left != null) {
+				rightBoundary(root.left);
+				System.out.print(root.data + " ");
+			}
+		}
+	}
+	
+	/** 
+	 * Print leaf nodes of a tree.
+	 * 
+	 * @param root
+	 */
+	private void leafNodes(TreeNode root) {
+		if (root != null) {
+			leafNodes(root.left);
+			if (root.left == null && root.right == null) {
+				System.out.print(root.data + " ");
+			}
+			leafNodes(root.right);
+		}
+	}
+	
+	/**
 	 * Size of a tree.
 	 * 
 	 * @param root
