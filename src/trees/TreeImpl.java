@@ -696,6 +696,57 @@ public class TreeImpl {
 	}
 	
 	/**
+	 * Convert a given binary tree to sum tree.
+	 * 
+	 * @param root
+	 */
+	public int convertToSumTree(TreeNode root) {
+		if (root == null) {
+			return 0;
+		} 
+		int oldVal = root.data;
+		int left = convertToSumTree(root.left);
+		int right = convertToSumTree(root.right);
+		root.data = left + right;
+		return root.data + oldVal;
+	}
+	
+	/**
+	 * Check if a given binary tree is a sum tree.
+	 * 
+	 * A binary tree is said to be a sum tree if: Every node is equal to the
+	 * summation of its child nodes
+	 * 
+	 * @param root
+	 * @return
+	 */
+	public int checkSumTree(TreeNode root) {
+		if (root == null || (root.left == null && root.right == null)) {
+			return 1;
+		}
+		int ln = sum(root.left);
+		int rn = sum(root.right);
+		if ((root.data == ln + rn) && checkSumTree(root.left) != 0 && checkSumTree(root.right) != 0) {
+			return 1;
+		}
+		return 0;
+	}
+
+	/**
+	 * Summation of child nodes of a given node.
+	 * 
+	 * @param root
+	 * @return
+	 */
+	private int sum(TreeNode root) {
+		if (root == null) {
+			return 0;
+		}
+		
+		return sum(root.left) + root.data + sum(root.right);
+	}
+	
+	/**
 	 * Size of a tree.
 	 * 
 	 * @param root
