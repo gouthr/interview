@@ -926,6 +926,41 @@ public class TreeImpl {
 		}
 		return 0;
 	}
+	
+	/**
+	 * Trim nodes of a tree outside the range min-max.
+	 * 
+	 * There are two possible cases for every node. 1) Node’s key is outside the
+	 * given range. This case has two sub-cases. …….a) Node’s key is smaller
+	 * than the min value. …….b) Node’s key is greater that the max value. 2)
+	 * Node’s key is in range.
+	 * 
+	 * We don’t need to do anything for case 2. In case 1, we need to remove the
+	 * node and change root of sub-tree rooted with this node. The idea is to
+	 * fix the tree in Postorder fashion. When we visit a node, we make sure
+	 * that its left and right sub-trees are already fixed. In case 1.a), we
+	 * simply remove root and return right sub-tree as new root. In case 1.b),
+	 * we remove root and return left sub-tree as new root.
+	 * 
+	 * @param root
+	 * @param min
+	 * @param max
+	 */
+	public TreeNode trimTree(TreeNode root, int min, int max) {
+		if (root == null) {
+			return null;
+		}
+		root.left = trimTree(root.left, min, max);
+		root.right = trimTree(root.right, min, max);
+		if (root.data < min) {
+			return root.right;
+		} 
+		if (root.data > max) {
+			return root.left;
+		}
+		
+		return root;
+	}
 
 	private class TreeNode {
 		int data;
