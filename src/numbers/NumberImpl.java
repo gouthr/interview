@@ -638,6 +638,39 @@ public class NumberImpl {
 		return sb.reverse().toString();
 	}
 	
+	/**
+	 * Find 2 nos. whose sum is closest to 0.
+	 * 
+	 */
+	public NumPair twoNumbersSumToZero(int[] arr) {
+		int i = 0;
+		int j = arr.length - 1;
+		int minSum = Integer.MAX_VALUE;
+		int sum = 0;
+		NumPair pair = new NumPair();
+		Arrays.sort(arr);
+		
+		while(i<j) {
+			sum = arr[i] + arr[j];
+			if (Math.abs(sum) < Math.abs(minSum)) {
+				minSum = sum;
+				pair.low = arr[i];
+				pair.high = arr[j];
+			}
+			if (sum < 0) {
+				i++;
+			} else {
+				j--;
+			}
+		}		
+		return pair;	
+	}
+	
+	private class NumPair {
+		int low;
+		int high;
+	}
+	
 	private class Interval {
 		int buy;
 		int sell;
