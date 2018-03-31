@@ -1,8 +1,10 @@
 package trees;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -397,7 +399,7 @@ public class TreeImpl {
 		if (root == null) {
 			return 0;
 		} else {
-			return 1 + max(height(root.left), height(root.right));
+			return 1 + Math.max(height(root.left), height(root.right));
 		}
 	}
 	
@@ -616,6 +618,15 @@ public class TreeImpl {
 		return root;
 	}
 	
+	private int findNodeInInOrder(int[] inorder, int data, int st, int end) {
+		for (int i=st; i<=end; i++) {
+			if (inorder[i] == data) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	public boolean mirrorCheck(TreeNode root1, TreeNode root2) {
 		if (root1 == null || root2 == null) {
 			return (root1 == null && root2 == null);
@@ -635,7 +646,7 @@ public class TreeImpl {
 		if (root.left == null && root.right == null) {
 			return level;
 		}
-		return max(deepestLeafNode(root.left, level+1), deepestLeafNode(root.right, level+1));
+		return Math.max(deepestLeafNode(root.left, level+1), deepestLeafNode(root.right, level+1));
 	}
 	
 	public TreeNode mirrorTree(TreeNode root) {
@@ -851,23 +862,71 @@ public class TreeImpl {
 		return Math.max(largestBSTinBT(root.left), largestBSTinBT(root.right));
 	}
 	
-	private int findNodeInInOrder(int[] inorder, int data, int st, int end) {
-		for (int i=st; i<=end; i++) {
-			if (inorder[i] == data) {
-				return i;
+	/**
+	 * Given a binary tree where all the right nodes are either leaf nodes with
+	 * a sibling (a left node that shares the same parent node) or empty, flip
+	 * it upside down and turn it into a tree where the original right nodes
+	 * turned into left leaf nodes. Return the new root.
+	 * 
+	 * For example: Given a binary tree {1,2,3,4,5}, return the root of the
+	 * binary tree [4,5,2,#,#,3,1].
+	 * 
+	 * newRoot is the new root.
+	 * 
+	 * @param root
+	 * @param newRoot
+	 * @return
+	 */
+	public TreeNode upsideDownTree(TreeNode root, TreeNode newRoot) {
+		if (root == null) {
+			return root;
+		}
+		if (root.left == null && root.right == null) {
+			newRoot = root;
+			return root;
+		}
+		TreeNode parent = upsideDownTree(root.left, newRoot);
+		parent.left = root.right;
+		parent.right = root;
+		root.left = root.right = null;
+		return parent.right;
+	}
+	
+	/**
+	 * Given a imbalance binary tree, print the leaf nodes then remove those
+	 * leaf node, print the new leaf nodes until only root node left.
+	 *
+	 * @param root
+	 */
+	public void printLeafNodes(TreeNode root) {
+		Map<Integer, List<TreeNode>> map = new HashMap<>();
+		printLeafNodesUtil(root, map);
+		
+		int size = map.size();
+		for(int i=0; i<size; i++) {
+			if (map.get(i) != null) {
+				for(TreeNode node : map.get(i)) {
+					System.out.print(node.data + " ");
+				}
+				System.out.println();
 			}
 		}
-		return -1;
 	}
 	
-	private int max(int a, int b) {
-		if (a>b) {
-			return a;
-		} else {
-			return b;
+	private int printLeafNodesUtil(TreeNode root, Map<Integer, List<TreeNode>> map) {
+		if (root != null) {
+			int l = printLeafNodesUtil(root.left, map);
+			int r = printLeafNodesUtil(root.right, map);
+			
+			int h = Math.max(l, r) + 1;
+			List<TreeNode> val = map.get(h) != null? map.get(h) : new ArrayList<TreeNode>();
+			val.add(root);
+			map.put(h, val);
+			return h;
 		}
+		return 0;
 	}
-	
+
 	private class TreeNode {
 		int data;
 		TreeNode left;
