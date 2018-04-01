@@ -2,8 +2,10 @@ package numbers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 public class NestedInteger {
 	Integer data;
@@ -59,6 +61,13 @@ public class NestedInteger {
 		System.out.println("Weighted sum (recursive solution): " + weightedSum(input, 1));
 		System.out.println("Weighted sum (non-recursive solution): " + weightedSumNonRecursive(input));
 		System.out.println("Inverse weighted sum (non-recursive solution): " + inverseWeightedSum(input));
+		
+		System.out.println("Flattened list: ");
+		NestedIntegerIterator nestedInterator = new NestedIntegerIterator(input);
+		while(nestedInterator.hasNext()) {
+			System.out.print(nestedInterator.next() + " ");
+		}
+		System.out.println();
 	}
 	
 	public static int weightedSum(List<NestedInteger> list, int level) {
@@ -150,6 +159,42 @@ public class NestedInteger {
 			}
 		}		
 		return sum;
+	}
+	
+	private static class NestedIntegerIterator implements Iterator<Integer> {
+		private Stack<NestedInteger> st;
+		
+		public NestedIntegerIterator(List<NestedInteger> list) {
+			st = new Stack<NestedInteger>();
+			for (int i=list.size()-1; i>=0; i--) {
+				st.push(list.get(i));
+			}
+		}
+		
+		// Example input = [1, [2, 3, [4, 5]], 6]
+		@Override
+		public boolean hasNext() {
+			while (!st.isEmpty()) {
+				NestedInteger cur = st.peek();
+				if (cur.isInteger()) {
+					return true;
+				} 
+				st.pop();
+				for (int i=cur.getList().size()-1; i>=0; i--) {
+					st.push(cur.getList().get(i));
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		public Integer next() {
+			NestedInteger front = st.pop();
+			for (int i=front.getList().size()-1; i>=0; i--) {
+				st.push(front.getList().get(i));
+			}
+			return front.getInteger();
+		}
 	}
 
 }
