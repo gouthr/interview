@@ -675,6 +675,7 @@ public class NumberImpl {
 		int low;
 		int high;
 	}
+
 	/**
 	 * Given a set, we need to find maximum and minimum possible product among all subsets of the set.
 	 * 
@@ -719,4 +720,37 @@ public class NumberImpl {
 		int maxProd;
 		int minProd;
 	}
+
+	/**
+	 * Given a set of integers, the task is to divide it into two sets S1 and S2
+	 * such that the absolute difference between their sums is minimum.
+	 * 
+	 * If there is a set S with n elements, then if we assume Subset1 has m
+	 * elements, Subset2 must have n-m elements and the value of
+	 * abs(sum(Subset1) – sum(Subset2)) should be minimum.
+	 * 
+	 * @param arr
+	 * @return
+	 */
+	public int partitionSubsets(int[] arr) {
+		int sumTotal = 0;
+		int n = arr.length;
+		for (int i=0; i<n; i++) {
+			sumTotal += arr[i];
+		}
+		return partitionUtil(arr, n, 0, sumTotal);
+	}
+	
+	private int partitionUtil(int[] arr, int n, int curTotal, int sumTotal) {
+		if (n == 0) {
+			return Math.abs((sumTotal - curTotal) - curTotal);
+		}
+		
+        // For every item arr[i], we have two choices
+        // (1) We do not include it first set
+        // (2) We include it in first set
+        // We return minimum of two choices
+		return Math.min(partitionUtil(arr, n-1, curTotal + arr[n-1], sumTotal), partitionUtil(arr, n-1, curTotal, sumTotal));
+	}
+	
 }
