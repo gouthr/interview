@@ -675,4 +675,48 @@ public class NumberImpl {
 		int low;
 		int high;
 	}
+	/**
+	 * Given a set, we need to find maximum and minimum possible product among all subsets of the set.
+	 * 
+	 * @param arr
+	 * @return
+	 */
+	public Product maxMinProd(int[] arr) {
+		int prevMaxProd = arr[0];
+		int prevMinProd = arr[0];
+		int curMaxProd = arr[0];
+		int curMinProd = arr[0];
+		int maxProd = arr[0];
+		int minProd = arr[0];
+		
+		Product prod = new Product();
+		
+		for (int i=1; i<arr.length; i++) {
+			/*
+			 * Current maximum product is maximum of following 1) prevMax *
+			 * curelement (when curelement is +ve) 2) prevMin * curelement (when
+			 * curelement is -ve) 3) Element itself 4) Previous max product
+			 */
+			curMaxProd = Math.max(prevMaxProd*arr[i], Math.max(prevMinProd*arr[i], arr[i]));
+			curMaxProd = Math.max(curMaxProd, prevMaxProd);
+			
+			curMinProd = Math.min(prevMinProd*arr[i], Math.min(prevMaxProd*arr[i], arr[i]));
+			curMinProd = Math.min(curMinProd, prevMinProd);
+			
+			maxProd = Math.max(maxProd, curMaxProd);
+			minProd = Math.max(minProd, curMinProd);
+			
+			prevMaxProd = curMaxProd;
+			prevMinProd = curMinProd;
+		}
+		prod.maxProd = maxProd;
+		prod.minProd = minProd;
+		
+		return prod;
+	}
+	
+	private class Product {
+		int maxProd;
+		int minProd;
+	}
 }
