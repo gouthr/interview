@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 
 public class NestedInteger {
 	Integer data;
@@ -60,7 +59,6 @@ public class NestedInteger {
 		System.out.println("Weighted sum (recursive solution): " + weightedSum(input, 1));
 		System.out.println("Weighted sum (non-recursive solution): " + weightedSumNonRecursive(input));
 		System.out.println("Inverse weighted sum (non-recursive solution): " + inverseWeightedSum(input));
-		System.out.println("Inverse weighted sum (non-recursive solution): " + inverseWeightedSum2(input));
 	}
 	
 	public static int weightedSum(List<NestedInteger> list, int level) {
@@ -105,7 +103,7 @@ public class NestedInteger {
 		}
 		return sum;		
 	}
-	
+
 	public static int inverseWeightedSum(List<NestedInteger> list) {
 		if (list == null || list.isEmpty()) {
 			return 0;
@@ -113,19 +111,19 @@ public class NestedInteger {
 		
 		HashMap<Integer, ArrayList<Integer>> map = new HashMap<Integer, ArrayList<Integer>>();
 		
-		Stack<NestedInteger> st1 = new Stack<NestedInteger>();
-		Stack<Integer> st2 = new Stack<Integer>();
+		LinkedList<NestedInteger> q1 = new LinkedList<NestedInteger>();
+		LinkedList<Integer> q2 = new LinkedList<Integer>();
 		int maxLevel = Integer.MIN_VALUE;
 		int sum = 0;
 		
 		for (NestedInteger ni : list) {
-			st1.push(ni);
-			st2.push(1);
+			q1.add(ni);
+			q2.add(1);
 		}
 		
-		while(!st1.isEmpty()) {
-			NestedInteger top = st1.pop();
-			Integer level = st2.pop();
+		while(!q1.isEmpty()) {
+			NestedInteger top = q1.remove();
+			Integer level = q2.remove();
 			
 			maxLevel = Math.max(level, maxLevel);
 			
@@ -139,56 +137,8 @@ public class NestedInteger {
 				}
 			}
 			for (NestedInteger ni : top.getList()) {
-				st1.push(ni);
-				st2.push(level+1);
-			}			
-		}
-		
-		for (int i=maxLevel; i>0; i--) {
-			if (map.get(i) != null) {
-				for (Integer val : map.get(i)) {
-					sum += val * (maxLevel-i + 1);
-				}
-			}
-		}		
-		return sum;
-	}
-
-	public static int inverseWeightedSum2(List<NestedInteger> list) {
-		if (list == null || list.isEmpty()) {
-			return 0;
-		}
-		
-		HashMap<Integer, ArrayList<Integer>> map = new HashMap<Integer, ArrayList<Integer>>();
-		
-		LinkedList<NestedInteger> st1 = new LinkedList<NestedInteger>();
-		LinkedList<Integer> st2 = new LinkedList<Integer>();
-		int maxLevel = Integer.MIN_VALUE;
-		int sum = 0;
-		
-		for (NestedInteger ni : list) {
-			st1.add(ni);
-			st2.add(1);
-		}
-		
-		while(!st1.isEmpty()) {
-			NestedInteger top = st1.remove();
-			Integer level = st2.remove();
-			
-			maxLevel = Math.max(level, maxLevel);
-			
-			if (top.isInteger()) {
-				if (map.containsKey(level)) {
-					map.get(level).add(top.getInteger());
-				} else {
-					ArrayList<Integer> vals = new ArrayList<Integer>();
-					vals.add(top.getInteger());
-					map.put(level, vals);
-				}
-			}
-			for (NestedInteger ni : top.getList()) {
-				st1.add(ni);
-				st2.add(level+1);
+				q1.add(ni);
+				q2.add(level+1);
 			}			
 		}
 		
