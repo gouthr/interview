@@ -231,4 +231,39 @@ public class BackTracking {
 			}
 		}
 	}
+	
+	/**
+	 * Returns count of possible paths to reach cell at row number m and column
+	 * number n from the topmost leftmost cell (cell at 1, 1)
+	 * 
+	 * @param m
+	 * @param n
+	 * @return
+	 */
+	public int countPaths(int m, int n) {
+		int[][] arr = new int[m][n];
+		
+        // Count of paths to reach any cell in 
+        // first column is 1
+		for (int i=0; i<m; i++) {
+			arr[i][0] = 1;
+		}
+		
+        // Count of paths to reach any cell in
+        // first row is 1
+		for (int i=0; i<n; i++) {
+			arr[0][i] = 1;
+		}
+		
+		for(int i=1; i<m; i++) {
+			for (int j=1; j<n; j++) {
+		        // By uncommenting the last part the 
+	            // code calculates the total possible paths 
+	            // if the diagonal Movements are allowed
+				arr[i][j] = arr[i-1][j] + arr[i][j-1]; // + arr[i-1][j-1];
+			}
+		}
+		
+		return arr[m-1][n-1];
+	}
 }
