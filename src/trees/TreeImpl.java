@@ -963,7 +963,14 @@ public class TreeImpl {
 	}
 	
 	/**
-	 * Find LCA (Lowest Common Ancestor) of 2 given nodes - parent pointer provided.
+	 * Find LCA (Lowest Common Ancestor) of 2 given nodes - parent pointer
+	 * provided.
+	 * 
+	 * Below are steps to find LCA.
+	 * 
+	 * Create an empty hash table. Insert n1 and all of its ancestors in hash
+	 * table. Check if n2 or any of its ancestors exist in hash table, if yes
+	 * return the first existing ancestor.
 	 * 
 	 * @param root
 	 * @param node1
