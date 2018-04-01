@@ -131,6 +131,12 @@ public class NumberImpl {
 		
 		// Add 2 nos. without arithmetic operators
 		System.out.println("Sum: " + numImpl.addNoArithmeticOperators(2, 3));
+		
+       // Let us search 3 in below array
+       int arr12[] = {5, 6, 7, 8, 9, 10, 1, 2, 3};
+       int key = 1;
+       System.out.println("Index of the element is: "
+                      + numImpl.rotatedBinarySearch(arr12, key));
 	}
 
 	/* 
@@ -751,6 +757,60 @@ public class NumberImpl {
         // (2) We include it in first set
         // We return minimum of two choices
 		return Math.min(partitionUtil(arr, n-1, curTotal + arr[n-1], sumTotal), partitionUtil(arr, n-1, curTotal, sumTotal));
+	}
+	
+	public int rotatedBinarySearch(int[] arr, int key) {
+		if (arr == null || arr.length == 0) {
+			System.out.println("Invalid input.");
+			return -1;
+		}
+		
+		int n = arr.length;
+		int pivot = findPivot(arr, 0, n-1);
+		if (pivot == -1) { // Array is not rotated
+			return binarySearch(arr, 0, n-1, key);
+		}
+		if (arr[pivot] == key) {
+			return pivot;
+		} else if (key < arr[0]) {
+			return binarySearch(arr, pivot+1, n-1, key);
+		} else {
+			return binarySearch(arr, 0, pivot-1, key);
+		}
+	}
+	
+	private int findPivot(int[] arr, int l, int h) {
+		if (h < l) {
+			return -1;
+		}
+		
+		int mid = (l + h)/2;
+		if (mid < h && arr[mid] > arr[mid+1]) {
+			return mid;
+		}
+		if (mid > l && arr[mid] < arr[mid-1]) {
+			return mid-1;
+		}
+		if (arr[mid] <= arr[l]) {
+			return findPivot(arr, l, mid-1);
+		} else {
+			return findPivot(arr, mid+1, h);
+		}
+	}
+	
+	private int binarySearch(int[] arr, int l, int h, int key) {
+		if (h < l) {
+			return -1;
+		}
+		
+		int mid = (l + h)/2;
+		if (arr[mid] == key) {
+			return mid;
+		} else if (key < arr[mid]) {
+			return binarySearch(arr, l, mid-1, key);
+		} else {
+			return binarySearch(arr, mid+1, h, key);
+		}
 	}
 	
 }
