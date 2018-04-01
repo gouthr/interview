@@ -487,6 +487,11 @@ public class NumberImpl {
 		}
 	}
 	
+	private class Interval {
+		int buy;
+		int sell;
+	}
+	
 	/**
 	 * The API: int read4(char *buf) reads 4 characters at a time from a file.
 	 * The return value is the actual number of characters read. For example, it
@@ -670,9 +675,4 @@ public class NumberImpl {
 		int low;
 		int high;
 	}
-	
-	private class Interval {
-		int buy;
-		int sell;
-	};
 }
