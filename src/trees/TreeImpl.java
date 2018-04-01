@@ -961,6 +961,47 @@ public class TreeImpl {
 		
 		return root;
 	}
+	
+	/**
+	 * Find LCA (Lowest Common Ancestor) of 2 given nodes - parent pointer provided.
+	 * 
+	 * @param root
+	 * @param node1
+	 * @param node2
+	 * @return
+	 */
+	public Node lcaWithParent(Node node1, Node node2) {
+		Map<Node, Boolean> map = new HashMap<>();
+		while(node1 != null) {
+			map.put(node1, true);
+			node1 = node1.parent;
+		}
+		
+		while (node2 != null) {
+			if (map.containsKey(node2)) {
+				return node2;
+			}
+			node2 = node2.parent;
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Tree node with parent pointer.
+	 *
+	 */
+	private class Node 
+	{
+	    int key;
+	    Node left, right, parent;
+	 
+	    Node(int key) 
+	    {
+	        this.key = key;
+	        left = right = parent = null;
+	    }
+	}
 
 	private class TreeNode {
 		int data;
