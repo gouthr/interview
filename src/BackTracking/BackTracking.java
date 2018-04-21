@@ -112,11 +112,11 @@ public class BackTracking {
 			res.add(new ArrayList<>(tmp));
 			return;
 		}
-		if (st < arr.length) {
-			tmp.add(arr[st]);
-			combinations(arr, tmp, st+1, k, res);
+		for(int i=st; i<arr.length; i++) {
+			tmp.add(arr[i]);
+			combinations(arr, tmp, i+1, k, res);
 			tmp.remove(tmp.size()-1);
-			combinations(arr, tmp, st+1, k, res);
+			// combinations(arr, tmp, st+1, k, res);
 		}
 	}
 	

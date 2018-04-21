@@ -161,7 +161,7 @@ public class TreeImpl {
 		System.out.println("Mirror check:" + tree.mirrorCheck(root.left, root.right));
 		System.out.println();
 		
-		// Deepest leaf node level
+		// Deepest leaf node level is one less than the height of the tree
 		System.out.println("Deepest leaf node level: " + tree.deepestLeafNode(root, 0));
 		System.out.println();
 		
