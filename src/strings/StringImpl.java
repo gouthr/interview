@@ -147,6 +147,9 @@ public class StringImpl {
 
 		// Longest substring of str (pwwkew)with no repeating characters
 		System.out.println("Longest substring of str (pwwkew)with no repeating characters: " + strImpl.longestSubstringWithoutRepeatingChars("pwwkew"));
+		
+		// Reverse words in a string
+		System.out.println("Reverse words in a string: " + strImpl.reverseWordsInString("the sky is     blue"));
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -159,6 +162,13 @@ public class StringImpl {
 				str = swap(str, start, i); //backtrack
 			}
 		}
+	}
+
+	private StringBuilder swap(StringBuilder str, int i, int j) {
+		char tmp = str.charAt(i);
+		str.setCharAt(i, str.charAt(j));
+		str.setCharAt(j, tmp);
+		return str;
 	}
 	
 	/**
@@ -625,10 +635,30 @@ public class StringImpl {
 		return res;
 	}
 	
-	private StringBuilder swap(StringBuilder str, int i, int j) {
-		char tmp = str.charAt(i);
-		str.setCharAt(i, str.charAt(j));
-		str.setCharAt(j, tmp);
-		return str;
+	/**
+	 * Reverse words in a string. For example, Given s = "the sky is blue",
+	 * return "blue is sky the".
+	 * 
+	 * @param str
+	 */
+	public String reverseWordsInString(String str) {
+		StringBuilder sb = new StringBuilder(str);		
+		sb.reverse();
+		int start = 0;
+		for (int i=0; i<sb.length(); i++) {
+			char ch = sb.charAt(i);
+			if (ch == ' ') {
+				 int end = i;
+				 String revStr = new StringBuilder(sb.substring(start, end)).reverse().toString();			 
+				 sb.replace(start, end, revStr);
+				 start = i;
+			}
+		}
+		// Last word needs to be reversed
+		 String revStr = new StringBuilder(sb.substring(start, sb.length())).reverse().toString();			 
+		 sb.replace(start, sb.length(), revStr);
+		
+		return sb.toString();
 	}
+
 }
