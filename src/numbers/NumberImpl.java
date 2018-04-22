@@ -980,7 +980,7 @@ public class NumberImpl {
 					continue;
 				}
 				
-				int gcd = gcd(x, y);
+				int gcd = gcd(x, y); // gcd will never be zero
 				
 				x = x/gcd;
 				y = y/gcd;
