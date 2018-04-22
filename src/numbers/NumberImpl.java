@@ -162,6 +162,9 @@ public class NumberImpl {
        // max points on a straight line given a 2d points array
        int[][] arr15 = {{1,1},{3,2},{5,3},{4,1},{2,3},{1,4}};
        System.out.println("Max points on a staright line: " + numImpl.maxPointsOnLine(arr15));
+       
+       // N queens problem
+       numImpl.placeNQueens(4);
 	}
 
 	/* 
@@ -1005,6 +1008,57 @@ public class NumberImpl {
 		} else {
 			return gcd(b, a%b);
 		}
+	}
+	
+	/**
+	 * Place n queens on a n*n chess board such that they do not collide with each other.
+	 * 
+	 * @param n
+	 */
+	public void placeNQueens(int n) {
+		List<Integer[]> res = new ArrayList<>();
+		Integer[] columns = new Integer[n];
+		placeNQueensUtil(n, 0, columns, res);
+		System.out.println("Queen positions: ");
+		for (Integer[] each : res) {
+			for (int pos : each) {
+				System.out.print(pos + " ");
+			}
+			System.out.println();
+		}
+		System.out.println();
+	}
+	
+	private void placeNQueensUtil(int n, int row, Integer[] columns, List<Integer[]> res) {
+		if (row == n) {
+			res.add(columns.clone());
+			return;
+		}
+		for (int col=0; col<n; col++) {
+			if (checkValidPos(columns, row, col)) {
+				columns[row] = col;
+				placeNQueensUtil(n, row+1, columns, res);
+			}
+		}
+	}
+	
+	private boolean checkValidPos(Integer[] columns, int row1, int col1) {
+		for (int row2 = 0; row2 < row1; row2++) {
+			int col2 = columns[row2];
+			// check previous row's queen position
+			if (col2 == col1) {
+				return false;
+			}
+			// check diagonal - if distance bw rows == dist bw columns, then
+			// they are on the same diagonal
+			int col = Math.abs(col1 - col2);
+			int row = row1 - row2;
+
+			if (row - col == 0) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 }
