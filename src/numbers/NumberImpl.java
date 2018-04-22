@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -157,6 +158,10 @@ public class NumberImpl {
     	   }
     	   System.out.println();
        }
+       
+       // max points on a straight line given a 2d points array
+       int[][] arr15 = {{1,1},{3,2},{5,3},{4,1},{2,3},{1,4}};
+       System.out.println("Max points on a staright line: " + numImpl.maxPointsOnLine(arr15));
 	}
 
 	/* 
@@ -923,6 +928,82 @@ public class NumberImpl {
 				arr[i][j] = arr[j][i];
 				arr[j][i] = tmp;
 			}
+		}
+	}
+	
+	/**
+	 * Given n points on a 2D plane, find the maximum number of points that lie
+	 * on the same straight line.
+	 * 
+	 * 
+	 * A line is determined by two factors,say y=ax+b
+	 * 
+	 * If two points(x1,y1) (x2,y2) are on the same line(Of course).
+	 * 
+	 * Consider the gap between two points.
+	 * 
+	 * We have (y2-y1)=a(x2-x1),a=(y2-y1)/(x2-x1) a is a rational, b is canceled
+	 * since b is a constant
+	 * 
+	 * If a third point (x3,y3) are on the same line. So we must have y3=ax3+b
+	 * 
+	 * Thus,(y3-y1)/(x3-x1)=(y2-y1)/(x2-x1)=a
+	 * 
+	 * Since a is a rational, there exists y0 and x0,
+	 * y0/x0=(y3-y1)/(x3-x1)=(y2-y1)/(x2-x1)=a
+	 * 
+	 * So we can use y0&x0 to track a line;
+	 * 
+	 * @param arr
+	 * @return
+	 */
+	public int maxPointsOnLine(int[][] arr) {
+		int n = arr.length;
+		Map<String, Integer> map = new HashMap<>();
+		int res = 0;
+			
+		for(int i=0; i<n; i++) {
+			int maxRes = 0;
+			int overlap = 0;
+			map.clear();
+			for (int j=i+1; j<n; j++) {
+				int x1 = arr[i][0];
+				int x2 = arr[j][0];
+				int y1 = arr[i][1];
+				int y2 = arr[j][1];
+				
+				int x = x1-x2;
+				int y = y1-y2;
+				
+				if (x==0 && y==0) {
+					overlap++;
+					continue;
+				}
+				
+				int gcd = gcd(x, y);
+				
+				x = x/gcd;
+				y = y/gcd;
+				
+				String key = x+":"+y;
+				Integer val = map.get(key);
+				if (val == null) {
+					map.put(key, 1);
+				} else {
+					map.put(key, val+1);
+				}
+				maxRes = Math.max(maxRes, map.get(key));
+			}
+			res = Math.max(maxRes + overlap + 1, res);
+		}
+		return res;
+	}
+	
+	private int gcd(int a, int b) {
+		if (b==0) {
+			return a;
+		} else {
+			return gcd(b, a%b);
 		}
 	}
 	
