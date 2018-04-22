@@ -137,6 +137,9 @@ public class NumberImpl {
        int key = 1;
        System.out.println("Index of the element is: "
                       + numImpl.rotatedBinarySearch(arr12, key));
+       
+       int arr13[] = {0,1,0,2,1,0,1,3,2,1,2,1};
+       System.out.println("Trappung rain water. Max water trapped = " + numImpl.trapRainWater(arr13));
 	}
 
 	/* 
@@ -811,6 +814,44 @@ public class NumberImpl {
 		} else {
 			return binarySearch(arr, mid+1, h, key);
 		}
+	}
+	
+	/**
+	 * Given n non-negative integers representing an elevation map where the
+	 * width of each bar is 1, compute how much water it is able to trap after
+	 * raining.
+	 * 
+	 * Reference - https://leetcode.com/problems/trapping-rain-water/description/
+	 * 
+	 * @param arr
+	 * @return
+	 */
+	public int trapRainWater(int[] arr) {
+		int n = arr.length;
+		int i = 0;
+		int j = n-1;
+		int maxleft = 0; 
+		int maxright = 0;
+		int res = 0;
+		
+		while(i<j) {
+			if (arr[i] <= arr[j]) {
+				if (arr[i] >= maxleft) {
+					maxleft = arr[i];
+				} else {
+					res+=maxleft-arr[i];
+				}
+				i++;
+			} else {
+				if(arr[j] >= maxright) {
+					maxright = arr[j];
+				} else {
+					res+=maxright-arr[j];
+				}
+				j--;
+			}
+		}
+		return res;
 	}
 	
 }
