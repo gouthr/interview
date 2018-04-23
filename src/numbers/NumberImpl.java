@@ -180,6 +180,14 @@ public class NumberImpl {
 		int[][] arr16 = {{1,4,7,11,15},{2,5,8,12,19}, {3,6,9,16,22}, {10,13,14,17,24},{18,21,23,26,30}};
 		System.out.println(numImpl.search2DMatrix(arr16, 5));
 		System.out.println(numImpl.search2DMatrix(arr16, 20));
+		
+		//		Maximal square area in a 2d matrix of 1's and 0's
+		//		1 0 1 0 0
+		//		1 0 1 1 1
+		//		1 1 1 1 1
+		//		1 0 0 1 0
+		int[][] arr17 = {{1,0,1,0,0},{1,0,1,1,1},{1,1,1,1,1},{1,0,0,1,0}};
+		System.out.println("Maximal square area: " + numImpl.maximalSquare(arr17));
 	}
 
 	/* 
@@ -1120,6 +1128,40 @@ public class NumberImpl {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Given a 2D binary matrix filled with 0's and 1's, find the largest square containing
+	 * only 1's and return its area.
+
+		For example, given the following matrix:
+		
+		1 0 1 0 0
+		1 0 1 1 1
+		1 1 1 1 1
+		1 0 0 1 0
+		Return 4.
+	 * @param arr
+	 * @return
+	 */
+	public int maximalSquare(int[][] arr) {
+		if (arr == null || arr.length == 0 || arr[0].length == 0) {
+			return 0;
+		}
+		int m = arr.length;
+		int n = arr[0].length;
+		int[][] b = new int[m+1][n+1];
+		int res = 0;
+		
+		for(int i=1; i<m+1; i++) {
+			for (int j=1; j<n+1; j++) {
+				if (arr[i-1][j-1] == 1) {
+					b[i][j] = Math.min(b[i][j-1], Math.min(b[i-1][j-1], b[i-1][j])) + 1;
+					res = Math.max(res, b[i][j]);
+				}
+			}
+		}
+		return res*res;
 	}
 	
 }
