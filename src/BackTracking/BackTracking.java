@@ -47,6 +47,8 @@ public class BackTracking {
 		
 		System.out.println("Add operators to evaluate an expression to a target value:");
 		bt.insertOpToEvaluateToTarget("105", 5);
+		
+		System.out.println("Number of ways to reach the top using 1, 2 or 3 steps: " + bt.countStairsWays(5));
 	}
 	
 	/**
@@ -280,5 +282,37 @@ public class BackTracking {
 			}
 		}	
 		return arr[m-1][n-1];
+	}
+	
+	/**
+	 * Given n stairs, find the number of ways to reach the top using 1, 2 or 3 steps.
+	 * 
+	 * @param n
+	 * @return
+	 */
+	public int countStairsWays(int n) {
+		if (n <= 1) {
+			return n;
+		}
+		if (n == 2) {
+			return 2;
+		}
+		if (n == 3) {
+			return 4;
+		}
+
+		int first = 1;
+		int second = 2;
+		int third = 4;
+		int fourth = 0;
+		
+		for (int i=4; i<=n; i++) {
+			fourth = third + second + first;
+			first = second;
+			second = third;
+			third = fourth;
+		}
+		
+		return fourth;
 	}
 }
