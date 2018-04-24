@@ -185,6 +185,8 @@ public class TreeImpl {
 		List<Integer> res = new ArrayList<Integer>();
 		tree.kClosestNodes(root, 6, 3, res);
 		System.out.println(res);
+		
+		tree.BTPaths(root);
 	}
 	
 	public static TreeNode createTree(TreeImpl tree) {
@@ -992,6 +994,42 @@ public class TreeImpl {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Given a binary tree, display all the paths from root to leaf.
+	 * For example, given the following binary tree:
+		
+		   1
+		 /   \
+		2     3
+		 \
+		  5
+		All root-to-leaf paths are:
+		
+		["1->2->5", "1->3"]
+	 * @param root
+	 */
+	public void BTPaths(TreeNode root) {
+		List<String> res = new ArrayList<>();
+		if (root != null) {
+			BTPathsUtil(root, "", res);
+		}
+		for(String str : res) {
+			System.out.print(str + ", ");
+		}
+	}
+	
+	private void BTPathsUtil(TreeNode root, String path, List<String> res) {
+		if (root.left == null && root.right == null) {
+			res.add(path + root.data);
+		}
+		if (root.left != null) {
+			BTPathsUtil(root.left, path+root.data+"->", res);
+		}
+		if (root.right != null) {
+			BTPathsUtil(root.right, path+root.data+"->", res);
+		}
 	}
 	
 	/**
