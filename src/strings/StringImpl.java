@@ -150,6 +150,11 @@ public class StringImpl {
 		
 		// Reverse words in a string
 		System.out.println("Reverse words in a string: " + strImpl.reverseWordsInString("the sky is     blue"));
+		
+		// Find index of substring in a given string
+		System.out.println("Index of substr in a given str: " + strImpl.strStr("Goutham", "ham"));
+		System.out.println("Index of substr in a given str: " + strImpl.strStr("aaaaa", "bba"));
+		System.out.println("Index of substr in a given str: " + strImpl.strStr("hello", "ll"));
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -659,6 +664,39 @@ public class StringImpl {
 		 sb.replace(start, sb.length(), revStr);
 		
 		return sb.toString();
+	}
+	
+	/**
+	 * Return index of matching substring in string. Else return -1.
+	 * 
+	 * @param haystack
+	 * @param needle
+	 * @return
+	 */
+	public int strStr(String haystack, String needle) {
+		if (haystack == null || needle == null) {
+			return -1;
+		}
+
+		int m = haystack.length();
+		int n = needle.length();
+		if (m==0 || n==0) {
+			return -1;
+		}
+		
+		for (int i=0; i<=m-n; i++) {
+			int count = 0;
+			for (int j=0; j<n; j++) {
+				if (haystack.charAt(i+j) != needle.charAt(j)) {
+					break;
+				}
+				count++;
+				if (count==n) {
+					return i;
+				}
+			}
+		}
+		return -1;
 	}
 
 }
