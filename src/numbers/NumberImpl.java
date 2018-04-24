@@ -191,6 +191,8 @@ public class NumberImpl {
 		
 		int[] arr18 = {5,4,0,3,1,6,2};
 		System.out.println("Nesting array size: " + numImpl.arrayNestingSize(arr18));
+		
+		System.out.println("Comparing 2 versio numbers: " + numImpl.compareVersionNumbers("0.3", ".25"));
 	}
 
 	/* 
@@ -1201,6 +1203,34 @@ public class NumberImpl {
 			maxSize = Math.max(maxSize, size);
 		}
 		return maxSize;
+	}
+	
+	/**
+	 * Compare version numbers represented as string. Compare two version
+	 * numbers version1 and version2. If version1 > version2 return 1, if
+	 * version1 < version2 return -1, otherwise return 0.
+	 * 
+	 * @param ver1
+	 * @param ver2
+	 * @return
+	 */
+	public int compareVersionNumbers(String ver1, String ver2) {
+		String[] verNum1 = ver1.split("\\.");
+		String[] verNum2 = ver2.split("\\.");
+		
+		int length1 = verNum1.length;
+		int length2 = verNum2.length;
+		
+		int maxLen = Math.max(length1, length2);
+		
+		for(int i=0; i<maxLen; i++) {
+			Integer num1 = i>length1? 0 : Integer.parseInt(verNum1[i]);
+			Integer num2 = i>length2? 0 : Integer.parseInt(verNum2[i]);
+			if (num1 != num2) {
+				return num1.compareTo(num2);
+			}
+		}	
+		return 0;		
 	}
 	
 }
