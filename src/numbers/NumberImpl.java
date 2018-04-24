@@ -188,6 +188,9 @@ public class NumberImpl {
 		//		1 0 0 1 0
 		int[][] arr17 = {{1,0,1,0,0},{1,0,1,1,1},{1,1,1,1,1},{1,0,0,1,0}};
 		System.out.println("Maximal square area: " + numImpl.maximalSquare(arr17));
+		
+		int[] arr18 = {5,4,0,3,1,6,2};
+		System.out.println("Nesting array size: " + numImpl.arrayNestingSize(arr18));
 	}
 
 	/* 
@@ -1162,6 +1165,42 @@ public class NumberImpl {
 			}
 		}
 		return res*res;
+	}
+	
+	/**
+	 * A zero-indexed array A of length N contains all integers from 0 to N-1. 
+	 * Find and return the longest length of set S, where S[i] = {A[i], A[A[i]], A[A[A[i]]], ... } 
+	 * subjected to the rule below.
+
+		Suppose the first element in S starts with the selection of element A[i] of index = i,
+		the next element in S should be A[A[i]], and then A[A[A[i]]]… By that analogy,
+		we stop adding right before a duplicate element occurs in S.
+		
+		Example 1:
+		Input: A = [5,4,0,3,1,6,2]
+		Output: 4
+		Explanation: 
+		A[0] = 5, A[1] = 4, A[2] = 0, A[3] = 3, A[4] = 1, A[5] = 6, A[6] = 2.
+		
+		One of the longest S[K]:
+		S[0] = {A[0], A[5], A[6], A[2]} = {5, 6, 2, 0}
+	 * @param arr
+	 * @return
+	 */
+	public int arrayNestingSize(int[] arr) {
+		int n = arr.length;
+		int maxSize = 0;
+		
+		for(int i=0; i<n; i++) {
+			int size = 0;
+			for (int j=i; arr[j]>=0; size++) {
+				int k = arr[j];
+				arr[j] = -1;
+				j = k;
+			}
+			maxSize = Math.max(maxSize, size);
+		}
+		return maxSize;
 	}
 	
 }
