@@ -2,6 +2,8 @@ package strings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -155,6 +157,11 @@ public class StringImpl {
 		System.out.println("Index of substr in a given str: " + strImpl.strStr("Goutham", "ham"));
 		System.out.println("Index of substr in a given str: " + strImpl.strStr("aaaaa", "bba"));
 		System.out.println("Index of substr in a given str: " + strImpl.strStr("hello", "ll"));
+		
+		// top k frequent words
+		// ["i", "love", "leetcode", "i", "love", "coding"]
+		String[] strInput = {"i", "love", "leetcode", "i", "love", "coding"};
+		System.out.println("Top k(2) frequent words: " + strImpl.topKFrequentWords(strInput, 2));
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -697,6 +704,42 @@ public class StringImpl {
 			}
 		}
 		return -1;
+	}
+	
+	/**
+	 * Given a non-empty list of words, return the k most frequent elements.
+	 * 
+	 * Your answer should be sorted by frequency from highest to lowest. If two
+	 * words have the same frequency, then the word with the lower alphabetical
+	 * order comes first.
+	 * 
+	 * Example 1: Input: ["i", "love", "leetcode", "i", "love", "coding"], k = 2
+	 * Output: ["i", "love"] Explanation: "i" and "love" are the two most
+	 * frequent words. Note that "i" comes before "love" due to a lower
+	 * alphabetical order.
+	 * 
+	 * @param words
+	 * @param k
+	 * @return
+	 */
+	public List<String> topKFrequentWords(String[] words, int k){
+		Map<String, Integer> map = new HashMap<>();
+		for (String word : words) {
+			map.put(word, map.getOrDefault(word, 0)+1);
+		}
+		
+		List<String> candidates = new ArrayList<>(map.keySet());
+		// Collections.sort(candidates, (w1, w2)->map.get(w1) != map.get(w2)? map.get(w2)-map.get(w1) : w1.compareTo(w2)); // Using lambda
+		
+		Collections.sort(candidates, new Comparator<String>() {
+			@Override
+			public int compare(String w1, String w2) {
+				return map.get(w1) != map.get(w2)? map.get(w2)-map.get(w1) : w1.compareTo(w2);
+			}
+			
+		});
+		
+		return candidates.subList(0, k);
 	}
 
 }
