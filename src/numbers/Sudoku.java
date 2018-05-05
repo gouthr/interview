@@ -13,6 +13,9 @@ public class Sudoku {
 								  {1, 3, 0, 0, 0, 0, 2, 5, 0},
 								  {0, 0, 0, 0, 0, 0, 0, 7, 4},
 								  {0, 0, 5, 2, 0, 6, 3, 0, 0}};
+								  
+		System.out.println("Given input is a valid sudoku input: " + sod.validSudoku(arr));
+		
 		if (sod.solveSudoku(arr)) {
 			for (int i=0; i<9; i++) {
 				for (int j=0; j<9; j++) {
@@ -23,6 +26,64 @@ public class Sudoku {
 		} else {
 			System.out.println("Sudoku solution does not exist.");
 		}
+	}
+	
+	/**
+	 * Check for valid sudoku.
+	 * 
+	 * @param arr
+	 * @return
+	 */
+	public boolean validSudoku(int[][] arr) {
+		for (int i=0; i<9; i++) {
+			for (int j=0; j<9; j++) {
+				if (arr[i][j] != 0) {
+					if (!checkValidRowColBox(arr, arr[i][j], i, j)) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
+	private boolean checkValidRowColBox(int[][] arr, int val, int row, int col) {
+		if (!checkRowPresent(arr, row, val, col) && !checkColPresent(arr, col, val, row) && !checkBoxPresent(arr, row-(row%3), col-(col%3), val, row, col)) {
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean checkRowPresent(int[][] arr, int row, int num, int col) {
+		for(int i=0; i<9; i++) {
+			if (i != col && arr[row][i] == num) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean checkColPresent(int[][] arr, int col, int num, int row) {
+		for(int i=0; i<9; i++) {
+			if (i != row && arr[i][col] == num) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean checkBoxPresent(int[][] arr, int startRow, int startCol, int num, int row, int col) {
+		for(int i=0; i<3; i++) {
+			for (int j=0; j<3; j++) {
+				if ((startRow+i)==row && (startCol+j)==col) {
+					continue;
+				}
+				if (arr[startRow+i][startCol+j] == num) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public boolean solveSudoku(int[][] arr) {
