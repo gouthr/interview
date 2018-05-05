@@ -49,6 +49,8 @@ public class BackTracking {
 		bt.insertOpToEvaluateToTarget("105", 5);
 		
 		System.out.println("Number of ways to reach the top using 1, 2 or 3 steps: " + bt.countStairsWays(5));
+		
+		System.out.println("Factors: " + bt.factors(12));
 	}
 	
 	/**
@@ -314,5 +316,43 @@ public class BackTracking {
 		}
 		
 		return fourth;
+	}
+	
+	/**
+	 * Numbers can be regarded as product of its factors. For example,
+	 * 
+	 * 8 = 2 x 2 x 2; = 2 x 4. Write a function that takes an integer n and
+	 * return all possible combinations of its factors.
+	 * 
+	 * Note: You may assume that n is always positive. Factors should be greater
+	 * than 1 and less than n. 
+	 * 
+	 * The time complexity for this solution will be:
+	 * k^n. Where k is number of factors for n.
+	 * 
+	 * @param num
+	 * @return
+	 */
+	public List<List<Integer>> factors(int num) {
+		List<List<Integer>> res = new ArrayList<>();
+		factorsUtil(num, 2, new ArrayList<Integer>(), res);
+		return res;
+	}
+	
+	private void factorsUtil(int n, int start, List<Integer> tmp, List<List<Integer>> res) {
+		if (n == 1) {
+			if (tmp.size()>1) {
+				res.add(new ArrayList<Integer>(tmp));
+			}
+			return;
+		}
+		
+		for(int i=start; i<=n; i++) {
+			if (n%i == 0) {
+				tmp.add(i);
+				factorsUtil(n/i, i, tmp, res);
+				tmp.remove(tmp.size()-1);
+			}
+		}
 	}
 }
