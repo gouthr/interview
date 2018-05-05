@@ -1,7 +1,9 @@
 package numbers;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
@@ -17,8 +19,7 @@ public class Parenthesis {
 		
 		// Print all possible correct combinations of parenthesis given a count
 		int cnt = 3;
-		System.out.println("Possible combinations of braces for cnt: " + cnt + "  is :");
-		p.printParenthesis(cnt);
+		System.out.println("Possible combinations of braces for cnt: " + cnt + "  is: " + p.generateParenthesis(cnt));
 		
 		// Print all valid parenthesis combinations by removing invalid parenthesis
 		System.out.println("Valid parenthesis combinations: ");
@@ -52,13 +53,6 @@ public class Parenthesis {
 			return true;
 		}
 		return false;
-	}
-	
-	public void printParenthesis(int cnt) {
-		if (cnt > 0) {
-			char[] str = new char[50];
-			_printParenthesis(str, 0, cnt, 0, 0);
-		}
 	}
 	
 	/**
@@ -98,21 +92,6 @@ public class Parenthesis {
 		}
 	}
 	
-	private void _printParenthesis(char[] paran, int index, int cnt, int open, int close) {
-		if (close == cnt) {
-			System.out.println(paran);
-			return;
-		}
-		if (open > close) {
-			paran[index] = '}';
-			_printParenthesis(paran, index+1, cnt, open, close+1);
-		} 
-		if (open < cnt) {
-			paran[index] = '{';
-			_printParenthesis(paran, index+1, cnt, open+1, close);
-		}
-	}
-	
 	private boolean isMatchingParan(char ele, char pop) {
 		if (ele == '}' && pop == '{') {
 			return true;
@@ -122,6 +101,36 @@ public class Parenthesis {
 			return true;
 		} else {
 			return false;
+		}
+	}
+	
+	/**
+	 * Given n pairs of parentheses, write a function to generate all
+	 * combinations of well-formed parentheses.
+	 * 
+	 * For example, given n = 3, a solution set is:
+	 * 
+	 * [ "((()))", "(()())", "(())()", "()(())", "()()()" ]
+	 * 
+	 * @param count
+	 * @return
+	 */
+	public List<String> generateParenthesis(int count) {
+		List<String> res = new ArrayList<>();
+		generateParenthesisUtil("", 0, 0, count, res);
+		return res;
+	}
+	
+	private void generateParenthesisUtil(String str, int open, int close, int count, List<String> res) {
+		if (close == count) {
+			res.add(str);
+			return;
+		}
+		if (open < count) {
+			generateParenthesisUtil(str+"(", open+1, close, count, res);
+		}
+		if (open > close) {
+			generateParenthesisUtil(str+")", open, close+1, count, res);
 		}
 	}
 }
