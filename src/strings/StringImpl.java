@@ -162,6 +162,10 @@ public class StringImpl {
 		// ["i", "love", "leetcode", "i", "love", "coding"]
 		String[] strInput = {"i", "love", "leetcode", "i", "love", "coding"};
 		System.out.println("Top k(2) frequent words: " + strImpl.topKFrequentWords(strInput, 2));
+		
+		String[] strs = {"abc", "bcd", "acef", "xyz", "az", "ba", "a", "z"};
+		List<List<String>> res2 = strImpl.groupShiftedStrings(Arrays.asList(strs));
+		System.out.println("Grouping shifted strings together: " + res2);
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -741,5 +745,44 @@ public class StringImpl {
 		
 		return candidates.subList(0, k);
 	}
-
+	
+	/**
+	 * Given a string, we can "shift" each of its letter to its successive
+	 * letter, for example: "abc" -> "bcd". We can keep "shifting" which forms
+	 * the sequence:
+	 * 
+	 * "abc" -> "bcd" -> ... -> "xyz" Given a list of strings which contains
+	 * only lowercase alphabets, group all strings that belong to the same
+	 * shifting sequence.
+	 * 
+	 * For example, given: ["abc", "bcd", "acef", "xyz", "az", "ba", "a", "z"],
+	 * A solution is:
+	 * 
+	 * [ ["abc","bcd","xyz"], ["az","ba"], ["acef"], ["a","z"] ]
+	 * 
+	 * @param strs
+	 * @return
+	 */
+	public List<List<String>> groupShiftedStrings(List<String> strs) {
+		Map<String, List<String>> map = new HashMap<>();
+		List<List<String>> res = new ArrayList<>();
+		for (String str : strs) {
+			int n = str.length();
+			String key = "";
+			for (int i=n-1; i>0; i--) {
+				int diff = str.charAt(i) - str.charAt(i-1);
+				if (diff < 0) {
+					diff += 26;
+				}
+				key += diff + ":";
+			}
+			List<String> val = map.get(key) == null ? new ArrayList<String>() : map.get(key);
+			val.add(str);
+			map.put(key, val);
+		}
+		for (List<String> eachRes : map.values()) {
+			res.add(eachRes);
+		}
+		return res;
+	}
 }
