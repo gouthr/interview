@@ -1,7 +1,9 @@
 package BackTracking;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Arrays.sort() vs Collections.sort() Arrays.sort works for arrays which can be
@@ -51,6 +53,9 @@ public class BackTracking {
 		System.out.println("Number of ways to reach the top using 1, 2 or 3 steps: " + bt.countStairsWays(5));
 		
 		System.out.println("Factors: " + bt.factors(12));
+		
+		// pattern = "abab", str = "redblueredblue"
+		System.out.println("Pattern matching: " + bt.wordPatternMatcher("asdasdasdasd", "aaaa"));
 	}
 	
 	/**
@@ -354,5 +359,52 @@ public class BackTracking {
 				tmp.remove(tmp.size()-1);
 			}
 		}
+	}
+	
+	/**
+	 * Given a pattern and a string str, find if str follows the same pattern.
+	 * 
+	 * Here follow means a full match, such that there is a bijection between a
+	 * letter in pattern and a non-empty substring in str.
+	 * 
+	 * Examples: pattern = "abab", str = "redblueredblue" should return true.
+	 * pattern = "aaaa", str = "asdasdasdasd" should return true. pattern =
+	 * "aabb", str = "xyzabcxzyabc" should return false.
+	 * 
+	 * @param str
+	 * @param pattern
+	 * @return
+	 */
+	public boolean wordPatternMatcher(String str, String pattern) {
+		Map<Character, String> map = new HashMap<>();
+		return isMatch(str, 0, pattern, 0, map);
+	}
+	
+	private boolean isMatch(String str, int i, String pattern, int j, Map<Character, String> map) {
+		if (i== str.length() && j==pattern.length()) {
+			return true;
+		}
+		if (i== str.length() || j==pattern.length()) {
+			return false;
+		}
+		
+		Character c = pattern.charAt(j);
+		if (map.containsKey(c)) {
+			String tmp = map.get(c);
+			if (!str.startsWith(tmp, i)) {
+				return false;
+			}
+			return isMatch(str, i+tmp.length(), pattern, j+1, map);
+		}
+		
+		for(int k=i; k<str.length(); k++) {
+			String s = str.substring(i, k+1);
+			map.put(c, s);
+			if (isMatch(str, k+1, pattern, j+1, map)) {
+				return true;
+			}
+			map.remove(c);
+		}
+		return false;
 	}
 }
