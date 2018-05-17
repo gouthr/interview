@@ -1033,6 +1033,64 @@ public class TreeImpl {
 	}
 	
 	/**
+	 * Connect all the adjacent nodes at the same level in a binary tree.
+	 * 
+	 * Input Tree
+		       A
+		      / \
+		     B   C
+		    / \   \
+		   D   E   F
+		
+		
+		Output Tree
+		       A--->NULL
+		      / \
+		     B-->C-->NULL
+		    / \   \
+		   D-->E-->F-->NULL
+	 */
+	public void connectNodesAtSameLevelBT(NextRightNode root) {
+		Queue<NextRightNode> q = new LinkedList<NextRightNode>();
+		int cur = 0;
+		int next = 0;
+		
+		q.add(root);
+		cur++;
+
+		while(!q.isEmpty()) {
+			NextRightNode prev = q.peek();
+			q.remove();
+			cur--;
+			if (prev.left != null) {
+				q.add(prev.left);
+				next++;
+			}
+			if (prev.right != null) {
+				q.add(prev.right);
+				next++;
+			}
+			if (cur == 0) {
+				cur = next;
+				next = 0;
+				prev.nextRight = null;
+			} else {
+				prev.nextRight = q.peek();
+			}
+		}
+	}
+	
+	private class NextRightNode {
+		int data;
+		NextRightNode left, right, nextRight;
+		
+		public NextRightNode(int data) {
+			this.data = data;
+			this.left = this.right = this.nextRight = null;
+		}
+	}
+	
+	/**
 	 * Tree node with parent pointer.
 	 *
 	 */
