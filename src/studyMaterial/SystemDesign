@@ -112,6 +112,75 @@ struct Message{ User from_user; User to_user; String post_message;}
 class User {Status type; Message posts[]; sendMessage(); addGroup(); updateStatus(); createGroup(); } 
 struct Group { Message posts[]; User list[];}
 
+Design an eCommerce website like amazon:
+========================================
+1. Data model
+	-Users
+		- user details of the purchaser
+	-Product (Can have a product Category)
+		- product details inlcuding category and price
+	-Order
+		- shopping cart oreder details like amount, quantity, total price
+		
+	Relational DB vs NoSQL DB
+		-Relational DB like MySQL would need a product table. Product table would have a number of 
+		columns each representing a attribute of a product.
+		-NoSQL has the advantage of specifying only the details needed for that particular product. 
+		Other attributes of the product can be null. Details can be stored something like a JSON.
+		
+2. Concurrency, consistency and Availability are very important when scaling an eCommerce site
+	-Concurrency - suppose there is a single copy of the book remaining. How to ensure concurrency if
+	2 users are trying to buy the same.
+		- Optimistic concurrency control (OCC) - Lock the entire row for the transaction.
+		This approach is better if there are a lot of conflicts.
+		- Pessimistic concurrency control (PCC) - Check the value during the start of the transaction and 
+		check again before committing the transaction, if the value has changed, roll-back and start over.
+		
+		For a site like amazon with so many products and categories, there being a conflict is less likely, 
+		PCC is better suited here.
+		
+	-Consistency and availability go hand in hand. We need thousands of resources/servers for better availability.
+	Increased availability reduces the consistency as the values need to be consistent across all resources.
+		-Strong consistency - The updates are atomic across all resources like in a single system.
+		-Weak consistency - The updates are not consistent across resources. In this case, it is upto
+		the clients to make a decision. If a shopping cart has different values across different hosts,
+		it might be more beneficial to pick the cart with more items.
+		-Eventual consistency - The updates become consistent eventually over time but maybe inconsistent
+		in the mean time.
+
+Shopping-cart data structure:
+ShoppingCart
+	List<ItemOrder> items;
+	add(ItemOrder)
+	remove(ItemOrder)
+	applyCoupan(Coupan)
+	getTotal()	
+
+ItemOrder
+	Item item;
+	int quantity
+	double price;
+	getPrice()
+	getQuantity()
+	changeQuantity();
+
+Enum ItemTypes\ or Category
+
+Item
+	String name;
+	ItemTypes type;
+	double price;
+	String itemID;
+	getName()
+	getItemID();
+	getItemPrice();
+
+
+	
+	
+
+
+
 			
 	
 	
