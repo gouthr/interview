@@ -175,6 +175,81 @@ Item
 	getItemID();
 	getItemPrice();
 
+Design HitCounter - Number of visitors in the last 1 min:
+=========================================================
+Simplest approach:
+	Log users in a DB along with timestamp, then filter and return count of visitors in the last 1m - O(n),
+	n is the number of visitors
+	A simple optimization would be to sort based on timestamp
+
+A better approach would be to maintain a queue (linkedlist) and keep appending users to the list, when the timestamp
+of first entry in the queue is > 1m, remove the first entry from list. Time efficiency is optimized to O(1) put space 
+efficiency still has a list of users in the queue. We could just store the timestamp and not the user object to optimize 
+space.
+
+Similar to the moving average problem below:
+public class MovingAverage {
+    private int size;
+    private int sum;
+    private Queue<Integer> window;
+
+    public MovingAverage(int size) {
+        this.size = size;
+        this.sum = 0;
+        this.window = new ArrayDeque<>();
+    }
+
+    public double next(int val) {
+        window.offer(val);
+        if (window.size() > size) {
+            sum -= window.poll();
+        }
+        sum += val;
+        return (double) sum / window.size();
+    }
+}
+
+An even better space efficiency would be if we can reduce accuracy by having visitor count upto the last second.
+That way space is optimized to constant as shown in the code below:
+public class HitCounter {
+    int[] hits;
+    int[] times;
+
+    public HitCounter() {
+        hits = new int[300];
+        times = new int[300];
+    }
+
+    public void hit(int time) {
+        int index = time % 300;
+        if (times[index] != time) {
+            times[index] = time;
+            hits[index] = 1;
+        } else {
+            hits[index]++;
+        }
+    }
+
+    public int getHits(int time) {
+        int count = 0;
+
+        for (int i = 0; i < 300; i++) {
+            if (time - times[i] < 300) {
+                count += hits[i];
+            }
+        }
+
+        return count;
+    }
+}
+
+For a distributed system with a large number of requests, a lock could be used but that reduces the performace. A better approach
+would be to distribute the counters across hosts and then add them back.
+
+	
+	
+
+
 
 	
 	
