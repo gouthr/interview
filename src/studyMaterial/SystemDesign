@@ -38,4 +38,37 @@ Talk about the below features:
 
 How to detect fake users  -machine learning systems based on number of followers, tweets and amount of time logged in etc.
 
+Design Youtube:
+===============
+1. Storage and data model - Youtube uses MySql DB
+	- User and video tables
+	- User can have login and personal details - these can be 2 separate tables
+	- Video contains video metadata, likes count, view count, shares etc.
+	- Relation bw users and videos - video uploaded by user, video liked by user
+	
+	Scaling the DB
+	- Start with a single server and scale as needed as features and use case keep changing
+	- Master slave model - writes to master, reads from multiple slaves
+	- Sharding the DB based on user's location, route the request to the appropriate DB
+	
+2. Video and image storage
+	- Youtube has more images than videos - multiple size images and thumbnails
+3. Popular vs long tailed videos
+	- Popular videos can be hosted on CDN (Content Delivery Network - nw of proxy servers around the world)
+	- Long tailed videos are videos with less view counts per day (less popular), these can be stored closer to the user
+	to enhance performance
+	- Performance can be optimized by having separate clusters for videos and general data
+4. Web server
+	- a bunch of web servers behind a load balancer
+	- These servers deal with authentication, session management and less heavy business logic
+	- More business heavy logic are routed to dedicated servers like recommendation server, video storage server
+	- A cache at the web server level and also a cache at the front end will enhance the performance for the user
+5. Security
+	- We also need to handle hacking view counts - These can be detected by looking at the origin IP,
+	also view counts need to go with view time and other statistics like comments, likes etc. With historical data available,
+	it wouldn't be difficult to predict usage patterns and detect fake view counts - a dedicated machine learning system to detect
+	video hacking could be used
+
+
+
 
