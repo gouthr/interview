@@ -69,6 +69,54 @@ Design Youtube:
 	it wouldn't be difficult to predict usage patterns and detect fake view counts - a dedicated machine learning system to detect
 	video hacking could be used
 
+Design chat application - like whatsapp:
+========================================
+1. Use case
+	-User A sends a msg to User B
+		- User A sends a msg to chat server
+		- Server sends an acknowledgement (a single tick mark)
+		- Now there are 2 cases:
+			- B is online, server sends a msg to B
+			- B is offline, a push notification is sent to B
+		- B sends an acknowledgement to the server
+		- server sends an acknowledgement to A that B has received (2 tick marks)
+			
+			
+2. To enhance performance - a HTTP persistent connection can be established from the recipient to the server. The recipient
+establishes a connection and waits for a response from the server. Recipient re-establishes a connection on timeout or interruption.
+This enhances the performance, rather than spawn a new process/thread and generate a new HTTP request and close the connection
+after the request.
+
+3. Detecting online users - Server can send a notification when any of the friends of a user changes the status. Can be optimized 
+to send status online of the user has been online for more than say 5 mins.
+
+A simple flow of events:
+-User registers for his account 
+-User logs in with his credentials 
+-User adds/edits/deletes contacts 
+-User sends message to his contact 
+-User receives message from his contact 
+-User logs out of the server 
+
+Server side: 
+-User account added to account-list 
+-User credentials verified while logging in and session created if success 
+-User contacts are managed with three operations addition, deletion, modification 
+-User message is queued in his contacts message queue 
+-User is delivered message from his queue if any 
+-User session is deleted
+
+Data structures:
+enum Status{offline, online, away}
+struct Message{ User from_user; User to_user; String post_message;}
+class User {Status type; Message posts[]; sendMessage(); addGroup(); updateStatus(); createGroup(); } 
+struct Group { Message posts[]; User list[];}
+
+			
+	
+	
+
+
 
 
 
