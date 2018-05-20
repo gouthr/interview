@@ -1,0 +1,41 @@
+Design Twitter:
+===============
+
+Use cases / Core features:
+Lets define twitter to its MVP (Minimum Viable Product).
+1. Users can follow other users
+2. Users can read other user's feed whom they follow
+
+Data model:
+User and Feed objects
+Relation between users - one user following otehr user
+Relation between users and feeds - every feed has a owner user
+
+Server feed:
+List tweets from users they follow with the most recent at the top. Dont have to list all the tweets. 
+Say top 20 at a time - Pagination. The feed could be ranked based on time or other personal traits like
+user's common interests. Tweets from users from the same location. Tweets from users with most common friends.
+Tweets from famous celebrities followed by the user.
+
+@ and retweet feature. Any feed with the user mentioned using @ also needs to be listed in the feed.
+Retweet also include the owner user id to be shown when retweeted.
+
+Talk about the below features:
+1. Trending topics
+	- Generate and rank the top trending topics. Could be based on frequency of hashtags,
+	Search query terms, pick common words/phrases from the topn news topics in the last n hours.
+	-Ranking the topics could be based on user's interests (based on favorites, retweets and comments) 
+2. Moments
+	- Organize the trending topics into pre-defined categories like news, sports, fun etc.
+	- List the trending topics and organize them into categories. Rank the tweets in each category.
+3. Whom to follow / Recommendation system
+	- Recommendation system based on machine learning to recommend other users to follow
+	- Provide following graphs users 2 to 3 steps away with common friends, common interests, common location,
+	Users with more followers could be ranked higher while listing
+	- Also include famous personalities with large number of followers in user's choice of interest
+4. Search for feed
+	- Weight given to certain social aspects when searching and listing search queries
+
+How to detect fake users  -machine learning systems based on number of followers, tweets and amount of time logged in etc.
+
+
