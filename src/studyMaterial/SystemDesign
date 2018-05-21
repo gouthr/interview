@@ -246,6 +246,55 @@ public class HitCounter {
 For a distributed system with a large number of requests, a lock could be used but that reduces the performace. A better approach
 would be to distribute the counters across hosts and then add them back.
 
+
+Design ticketmaster:
+====================
+Design a ticket sales site where people can buy tickets to sporting events and concerts.
+
+MVP:
+User case:
+1. User looks at the list of events in a time range - say 3 months
+2. User selects an event
+3. User chooses a seat from amongst the available
+4. User purchases the ticket to the event
+
+User's browser  --> Web server ---> DB
+
+Data Model:
+	-Users
+		-userId
+		-userName
+		-userCreditCard
+		-userCreditCardExpiry
+		-userCVV
+	-Events
+		-eventId
+		-eventDate
+		-eventVenue
+		-eventDescription
+	-Seats
+		-seatId
+		-seatSection
+		-seatRow
+		-seatNumber
+		-seatPrice
+		-seatAvailable
+		-eventId
+	-Purchases
+		-userId
+		-eventId
+		-seatId
+
+Concurrency: What happens if 2 users book the same seat to the same event at the same time
+Use a ACID DB. Check for seat availability at the start of the transaction. Before committing the transaction
+check if the value is the same. If the seat is no longer available, roll-back and request to choose another seat.
+
+We could also block the seat on a first come first server basis for a small time period (say 5 mins) in order to
+server the user who blocked the seat first.
+
+Scaling:
+Load balancer (Backup Load Balancer) ---> a Number of web servers ---> Cache (DB optimization) ---> DB (backup DB)
+
 	
 	
 
