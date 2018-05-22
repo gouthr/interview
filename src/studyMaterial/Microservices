@@ -1,0 +1,44 @@
+Microservices:
+==============
+
+Pros:
+1. Fault isolation
+2. Scalable
+3. Independent development, deployment and maintenance
+4. Separate tech stack for each service
+
+Cons:
+1. Associated complexities of distributed systems
+2. Latency introduced due to services (Eg: HTTP requests)- serializing, deserializing, network latency
+3. Deployment - separate maven build process/pipeline for each service
+4. Transaction safety - Besides it’s already tricky to implement transactions correctly within a single microservice, 
+when another microservice should be called after a certain action. What happens if the transaction rolls back, 
+but we already notified a downstream microservice? We have to be more careful with transactions and their scopes.
+
+
+Designing a reliable/fault tolerant micro-services architecture:
+================================================================
+1. Dynamic environments and distributed systems - like microservices - lead to a higher chance of failures.
+2. Services should fail separately, achieve graceful degradation to improve user experience.
+	- Eg: for a photo sharing website, even if upload service is down. we should still be able to view, edit pictures
+3. 70% of the outages are caused by changes, reverting code is not a bad thing.
+	-Slow rollout by testing the changes on a few instances before rolling out ww
+	-We could also use 2 production environments and point the Load Balancer to the newer version after testing
+4. Fail fast and independently. Teams have no control over their service dependencies.
+	-Fine tuned timeouts
+	-Use exponential backoff for timeouts
+5. Architectural patterns and techniques like caching, bulkheads, circuit breakers and rate-limiters
+help to build reliable microservices
+	-Caching - Two caches, a regular cache and a failover cache. Use HTTP headers like max-age and stale-if-error.
+	-Bulkheads - Eg: Have separate connection pools for say services using a DB service. Doing so, if one service exhaust
+	all the connections, it wouldn't bring down the system
+	-Circuit-breakers - Stop incoming requests to let the system to recover. This can be done on 5xx errors and not 4xx errors
+	-Rate-limiters - 
+		-Rate-limiting peak traffic loads
+		-Rate-limiting concurrent requests
+		-Rate-limiting to keep resources for high-priority requests, rate-limit lower priority requests
+6. Self-healing systems 
+	-Use health-check services to check the hosts when routing requests from a load balancer
+	-Use clever systems to bring back slow systems - not necessarily restart
+7. Testing for failure
+	-Test the system by bringing down instances of services
