@@ -28,7 +28,6 @@ public class Apple {
 	    System.out.print(chain);
 	    originalText.toUpperCase();
 	    int strLen = originalText.length();
-	    int chainLen = chain.length();
 	    
 	  char[][] arr= {{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}, 
 			      	{'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'}, 
@@ -36,6 +35,7 @@ public class Apple {
 			      	{'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/'}};
 		  
 	    String[] chainArr = chain.split(",");
+	    int chainLen = chainArr.length;
 	    Map<Character, Character> vShiftMap = verticalShift(arr);
 	    Map<Character, Character> hShiftMap = horShift(arr);
 	    Map<Character, Integer> shift = shift(arr);
