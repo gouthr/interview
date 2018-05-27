@@ -466,6 +466,8 @@ public class StringImpl {
 	 * 
 	 * "take bath and come" "take bat hand come" So the modified function should
 	 * return 2
+	 * 
+	 * Time complexity : O(n^n) in the worst case.
 	 */
 	public int wordBreak(final String str, final List<String> dict) {
 		if (str.length() == 0) {
