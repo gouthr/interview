@@ -455,6 +455,74 @@ public class AmazonOrders {
 
 }
 
+Design a key-value data store:
+==============================
+
+Storing key-value pairs on a single machine is usually done in memory using something like a hash-map. 
+Hash-map has O(1) time for insert and retrieval. But when large amounts of data needs to be stored as
+key-value pair, they need to stored on disk. Some approaches:
+1. Compress data
+2. Use a cache system; frequently accessed data is in cache, the rest in disk
+
+Distributed key-value storage: The idea is to split the data into multiple machines and have a coordinator machine
+route the request appropriately. We need to come up with a good partition scheme (sharding) to distribute the data equally among
+the multiple hosts. We could take a hash of the resource (something like a URL) and then distribute the data into multiple machines.
+
+System availability: This can be handled by having replicas for every machines.
+
+Sharding is basically used to splitting data to multiple machines since a single machine cannot store too much data. 
+Replica is a way to protect the system from downtime. 
+
+Consistency: 
+By introducing replicas, we can make the system more robust. However, one issue is about consistency. Let’s say for machine A1, 
+we have replica A2. How do you make sure that A1 and A2 have the same data? For instance, when inserting a new entry, 
+we need to update both machines. But it’s possible that the write operation fails in one of them. So over time, 
+A1 and A2 might have quite a lot inconsistent data, which is a big problem.
+There are a few approaches to achieve consistency.
+1. The coordinator machine maintains a copy of the updated version and retries if update to one of the replica fails
+2. Use a commit log, the updates are written to a commit log and a background job processes these commit operations. If any update
+fails, they can be redone as the details are in a commit log.
+3. The coordinator machine can read the data from all the available replicas and resolve conflicts on the fly during a read
+
+Read throughput can be optimized by introducing a cache system.
+
+Design a cache system:
+======================
+
+Cache is used to provide quick access to frequently accessed data by storing them in memory.
+
+One of the most commonly used cache is LRU (Least Recently Used) cache. It works as below:
+
+1. If the requested key is in the cache, it returns the result and moves the key to the head of the cache queue
+2. If the key isn't present, it fetches it from disk and writes it to the head of the cache queue
+3. While writing to cache, if the cache is full, the least recently used data is evicted; in this case, the tail of the
+cache queue
+
+LRU design:
+It involves having a hash-map to store the key and Node mapping.
+Node is maintained in a doubly linked list with head and tail pointers.
+
+Eviction policies:
+LRU - least recently used
+Random replacement - random element is replaced
+LFU - least frequently used is evicted. A count is maintained, and the entry with least count is evicted
+W-TinyLFU - It is similar to LFU but it uses a time window since sometimes an item is only used frequently in the past, 
+but LFU will still keep this item for a long while.
+
+Concurrency: This is handled by using a lock but that slows the performance. One way to elevate performance 
+is to use a distributed cache. Now the data is spit across multiple machines and there is less contention for locks.
+An alternative is to use commit logs. To update the cache, we can store all the mutations into logs rather than update 
+immediately. And then some background processes will execute all the logs asynchronously. 
+This strategy is commonly adopted in database design.
+
+In a distributed cache, a coordinator machines routes the request to a machine with the resource. The machine with the
+resource has a local cache. If the data is present in the cache, it returns immediately, else it fetches from disk, stores
+in cache and returns the result back.
+
+
+
+
+
 
 	
 	
