@@ -202,6 +202,13 @@ public class NumberImpl {
 			System.out.print(each + " ");
 		}
 		System.out.println();
+		
+		int[][] positions = {{1, 2}, {2, 3}, {6, 1}};
+		System.out.println("Falling squares resultant height: " + numImpl.fallingSquares(positions));
+		System.out.println();
+		int[][] positions2 = {{100, 100}, {200, 100}};
+		System.out.println("Falling squares resultant height: " + numImpl.fallingSquares(positions2));
+		System.out.println();
 	}
 
 	/* 
@@ -1289,6 +1296,110 @@ public class NumberImpl {
 			}
 		}
 		return res;
+	}
+	
+	/**
+	 * 
+	 * On an infinite number line (x-axis), we drop given squares in the order
+	 * they are given.
+	 * 
+	 * The i-th square dropped (positions[i] = (left, side_length)) is a square
+	 * with the left-most point being positions[i][0] and sidelength
+	 * positions[i][1].
+	 * 
+	 * The square is dropped with the bottom edge parallel to the number line,
+	 * and from a higher height than all currently landed squares. We wait for
+	 * each square to stick before dropping the next.
+	 * 
+	 * The squares are infinitely sticky on their bottom edge, and will remain
+	 * fixed to any positive length surface they touch (either the number line
+	 * or another square). Squares dropped adjacent to each other will not stick
+	 * together prematurely.
+	 * 
+	 * 
+	 * Return a list ans of heights. Each height ans[i] represents the current
+	 * highest height of any square we have dropped, after dropping squares
+	 * represented by positions[0], positions[1], ..., positions[i].
+	 * 
+	 * Input: [[1, 2], [2, 3], [6, 1]]
+			Output: [2, 5, 5]
+			Explanation:
+			
+			After the first drop of positions[0] = [1, 2]:
+			_aa
+			_aa
+			-------
+			The maximum height of any square is 2.
+			
+			
+			After the second drop of positions[1] = [2, 3]:
+			__aaa
+			__aaa
+			__aaa
+			_aa__
+			_aa__
+			--------------
+			The maximum height of any square is 5.  
+			The larger square stays on top of the smaller square despite where its center
+			of gravity is, because squares are infinitely sticky on their bottom edge.
+			
+			
+			After the third drop of positions[1] = [6, 1]:
+			__aaa
+			__aaa
+			__aaa
+			_aa
+			_aa___a
+			--------------
+			The maximum height of any square is still 5.
+			
+			Thus, we return an answer of [2, 5, 5].
+	 * 
+	 * @param positions
+	 * @return
+	 */
+	public List<Integer> fallingSquares(int[][] positions) {
+		int n = positions.length;
+		List<Integer> res = new ArrayList<>();
+		List<Inter> intervals = new ArrayList<>();
+		int max = 0;
+		for (int i=0; i<n; i++) {
+			Inter cur = new Inter(positions[i][0], positions[i][1]+positions[i][0], positions[i][1]);
+			max = Math.max(getMaxHeight(intervals, cur), max);
+			res.add(max);
+		}
+		
+		return res;
+	}
+	
+	private int getMaxHeight(List<Inter> intervals, Inter cur) {		
+		int prevMaxHeight = 0;
+		for (Inter inter: intervals) {
+			// no overlap
+			if (inter.end <= cur.start) {
+				continue;
+			}
+			// no overlap
+			if (inter.start >= cur.end) {
+				continue;
+			}
+			prevMaxHeight = Math.max(inter.height, prevMaxHeight);
+		}
+		cur.height += prevMaxHeight;
+		intervals.add(cur);
+		return cur.height;	
+	}
+	
+	private class Inter {
+		int start;
+		int end;
+		int height;
+		
+		public Inter(int start, int end, int height) {
+			this.start = start;
+			this.end = end;
+			this.height = height;
+		}
 	}
 	
 }
