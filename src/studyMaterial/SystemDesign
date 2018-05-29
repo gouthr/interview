@@ -522,10 +522,14 @@ in cache and returns the result back.
 Design Uber/Lyft:
 =================
 User cases:
+	Major-
 	-Customer to driver matching
 		-Matching riders to nearest drivers
 	-Routing/ETA
 		-Providing an estimated time of arrival to rider
+	Minor-
+	-Payment processing
+	-Feedback processing
 
 Storage:
 	-Every trip needs to be recorded and stored. Have a primary and backup DB.
