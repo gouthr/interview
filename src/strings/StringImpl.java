@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -166,6 +167,10 @@ public class StringImpl {
 		String[] strs = {"abc", "bcd", "acef", "xyz", "az", "ba", "a", "z"};
 		List<List<String>> res2 = strImpl.groupShiftedStrings(Arrays.asList(strs));
 		System.out.println("Grouping shifted strings together: " + res2);
+		
+		String encodeddUrl = strImpl.encodeUrl("www.facebook.com/user1/profilepage");
+		System.out.println("Encode url - (www.facebook.com/user1/profilepage):" + encodeddUrl);
+		System.out.println("Decode url:" + strImpl.decodeUrl(encodeddUrl));
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -786,5 +791,34 @@ public class StringImpl {
 			res.add(eachRes);
 		}
 		return res;
+	}
+
+	/**
+	 * TinyUrl encode and decode implementation.
+	 */
+	Map<String, String> map = new HashMap<>();
+	String alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	Random rand = new Random();
+	
+	private String getRand() {
+		StringBuilder sb = new StringBuilder();
+		for (int i=0; i<6; i++) {
+			sb.append(alphabet.charAt(rand.nextInt(alphabet.length())));
+		}
+		return sb.toString();
+	}
+	
+	public String encodeUrl(String longUrl) {
+		String key = getRand();
+		while (map.containsKey(key)) {
+			key = getRand(); 
+		}
+		String value = "http://tinyurl.com/" + key;
+		map.put(key, longUrl);
+		return value;
+	}
+	
+	public String decodeUrl(String tinyUrl) {
+		return map.get(tinyUrl.replace("http://tinyurl.com/", ""));
 	}
 }
