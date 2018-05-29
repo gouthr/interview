@@ -538,12 +538,14 @@ Logging:
 	-Message queue like Kafka can be used to log both rider and driver locations periodically (like every 4 secs)
 Web-server:
 	-Micro-services based approach - separate independent services for every feature/functionality
-	-Need to ensure provisioning (pushing static code to web servers) is done correctly so rider 
-	requests can be routed to any state-less webs server
+	-Need to ensure provisioning (pushing static code to web servers. Terraform is a tool used for provisioning)
+	 is done correctly so rider requests can be routed to any state-less webs server
+	-Services are deployed in docker containers. These can be managed independently as if they were hosted on
+	separate hosts. Mesos is used to manage bringing up/down these cluster of services.
 	
 Testing:
 	-Shadow fleet environment can be used to test cases where any of the number of services can go down. This is done
-	by using tools like ChaosMonkey which is used to shutdown services abruptly.
+	by using tools like ChaosMonkey/Hailstorm which is used to shutdown services abruptly.
 
 Algorithm:
 	-Cities and roads connecting them are represented as graph nodes and edges respectively
