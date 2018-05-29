@@ -519,6 +519,46 @@ In a distributed cache, a coordinator machines routes the request to a machine w
 resource has a local cache. If the data is present in the cache, it returns immediately, else it fetches from disk, stores
 in cache and returns the result back.
 
+Design Uber/Lyft:
+=================
+User cases:
+	-Customer to driver matching
+		-Matching riders to nearest drivers
+	-Routing/ETA
+		-Providing an estimated time of arrival to rider
+
+Storage:
+	-Every trip needs to be recorded and stored. Have a primary and backup DB.
+	-The data is also archived into Date Warehouse systems for analytics/trends
+Cache:
+	-Cache will be used for retrieving constant (non-real time) data like maps and events. For real time data
+	persistent cache like Redis can be used
+Logging:
+	-Every rider and driver location data needs to be logged for legal reasons - in case of attack etc.
+	-Message queue like Kafka can be used to log both rider and driver locations periodically (like every 4 secs)
+Web-server:
+	-Micro-services based approach - separate independent services for every feature/functionality
+	-Need to ensure provisioning (pushing static code to web servers) is done correctly so rider 
+	requests can be routed to any state-less webs server
+	
+Testing:
+	-Shadow fleet environment can be used to test cases where any of the number of services can go down. This is done
+	by using tools like ChaosMonkey which is used to shutdown services abruptly.
+
+Algorithm:
+	-Cities and roads connecting them are represented as graph nodes and edges respectively
+	-Dijkstra's algorithm to determine the shortest distance between any 2 points in a graph
+	-Distance between nodes can be pre-calculated based on speed zones. Since these are static, these can be
+	pre-calculated and for taking into consideration things like traffic, historical data for similar trips can be used
+	-For places where uber is launched recently, no historical data is present. In those cases, cities are partitioned into
+	small cells and something like Dijkstra's algorithm is used in real time to predict ETA. Traffic in adjacent cells can also
+	affect the ETA. This also needs to be taken into account.
+
+	
+	
+	
+	
+
 
 
 
