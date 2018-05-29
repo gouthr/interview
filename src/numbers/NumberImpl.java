@@ -209,6 +209,8 @@ public class NumberImpl {
 		int[][] positions2 = {{100, 100}, {200, 100}};
 		System.out.println("Falling squares resultant height: " + numImpl.fallingSquares(positions2));
 		System.out.println();
+		
+		System.out.println("Roman to integer: " + numImpl.romanToInteger("MCMXCIV"));
 	}
 
 	/* 
@@ -1400,6 +1402,61 @@ public class NumberImpl {
 			this.end = end;
 			this.height = height;
 		}
+	}
+	
+	/**
+	 * Convert a roman numeral representation to integer.
+	 * 
+	 * Input: "MCMXCIV" Output: 1994 
+	 * Explanation: M = 1000, CM = 900, XC = 90
+	 * and IV = 4.
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public int romanToInteger(String str) {
+		if (str == null || str.length() == 0) {
+			return -1;
+		}
+		
+		int sum = 0;
+		for (int i=0; i<str.length()-1; i++) {
+			if (getNumericValue(str.charAt(i)) >= getNumericValue(str.charAt(i+1))) {
+				sum += getNumericValue(str.charAt(i));
+			} else {
+				sum -= getNumericValue(str.charAt(i));
+			}
+		}
+		sum += getNumericValue(str.charAt(str.length()-1));
+		return sum;
+	}
+
+	private int getNumericValue(char ch) {
+		int val  = 0;
+		switch(ch) {
+		case 'I':
+			val = 1;
+			break;
+		case 'V':
+			val = 5;
+			break;
+		case 'X':
+			val = 10;
+			break;
+		case 'L':
+			val = 50;
+			break;
+		case 'C':
+			val =100;
+			break;
+		case 'D':
+			val = 500;
+			break;
+		case 'M':
+			val = 1000;
+			break;
+		}
+		return val;
 	}
 	
 }
