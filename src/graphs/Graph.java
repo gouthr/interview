@@ -119,7 +119,7 @@ public class Graph {
 		}
 		
 		UndirectedGraphNode clone = new UndirectedGraphNode(node.label);
-		map.put(node.label, node);
+		map.put(clone.label, clone);
 		for (UndirectedGraphNode neighbor : node.neighbors) {
 			clone.neighbors.add(clone(neighbor));
 		}
