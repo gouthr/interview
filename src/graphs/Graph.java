@@ -1,7 +1,11 @@
 package graphs;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -24,7 +28,10 @@ public class Graph {
         System.out.println("DFS of the given graph:");
         g.dfs();
 
-	}
+	}	
+	
+	private int v; //No. of vertices
+	private LinkedList<Integer> adj[];
 	
 	public Graph(int v) {
 		this.v = v;
@@ -95,7 +102,37 @@ public class Graph {
 		stack.push(vertex);
 	}
 	
-	private int v; //No. of vertices
-	private LinkedList<Integer> adj[];
-
+	/** 
+	 * Clone an undirected graph.
+	 * 
+	 * @param node
+	 * @return
+	 */
+	public UndirectedGraphNode clone(UndirectedGraphNode node) {
+		if (node == null) {
+			return null;
+		}
+		
+		Map<Integer, UndirectedGraphNode> map = new HashMap<>();
+		if (map.containsKey(node.label)) {
+			return map.get(node.label);
+		}
+		
+		UndirectedGraphNode clone = new UndirectedGraphNode(node.label);
+		map.put(node.label, node);
+		for (UndirectedGraphNode neighbor : node.neighbors) {
+			clone.neighbors.add(clone(neighbor));
+		}
+		return clone;
+	}
+	
+	class UndirectedGraphNode {
+		int label;
+		List<UndirectedGraphNode> neighbors;
+		
+		public UndirectedGraphNode(int label) {
+			this.label = label;
+			this.neighbors = new ArrayList<>();
+		}
+	}
 }
