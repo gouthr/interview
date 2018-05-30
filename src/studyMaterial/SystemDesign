@@ -650,7 +650,63 @@ Design a URL shortening service like bit.ly:
 		-As the load increases, vertically scale the server
 		-Eventually, partition the data into multiple small DBs and distribute the load using the first char of hash
 		and mod with the number of machines. Think about master-slave architecture (for more reads from replica slaves)
-		
+
+Twitter design (HiredInTech):
+=============================
+1. Use cases:
+	-Users should be able to post tweets
+	-Users should be able to follow other users
+	-Users can favorite other tweets
+2. Constraints:
+	-Low response time
+	-Highly available
+	-There could be spikey traffic
+3. Abstract design:
+	-Application server layer
+		-Multiple application servers behind a load balancer to provide high availability
+		-Auto scaling to account for spikey traffic
+	-Data Storage layer
+		-Relational DB like MySQL
+		-Scale vertically
+		-Then partition into multiple small DBs
+4. Low level design:
+	Schema design:
+	-User table
+		user_id
+		username
+		firstName
+		lastName
+		password
+		created_at
+		updated_at
+		profileDetail
+	-Tweet table
+		tweet_id
+		author_id
+		content
+		created_at
+	-Connections table
+		follower_id
+		followee_id
+		created_at
+	-Favorites table
+		user_id
+		tweet_id
+		created_at
+	
+	RESTful APIs:
+	Get profile details of a user - GET /api/users/<username>
+	To get the tweets of a given user ordered by date - GET /api/users/<username>/tweets
+		pagination - GET /api/users/<username>/tweets?page=4
+	Users following a given user - GET /api/users/<username>/followers
+	Users followed for a given user - GET /api/users/<username>/followees
+	Posting a tweet - POST /api/users/<username>/tweets
+	Following a given user - POST /api/users/<username>/followers
+	see a list of all users that favorited a tweet - GET /api/users/<username>/tweets/<tweetid>/favorites
+	Favoriting a tweet - POST /api/users/<username>/tweets/<tweetid>/favorites
+	
+	Diagram link - https://www.hiredintech.com/classrooms/system-design/lesson/72
+	
 
 	
 	
