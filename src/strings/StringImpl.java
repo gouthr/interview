@@ -171,6 +171,11 @@ public class StringImpl {
 		String encodeddUrl = strImpl.encodeUrl("www.facebook.com/user1/profilepage");
 		System.out.println("Encode url - (www.facebook.com/user1/profilepage):" + encodeddUrl);
 		System.out.println("Decode url:" + strImpl.decodeUrl(encodeddUrl));
+		
+		// Input: pattern = "abba", str = "dog cat cat dog"
+		System.out.println("Word pattern match: " + strImpl.wordPattern("dog cat cat dog", "abba"));
+		// Input: pattern = "abba", str = "dog dog dog dog"
+		System.out.println("Word pattern match: " + strImpl.wordPattern("dog dog dog dog", "abba"));
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -820,5 +825,56 @@ public class StringImpl {
 	
 	public String decodeUrl(String tinyUrl) {
 		return map.get(tinyUrl.replace("http://tinyurl.com/", ""));
+	}
+	
+	/**
+	 * Given a pattern and a string str, find if str follows the same pattern.
+
+		Here follow means a full match, such that there is a bijection between a letter in pattern and a non-empty word in str.
+		
+		Example 1:
+		
+		Input: pattern = "abba", str = "dog cat cat dog"
+		Output: true
+		Example 2:
+		
+		Input:pattern = "abba", str = "dog cat cat fish"
+		Output: false
+		Example 3:
+		
+		Input: pattern = "aaaa", str = "dog cat cat dog"
+		Output: false
+		Example 4:
+		
+		Input: pattern = "abba", str = "dog dog dog dog"
+		Output: false
+	 * @param str
+	 * @param pattern
+	 * @return
+	 */
+	public boolean wordPattern(String str, String pattern) {
+		String[] arr = str.split(" ");
+		int m = arr.length;
+		int n = pattern.length();
+		
+		if (m != n) {
+			return false;
+		}
+		Map<Character, String> map = new HashMap<>();
+		for (int i=0; i<m; i++) {
+			char ch = pattern.charAt(i);
+			if (map.containsKey(ch)) {
+				String val = map.get(ch);
+				if (!val.equals(arr[i])) {
+					return false;
+				}
+			} else {
+				if (map.containsValue(arr[i])) {
+					return false;
+				}
+				map.put(ch, arr[i]);
+			}
+		}
+		return true;
 	}
 }
