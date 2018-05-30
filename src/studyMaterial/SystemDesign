@@ -638,7 +638,19 @@ Design a URL shortening service like bit.ly:
 4. Bottleneck:
 	-400 RPS is fine
 	-scanning 3TB of data for redirect urls - more interesting
-	A cache would help.
+	
+5. Scalable design
+	1. Application service layer
+		-Start with a single server
+		-Add a load balancer with a cluster of machines to handle spike-y traffic and to deal with availability
+	2. Data storage
+		-Start with a single MySQL server
+		-Add a mappings table with 2 fields, hash and originalUrl
+		-Add an index of hashes for quicker retrievals
+		-As the load increases, vertically scale the server
+		-Eventually, partition the data into multiple small DBs and distribute the load using the first char of hash
+		and mod with the number of machines. Think about master-slave architecture (for more reads from replica slaves)
+		
 
 	
 	
