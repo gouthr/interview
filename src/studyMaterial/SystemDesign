@@ -560,6 +560,86 @@ Algorithm:
 	small cells and something like Dijkstra's algorithm is used in real time to predict ETA. Traffic in adjacent cells can also
 	affect the ETA. This also needs to be taken into account.
 
+
+Design a URL shortening service like bit.ly:
+============================================
+1. Use cases:
+	Major-
+	-Shorten - Given a url, shorten and return the shortened url
+	-Redirect - Given a shortened url, redirect to the original url
+	Minor-
+	-Custom url
+	-Analytics
+	-Automatic link expiration
+	-Manual link removal
+	-UI vs API
+	
+2. Constraints:
+	-Traffic - Requests per second
+	-Data - Amount of storage needed
+
+	Lets consider twitter. There are about 500M new tweets every day. That is 15B per month.
+	Lets take 20% of those tweets are urls == 300M per month
+	Of the 300M, 80% is handled by top 3 sites, the remaining 20% by the other sites
+	Lets say, our service is not in the top 3. Of the remaining services, lets say 1/3 is handled by ours.
+	So, 100M per month new urls.
+	
+	Lets say 90% of the traffic is redirects and 10% shortens, 900M requests per month for redirects and 100M for shortens.
+	Now if we bring it down to Requests per second, 400+ RPS, 40: shortens, 360:redirects
+	
+	Similarly we would need say 500 bytes for original url, 6 bytes for shortened url.
+	That is, 100M*12*5*506 = 6B*506 bytes approx = 3TB for 5 years
+	
+3. Abstract design:
+	1. Apllication servcie layer
+		-Shotering servcie
+		-Redirection service
+	2. Data service layer
+		-a huge key:value map
+	
+	hash_url = convertBase62(md5(originalurl+salt))[:6]
+	
+	/**
+	 * TinyUrl encode and decode implementation.
+	 */
+	Map<String, String> map = new HashMap<>();
+	String alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	Random rand = new Random();
+	
+	private String getRand() {
+		StringBuilder sb = new StringBuilder();
+		for (int i=0; i<6; i++) {
+			sb.append(alphabet.charAt(rand.nextInt(alphabet.length())));
+		}
+		return sb.toString();
+	}
+	
+	public String encodeUrl(String longUrl) {
+		String key = getRand();
+		while (map.containsKey(key)) {
+			key = getRand(); 
+		}
+		String value = "http://tinyurl.com/" + key;
+		map.put(key, longUrl);
+		return value;
+	}
+	
+	public String decodeUrl(String tinyUrl) {
+		return map.get(tinyUrl.replace("http://tinyurl.com/", ""));
+	}
+	
+	A good hash function:
+	=====================
+	int hash = 7;
+	for (int i = 0; i < strlen; i++) {
+	    hash = hash*31 + charAt(i);
+	}
+	
+4. Bottleneck:
+	-400 RPS is fine
+	-scanning 3TB of data for redirect urls - more interesting
+	A cache would help.
+
 	
 	
 	
