@@ -101,6 +101,31 @@ public class LinkedListImpl {
 		return res;
 	}
 	
+	private Node partition(Node[] list, int st, int end) {		
+		if (st == end) {
+			return list[st];
+		}
+		if (st < end) {
+			int mid = (st + end)/2;
+			Node a = partition(list, st, mid);
+			Node b = partition(list, mid+1, end);
+			return mergeSortedLists(a, b);
+		}
+		return null;
+		
+	}
+	
+	/**
+	 * Merge k sorted lists into a single list.
+	 * 
+	 * @param list
+	 * @return
+	 */
+	public Node mergekSortedLists(Node[] list) {
+		int n = list.length;
+		return partition(list, 0, n-1);
+	}
+	
 	public static void main(String[] args) {
 		LinkedListImpl list = new LinkedListImpl();
 		// 2->3->20->5->10->15
@@ -120,5 +145,28 @@ public class LinkedListImpl {
 		head = list.mergeSort(head);
 		
 		list.printList(head);
+		
+		/** [
+		  1->4->5,
+		  1->3->4,
+		  2->6
+		]*/
+		Node a = list.insertNode(null, 5);
+		a = list.insertNode(a, 4);
+		a = list.insertNode(a, 1);
+		
+		Node b = list.insertNode(null, 4);
+		b = list.insertNode(b, 3);
+		b = list.insertNode(b, 1);
+		
+		Node c = list.insertNode(null, 6);
+		c = list.insertNode(c, 2);
+		
+		Node[] arr = {a, b, c};
+		
+		Node merged = list.mergekSortedLists(arr);
+		
+		list.printList(merged);
+		
 	}
 }
