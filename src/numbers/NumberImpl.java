@@ -2,6 +2,7 @@ package numbers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -211,6 +212,9 @@ public class NumberImpl {
 		System.out.println();
 		
 		System.out.println("Roman to integer: " + numImpl.romanToInteger("MCMXCIV"));
+		
+		int[][] arr19 = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+		System.out.println("Spiral matrix output: " + numImpl.spiralMatrix(arr19));
 	}
 
 	/* 
@@ -1457,6 +1461,60 @@ public class NumberImpl {
 			break;
 		}
 		return val;
+	}
+	
+	/**
+	 * 
+	 * Given a matrix of m x n elements (m rows, n columns), return all elements
+	 * of the matrix in spiral order.
+	 * 
+	 * Example 1:
+	 * 
+	 * Input: [ [ 1, 2, 3 ], 
+	 * 			[ 4, 5, 6 ], 
+	 * 			[ 7, 8, 9 ] ] 
+	 * Output:
+	 * [1,2,3,6,9,8,7,4,5]
+	 * 
+	 * @param arr
+	 * @return
+	 */
+	public List<Integer> spiralMatrix(int[][] arr) {
+		if (arr == null) {
+			return Collections.emptyList();
+		}
+		int m = arr.length;
+		int n = arr[0].length;
+		
+		if (m == 0) {
+			return Collections.emptyList();
+		}
+		
+		int rowBegin = 0;
+		int rowEnd = m-1;
+		int colBegin = 0;
+		int colEnd = n-1;
+		List<Integer> res = new ArrayList<>();
+		
+		while(rowBegin<=rowEnd && colBegin<=colEnd) {
+			for (int i=colBegin; i<=colEnd; i++) {
+				res.add(arr[rowBegin][i]);
+			}
+			rowBegin++;
+			for (int i=rowBegin; i<=rowEnd; i++) {
+				res.add(arr[i][colEnd]);
+			}
+			colEnd--;
+			for (int i=colEnd; i>=colBegin && rowBegin<=rowEnd; i--) {
+				res.add(arr[rowEnd][i]);
+			}
+			rowEnd--;
+			for (int i=rowEnd; i>=rowBegin && colBegin<=colEnd; i--) {
+				res.add(arr[i][colBegin]);
+			}
+			colBegin++;
+		}
+		return res;
 	}
 	
 }
