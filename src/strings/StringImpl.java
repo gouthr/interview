@@ -176,6 +176,16 @@ public class StringImpl {
 		System.out.println("Word pattern match: " + strImpl.wordPattern("dog cat cat dog", "abba"));
 		// Input: pattern = "abba", str = "dog dog dog dog"
 		System.out.println("Word pattern match: " + strImpl.wordPattern("dog dog dog dog", "abba"));
+		
+		/**
+		 * Example 1: Input: dict = ["cat", "bat", "rat"] sentence =
+		 * "the cattle was rattled by the battery" Output:
+		 * "the cat was rat by the bat"
+		 */
+		String[] dict1 = {"cat", "bat", "rat"};
+		System.out.println("Replace words with roots: " + strImpl.replaceWords("the cattle was rattled by the battery", 
+				Arrays.asList(dict1)));
+		
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -876,5 +886,48 @@ public class StringImpl {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * In English, we have a concept called root, which can be followed by some
+	 * other words to form another longer word - let's call this word successor.
+	 * For example, the root an, followed by other, which can form another word
+	 * another.
+	 * 
+	 * Now, given a dictionary consisting of many roots and a sentence. You need
+	 * to replace all the successor in the sentence with the root forming it. If
+	 * a successor has many roots can form it, replace it with the root with the
+	 * shortest length.
+	 * 
+	 * You need to output the sentence after the replacement.
+	 * 
+	 * Example 1: Input: dict = ["cat", "bat", "rat"] sentence =
+	 * "the cattle was rattled by the battery" 
+	 * Output:
+	 * "the cat was rat by the bat"
+	 * 
+	 * @param str
+	 * @param dict
+	 * @return
+	 */
+	public String replaceWords(String str, List<String> dict) {
+		Set<String> dictionary = new HashSet<>();
+		for (String tmp : dict) {
+			dictionary.add(tmp);
+		}
+		String[] words = str.split(" ");
+		StringBuilder sb = new StringBuilder();
+		String substr = null;
+		
+		for(String word: words) {
+			for (int i=1; i<=word.length(); i++) {
+				substr = word.substring(0, i);
+				if (dictionary.contains(substr)) {
+					break;
+				}
+			}
+			sb.append(" " + substr);
+		}
+		return sb.substring(1).toString();
 	}
 }
