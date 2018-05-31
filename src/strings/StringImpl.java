@@ -186,6 +186,12 @@ public class StringImpl {
 		System.out.println("Replace words with roots: " + strImpl.replaceWords("the cattle was rattled by the battery", 
 				Arrays.asList(dict1)));
 		
+		/**
+		 * Input: s = "catsanddog" wordDict = ["cat", "cats", "and", "sand", "dog"]
+		 */
+		String[] wordDict = {"cat", "cats", "and", "sand", "dog"};
+		System.out.println("Word break problem 2: " + strImpl.wordBreak2("catsanddog", Arrays.asList(wordDict)));
+		
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -502,6 +508,43 @@ public class StringImpl {
 		}
 		
 		return count;
+	}
+	
+	/**
+	 * Given a non-empty string s and a dictionary wordDict containing a list of
+	 * non-empty words, add spaces in s to construct a sentence where each word
+	 * is a valid dictionary word. Return all such possible sentences.
+	 * 
+	 * Note:
+	 * 
+	 * The same word in the dictionary may be reused multiple times in the
+	 * segmentation. You may assume the dictionary does not contain duplicate
+	 * words. Example 1:
+	 * 
+	 * Input: s = "catsanddog" wordDict = ["cat", "cats", "and", "sand", "dog"]
+	 * Output: [ "cats and dog", "cat sand dog" ]
+	 * 
+	 * @param str
+	 * @param dict
+	 * @return
+	 */
+	public List<String> wordBreak2(String str, List<String> dict) {
+		List<String> res = new ArrayList<>();
+		if (str.length() == 0) {
+			res.add("");
+			return res;
+		}
+		
+		for (int i=1; i<=str.length(); i++) {
+			String prefix = str.substring(0, i);
+			if (dict.contains(prefix)) {
+				List<String> tmp = wordBreak2(str.substring(i), dict);
+				for (String word : tmp) {
+					res.add(prefix + (word.isEmpty()? "" : " ") + word);
+				}
+			}
+		}
+		return res;
 	}
 	
 	/**
