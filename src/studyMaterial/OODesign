@@ -1,0 +1,74 @@
+OO design of a deck of cards:
+=============================
+
+public abstract class Card {
+	int faceValue;
+	Suit suit;
+	
+	public Card(int f, Suit s) {
+		this.faceValue = f;
+		this.suit = s;
+	}
+	
+	public int getValue() {
+		return faceValue;
+	}
+	
+	public Suit getSuit() {
+		return suit;
+	}
+}
+
+public enum Suit {
+	Diamond,
+	Club,
+	Heart,
+	Spade
+}
+
+public class Deck<T extends Card> {
+	ArrayList<T> cards;
+	int undealtIndex = 0;
+	
+	public void setDeckOfCards(ArrayList<T> cards) { ... }
+	
+	public void shuffle() { ... }
+	
+	public T[] dealHand() { ... }
+	
+	public T dealCard() { ... }
+	
+	public int remainingCards() {
+		return cards.size() - undealtIndex;
+	}	
+}
+
+public class Hand<T extends Card> {
+	ArrayList<T> cards;
+	
+	public int score() {
+		int score = 0;
+		for (T card : cards) {
+			score+=card.getValue();
+		}
+		return score;
+	}
+	
+	public void addCard(T card) {
+		cards.add(card);
+	}
+}
+
+public class BlackJackCard extends Card {
+	public BlackJackCard(int v, Suit s) {
+		super(v, s);
+	}
+	
+	public int getValue() {
+		if (faceValue>=10 && faceValue<=13) {
+			return 10;
+		} else {
+			return faceValue;
+		}
+	}
+}
