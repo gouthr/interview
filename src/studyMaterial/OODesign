@@ -72,3 +72,101 @@ public class BlackJackCard extends Card {
 		}
 	}
 }
+
+Design an in-memory FileSystem:
+===============================
+
+File System:
+	-File
+	-Directory
+
+public abstract class Entry {
+	String name;
+	Directory parent;
+	long created;
+	long updated;
+	long accessed;
+	
+	public Entry(String n, Directory p) {
+		name = n;
+		parent = p;
+		created = System.currentTimeMillis();
+		updated = System.currentTimeMillis();
+		accessed = System.currentTimeMillis();
+	}
+	
+	public abstract int size();
+	
+	public String getFullPath() {
+		if (parent == null) {
+			return name;
+		} else {
+			return parent.getFullPath() + "/" + name;
+		}
+	}
+}
+
+public class File extends Entry {
+	int size;
+	String content;
+	
+	public File(String name, Directory parent, int size) {
+		super(name, parent);
+		this.size = size;
+	}
+	
+	public int size() {
+		return size;
+	}
+	
+	public void write(String content) {
+		this.content = content;
+	}
+	
+	public String read() {
+		return content;
+	}
+}
+
+public class Directory extends Entry {
+	List<Entry> contents;
+	
+	public Directory(String name, Directory parent) {
+		super(name, parent);
+		contents = new ArrayList<Entry>();
+	}
+	
+	public int size() {
+		int sum = 0;
+		for (Entry entry : contents) {
+			sum+=entry.size();
+		}
+		return sum;
+	}
+	
+	public int numFiles() {
+		int count = 0;
+		for (Entry entry : contents) {
+			if (entry instanceof Directory) {
+				count++; //directory counts as a file
+				Directory d = (Directory) e;
+				count += d.numFiles();
+			} else {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	public void addEntry(Entry entry) {
+		contents.add(entry);
+	}
+	
+	public boolean deleteEntry(Entry entry) {
+		return contents.remove(entry);
+	}
+	
+	public List<Entry> getContents() {
+		return contents;
+	}
+}
