@@ -192,6 +192,8 @@ public class StringImpl {
 		String[] wordDict = {"cat", "cats", "and", "sand", "dog"};
 		System.out.println("Word break problem 2: " + strImpl.wordBreak2("catsanddog", Arrays.asList(wordDict)));
 		
+		System.out.println("String palindrome check: " + strImpl.isPalindrome("A man, a plan, a canal: Panama"));
+		
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -973,4 +975,38 @@ public class StringImpl {
 		}
 		return sb.substring(1).toString();
 	}
+	
+	/**
+	 * Palindrome check, ignoring non-alphanumeric characters.
+	 * 
+	 * @param s
+	 * @return
+	 */
+    public boolean isPalindrome(String s) {
+        int n = s.length();
+        if (n <= 1) {
+            return true;
+        }
+        s = s.toLowerCase();
+        
+        int i = 0;
+        int j = n-1;
+
+        while(i<j) {
+            if (!Character.isLetterOrDigit(s.charAt(i))) {
+            	i++;
+            	continue;
+            }
+            if (!Character.isLetterOrDigit(s.charAt(j))) {
+            	j--;
+            	continue;
+            }
+            if (s.charAt(i) != s.charAt(j)) {
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;       
+    }
 }
