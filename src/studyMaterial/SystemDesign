@@ -560,6 +560,26 @@ Algorithm:
 	small cells and something like Dijkstra's algorithm is used in real time to predict ETA. Traffic in adjacent cells can also
 	affect the ETA. This also needs to be taken into account.
 
+Uber specific architecture - Matt Ranney talk:
+	
+				demand             supply
+						
+						
+			maps/ETA	services    post trip processing
+			
+							DB       money/payment systems
+							
+ To make it more available, scalable a new dispatch system is developed.
+ 
+ Dispatch uses a ringpop architecture with gossip
+ A new RPC protocol TChannel
+ Every service also has some routing information in case Load Balancer between services is down
+ Stateful systems - in case Data center is down, state is also stored on driver partner phones as a backup
+ Geo-spatial index uses Google S2 library
+ 	A cell is a level 12 (3km - 6km radius)
+ 	Sharded by cell
+ 	
+
 
 Design a URL shortening service like bit.ly:
 ============================================
