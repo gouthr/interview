@@ -1,0 +1,53 @@
+Strengths:
+==========
+1. Complete ownership and responsibility of all tasks/projects assigned
+	-irrespective of if I'm only a part of a small task in the complete project
+	-initiate to help peers to take on more tasks/project to closure
+2. Fast turn-around time with good quality of all my projects
+	-I take it as a challenge to myself to complete it at the earliest possible
+3. Good communicator and complete team player
+
+
+Weaknesses:
+===========
+1. I wanted to be very involved in all my projects, so was not very good at delegation
+	-I worked on it and now I'm more comfortable delegating but I'm actively involved in code reviews and feedback
+	-This has helped me take on more projects (work on more projects) and also helped me enhance my mentoring skills
+	-Now I'm actively involved in hiring and screening process
+
+
+Accomplishment:
+================
+1. Take an idea from conception to design, implementation and rollout ww
+	-Unsubscribe project
+		-Convinced the Product Management team of the need of this feature and got it approved
+		-Coming up with a design after carefully go through the RFC
+		-Implementation leading a team of 3 members	
+		-Code deployment, rollout and monitoring
+		-Thought about localization issues for user friendly message
+2. Sendas/forward security fix
+
+Failed project/ Not so proud:
+=============================
+1. WireTap project 
+	-Had to work on a very tight schedule with no test framework
+	-Lead to some missing functionality on porting
+	-Mismatch in types of the subject header
+	-Missed rolling out the changes to IMAP protocol - it was the way the services are deployed
+	-a config change and it lead to WT outage
+	
+Questions to ask the interviewer:
+=================================
+1. What characteristics do you look for in a successful SE at Uber?
+2. What are some of the challenges of a SE at Uber?
+3. What made someone stand out in the past at Uber?
+4. What is the ratio of PM to dev to QA and what are the processess followed - like agile
+
+Why Uber:
+=========
+1. I'm interested in working on challenges involved in distributed systems at scale adn what better than Uber
+2. Also, it would be a privilege to work on a consumer facing product (Something that u worked on is being used on a daily basis)
+
+
+
+
