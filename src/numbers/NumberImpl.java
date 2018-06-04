@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Stack;
 
 public class NumberImpl {
@@ -387,7 +388,8 @@ public class NumberImpl {
 	public void randomize(int[] arr) {
 		int n = arr.length -1;
 		for(int i=n-1; i>0; i--) {
-			int random = (int)Math.round(Math.random()*10) % i;
+			Random rand = new Random();
+			int random = rand.nextInt(i);
 			int tmp = arr[i];
 			arr[i] = arr[random];
 			arr[random] = tmp;
