@@ -580,7 +580,6 @@ Uber specific architecture - Matt Ranney talk:
  	Sharded by cell
  	
 
-
 Design a URL shortening service like bit.ly:
 ============================================
 1. Use cases:
@@ -619,6 +618,7 @@ Design a URL shortening service like bit.ly:
 	
 	hash_url = convertBase62(md5(originalurl+salt))[:6]
 	
+	```
 	/**
 	 * TinyUrl encode and decode implementation.
 	 */
@@ -647,13 +647,15 @@ Design a URL shortening service like bit.ly:
 	public String decodeUrl(String tinyUrl) {
 		return map.get(tinyUrl.replace("http://tinyurl.com/", ""));
 	}
+	```
 	
 	A good hash function:
-	=====================
+	```
 	int hash = 7;
 	for (int i = 0; i < strlen; i++) {
 	    hash = hash*31 + charAt(i);
 	}
+	```
 	
 4. Bottleneck:
 	-400 RPS is fine
