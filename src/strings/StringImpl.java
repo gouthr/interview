@@ -194,6 +194,9 @@ public class StringImpl {
 		
 		System.out.println("String palindrome check: " + strImpl.isPalindrome("A man, a plan, a canal: Panama"));
 		
+		char[] chars = {'a','a','b','b','c','c','c'};
+		System.out.println("String compression length " + strImpl.compress(chars));
+		
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -1008,5 +1011,33 @@ public class StringImpl {
             j--;
         }
         return true;       
+    }
+    
+    /**
+     * Compressing a string to occupy less space.
+     */
+    public List<Character> compress(char[] chars) {
+        Arrays.sort(chars);
+        List<Character> res = new ArrayList<>();
+        int count = 1;
+        for (int i=0; i<chars.length-1; i++) {
+            if (chars[i] == chars[i+1]) {
+                count++;
+                continue;
+            }
+            if (count > 1) {
+                res.add(chars[i]);
+                res.add((char)(count+'0'));
+                count = 1;
+            } else {
+                count = 1;
+                res.add(chars[i]);
+            }
+        }
+        res.add(chars[chars.length-1]);
+        if (count>1) {
+            res.add((char)(count+'0'));
+        }
+        return res;
     }
 }
