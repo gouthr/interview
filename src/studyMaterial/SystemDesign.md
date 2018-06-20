@@ -727,6 +727,47 @@ Twitter design (HiredInTech):
 	
 	Diagram link - https://www.hiredintech.com/classrooms/system-design/lesson/72
 	
+Netflix design:
+===============
+
+Finally: Here’s What Happens When You Press Play
+It’s been a long road getting here. We’ve learned a lot. Here’s what we’ve learned so far:
+
+Netflix can be divided into three parts: the backend, the client, and the CDN. 
+All requests from Netflix clients are handled in AWS.
+All video is streamed from a nearby Open Connect Appliance (OCA) in the Open Connect CDN.
+Netflix operates out of three AWS regions and can usually handle a failure in any region without members even noticing.
+New video content is transformed by Netflix into many different formats so the best format can be selected for viewing 
+based on the device type, network quality, geographic location, and the member’s subscription plan.
+Every day, over Open Connect, Netflix distributes video throughout the world, based on what they predict members in each
+location will want to watch.
+Here’s a picture of how Netflix describes the play process:
+
+![alt text](https://c1.staticflickr.com/5/4598/25067243468_6e16c1052a.jpg?__SQUARESPACE_CACHEVERSION=1512840290262)
+
+Now, let’s complete the picture:
+You select a video to watch using a client running on some device. The client sends a play request, indicating which
+video you want to play, to Netflix’s Playback Apps service running in AWS.
+We’ve not talked about this before, but a big part of what happens after you hit play has to do with licensing. Not every 
+location in the world has a license to view every video. Netflix must determine if you have a valid license to view a particular 
+video. We won’t talk about how that works—it’s really boring—but keep in mind it’s always happening. One reason Netflix started 
+developing its own content is to avoid licensing issues. Netflix wants to release a show to everyone in the world all at the 
+same time. Creating its own content is the easiest way for Netflix to avoid worrying about licensing problems.
+Taking into account all the relevant information, the Playback Apps service returns URLs for up to ten different OCA servers. 
+These are the same sort of URLs you use all the time in your web browser. Netflix uses your IP address and information from ISPs 
+to identify which OCA clusters are best for you to use.
+The client intelligently selects which OCA to use. It does this by testing the quality of the network connection to each OCA. 
+It will connect to the fastest, most reliable OCA first. The client keeps running these tests throughout the video streaming process.
+The client probes to figure out the best way to receive content from the OCA.
+The client connects to the OCA and starts streaming video to your device. 
+Have you noticed when watching a video the picture quality varies? Sometimes it will look pixelated, and after awhile the 
+picture snaps back to HD quality? That’s because the client is adapting to the quality of the network. If the network quality 
+declines, the client lowers video quality to match. The client will switch to another OCA when the quality declines too much.
+That’s what happens when you press play on Netflix.
+
+Original source link with complete details - http://highscalability.com/blog/2017/12/11/netflix-what-happens-when-you-press-play.html
+
+	
 
 	
 	
