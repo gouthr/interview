@@ -730,6 +730,18 @@ Twitter design (HiredInTech):
 Netflix design:
 ===============
 
+To see why let’s look at some impressive Netflix statistics for 2017.
+
+Netflix has more than 110 million subscribers.
+Netflix operates in more than 200 countries. 
+Netflix has nearly $3 billion in revenue per quarter.
+Netflix adds more than 5 million new subscribers per quarter.
+Netflix plays more than 1 billion hours of video each week. As a comparison, YouTube streams 1 billion hours of video every day 
+while Facebook streams 110 million hours of video every day.
+Netflix played 250 million hours of video on a single day in 2017.
+Netflix accounts for over 37% of peak internet traffic in the United States.
+Netflix plans to spend $7 billion on new content in 2018. 
+
 Finally: Here’s What Happens When You Press Play
 It’s been a long road getting here. We’ve learned a lot. Here’s what we’ve learned so far:
 
