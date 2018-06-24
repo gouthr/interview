@@ -1013,31 +1013,39 @@ public class StringImpl {
         return true;       
     }
     
-    /**
-     * Compressing a string to occupy less space.
-     */
-    public List<Character> compress(char[] chars) {
-        Arrays.sort(chars);
-        List<Character> res = new ArrayList<>();
-        int count = 1;
-        for (int i=0; i<chars.length-1; i++) {
-            if (chars[i] == chars[i+1]) {
+	/**
+	 * Given an array of characters, compress it in-place.
+	 * 
+	 * The length after compression must always be smaller than or equal to the
+	 * original array.
+	 * 
+	 * Every element of the array should be a character (not int) of length 1.
+	 * 
+	 * After you are done modifying the input array in-place, return the new
+	 * length of the array. Input:
+	 * ["a","b","b","b","b","b","b","b","b","b","b","b","b"]
+	 * 
+	 * Output: Return 4, and the first 4 characters of the input array should
+	 * be: ["a","b","1","2"].
+	 * 
+	 * Explanation: Since the character "a" does not repeat, it is not
+	 * compressed. "bbbbbbbbbbbb" is replaced by "b12". Notice each digit has
+	 * it's own entry in the array.
+	 */
+    public int compress(char[] chars) {
+        int indexAns = 0, index = 0;
+        while(index < chars.length){
+            char currentChar = chars[index];
+            int count = 0;
+            while(index < chars.length && chars[index] == currentChar){
+                index++;
                 count++;
-                continue;
             }
-            if (count > 1) {
-                res.add(chars[i]);
-                res.add((char)(count+'0'));
-                count = 1;
-            } else {
-                count = 1;
-                res.add(chars[i]);
-            }
+            chars[indexAns++] = currentChar;
+            if(count != 1)
+                for(char c : Integer.toString(count).toCharArray()) 
+                    chars[indexAns++] = c;
         }
-        res.add(chars[chars.length-1]);
-        if (count>1) {
-            res.add((char)(count+'0'));
-        }
-        return res;
+        return indexAns;
     }
 }
