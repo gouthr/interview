@@ -1,5 +1,9 @@
 package linkedList;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
+
 public class LinkedListImpl {
 	private class Node {
 		int data;
@@ -125,6 +129,44 @@ public class LinkedListImpl {
 		int n = list.length;
 		return partition(list, 0, n-1);
 	}
+	
+	/**
+	 * Optimized merge k lists.
+	 * 
+	 * @param lists
+	 * @return
+	 */
+    public Node mergeKLists(List<Node> lists) {
+        if (lists==null||lists.size()==0) return null;
+        
+        PriorityQueue<Node> queue= new PriorityQueue<Node>(lists.size(),new Comparator<Node>(){
+            @Override
+            public int compare(Node o1,Node o2){
+                if (o1.data<o2.data)
+                    return -1;
+                else if (o1.data==o2.data)
+                    return 0;
+                else 
+                    return 1;
+            }
+        });
+        
+        Node dummy = new Node(0);
+        Node tail=dummy;
+        
+        for (Node node:lists)
+            if (node!=null)
+                queue.add(node);
+            
+        while (!queue.isEmpty()){
+            tail.next=queue.poll();
+            tail=tail.next;
+            
+            if (tail.next!=null)
+                queue.add(tail.next);
+        }
+        return dummy.next;
+    }
 	
 	public static void main(String[] args) {
 		LinkedListImpl list = new LinkedListImpl();
