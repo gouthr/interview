@@ -1519,4 +1519,65 @@ public class NumberImpl {
 		return res;
 	}
 	
+	/**
+	 * You have k lists of sorted integers in ascending order. Find the smallest
+	 * range that includes at least one number from each of the k lists.
+	 * 
+	 * We define the range [a,b] is smaller than range [c,d] if b-a < d-c or a <
+	 * c if b-a == d-c.
+	 * 
+	 * Example 1: Input:[[4,10,15,24,26], [0,9,12,20], [5,18,22,30]] Output:
+	 * [20,24] Explanation: List 1: [4, 10, 15, 24,26], 24 is in range [20,24].
+	 * List 2: [0, 9, 12, 20], 20 is in range [20,24]. List 3: [5, 18, 22, 30],
+	 * 22 is in range [20,24].
+	 * 
+	 * @param nums
+	 * @return
+	 */
+    public int[] smallestRange(List<List<Integer>> nums) {
+        Queue<Element> pq = new PriorityQueue<>(new Comparator<Element>() {
+        	public int compare(Element e1, Element e2) {
+        		return e1.value - e2.value;
+        	}
+        });
+        int max = Integer.MIN_VALUE;
+        for (int i=0; i<nums.size(); i++) {
+        	int val = nums.get(i).get(0);
+            Element ele = new Element(i, 0, val);
+            max = Math.max(max, val);
+            pq.offer(ele);
+        }
+        int range = Integer.MAX_VALUE;
+        int start = 0;
+        int end = 0;
+        while(pq.size() == nums.size()) {
+        	Element ele = pq.poll();
+        	if (max-ele.value < range) {
+        		range = max-ele.value;
+        		start = ele.value;
+        		end = max;
+        	}
+        	if (ele.index+1 < nums.get(ele.row).size()) {
+        		Element e = new Element(ele.row, ele.index+1, nums.get(ele.row).get(ele.index+1));
+        		pq.offer(e);
+        		if (e.value > max) {
+        			max = e.value;
+        		}
+        	}
+        }
+        return new int[] {start, end};
+    }
+    
+    public class Element {
+        private int row;
+        private int index;
+        private int value;
+        
+        public Element(int row, int index, int value) {
+            this.row = row;
+            this.index = index;
+            this.value = value;
+        }
+    }
+	
 }
