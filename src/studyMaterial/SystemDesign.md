@@ -7,12 +7,12 @@ Lets define twitter to its MVP (Minimum Viable Product).
 2. Users can read other user's feed whom they follow
 
 Data model:
-	-User and Feed objects
-	-Relation between users - one user following other user
-	-Relation between users and feeds - every feed has a owner user
+	- User and Feed objects
+	- Relation between users - one user following other user
+	- Relation between users and feeds - every feed has a owner user
 
 Server feed:
-	-List tweets from users they follow with the most recent at the top. Don't have to list all the tweets. 
+	- List tweets from users they follow with the most recent at the top. Don't have to list all the tweets. 
 	Say top 20 at a time - Pagination. The feed could be ranked based on time or other personal traits like
 	user's common interests. Tweets from users from the same location. Tweets from users with most common friends.
 	Tweets from famous celebrities followed by the user.
@@ -36,7 +36,8 @@ Talk about the below features:
 4. Search for feed
 	- Weight given to certain social aspects when searching and listing search queries
 
-How to detect fake users  -machine learning systems based on number of followers, tweets and amount of time logged in etc.
+How to detect fake users 
+	- machine learning systems based on number of followers, tweets and amount of time logged in etc.
 
 Design Youtube:
 ===============
@@ -683,24 +684,25 @@ Design a URL shortening service like bit.ly:
 Twitter design (HiredInTech):
 =============================
 1. Use cases:
-	-Users should be able to post tweets
-	-Users should be able to follow other users
-	-Users can favorite other tweets
+	- Users should be able to post tweets
+	- Users should be able to follow other users
+	- Users can favorite other tweets
 2. Constraints:
-	-Low response time
-	-Highly available
-	-There could be spikey traffic
+	- Low response time
+	- Highly available
+	- There could be spikey traffic
 3. Abstract design:
-	-Application server layer
-		-Multiple application servers behind a load balancer to provide high availability
-		-Auto scaling to account for spikey traffic
-	-Data Storage layer
-		-Relational DB like MySQL
-		-Scale vertically
-		-Then partition into multiple small DBs
+	- Application server layer
+		- Multiple application servers behind a load balancer to provide high availability
+		- Auto scaling to account for spikey traffic
+	- Data Storage layer
+		- Relational DB like MySQL
+		- Scale vertically
+		- Then partition into multiple small DBs
 4. Low level design:
+```
 	Schema design:
-	-User table
+	- User table
 		user_id
 		username
 		firstName
@@ -709,21 +711,22 @@ Twitter design (HiredInTech):
 		created_at
 		updated_at
 		profileDetail
-	-Tweet table
+	- Tweet table
 		tweet_id
 		author_id
 		content
 		created_at
-	-Connections table
+	- Connections table
 		follower_id
 		followee_id
 		created_at
-	-Favorites table
+	- Favorites table
 		user_id
 		tweet_id
 		created_at
-	
+```	
 	RESTful APIs:
+	```
 	Get profile details of a user - GET /api/users/<username>
 	To get the tweets of a given user ordered by date - GET /api/users/<username>/tweets
 		pagination - GET /api/users/<username>/tweets?page=4
@@ -733,8 +736,9 @@ Twitter design (HiredInTech):
 	Following a given user - POST /api/users/<username>/followers
 	see a list of all users that favorited a tweet - GET /api/users/<username>/tweets/<tweetid>/favorites
 	Favoriting a tweet - POST /api/users/<username>/tweets/<tweetid>/favorites
+	```
 	
-	Diagram link - https://www.hiredintech.com/classrooms/system-design/lesson/72
+	![alt text](https://train.hiredintech.com/lecture_materials/twitter_problem_system_design.png)
 	
 Netflix design:
 ===============
