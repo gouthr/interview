@@ -9,7 +9,7 @@ Lets define twitter to its MVP (Minimum Viable Product).
 Data model:
 	-User and Feed objects
 	-Relation between users - one user following other user
--	Relation between users and feeds - every feed has a owner user
+	-Relation between users and feeds - every feed has a owner user
 
 Server feed:
 	-List tweets from users they follow with the most recent at the top. Don't have to list all the tweets. 
