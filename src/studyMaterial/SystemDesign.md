@@ -107,10 +107,12 @@ Server side:
 -User session is deleted
 
 Data structures:
+```
 enum Status{offline, online, away}
 struct Message{ User from_user; User to_user; String post_message;}
 class User {Status type; Message posts[]; sendMessage(); addGroup(); updateStatus(); createGroup(); } 
 struct Group { Message posts[]; User list[];}
+```
 
 Design an eCommerce website like amazon:
 ========================================
@@ -149,6 +151,7 @@ Design an eCommerce website like amazon:
 		in the mean time.
 
 Shopping-cart data structure:
+```
 ShoppingCart
 	List<ItemOrder> items;
 	add(ItemOrder)
@@ -174,6 +177,7 @@ Item
 	getName()
 	getItemID();
 	getItemPrice();
+```
 
 Design HitCounter - Number of visitors in the last 1 min:
 =========================================================
@@ -188,6 +192,7 @@ efficiency still has a list of users in the queue. We could just store the times
 space.
 
 Similar to the moving average problem below:
+```
 public class MovingAverage {
     private int size;
     private int sum;
@@ -208,9 +213,11 @@ public class MovingAverage {
         return (double) sum / window.size();
     }
 }
+```
 
 An even better space efficiency would be if we can reduce accuracy by having visitor count upto the last second.
 That way space is optimized to constant as shown in the code below:
+```
 public class HitCounter {
     int[] hits;
     int[] times;
@@ -242,8 +249,8 @@ public class HitCounter {
         return count;
     }
 }
-
-For a distributed system with a large number of requests, a lock could be used but that reduces the performace. A better approach
+```
+For a distributed system with a large number of requests, a lock could be used but that reduces the performance. A better approach
 would be to distribute the counters across hosts and then add them back.
 
 
@@ -305,7 +312,7 @@ such as order received with expected time of delivery, delivery boy assigned, or
 The main idea is to implement the Observable architecture.
 We need to create OrderManager Class that observe Order Class for status changes.
 
-
+```
 package com.cracking.amazon;
 
 import java.util.ArrayList;
@@ -452,8 +459,8 @@ public class AmazonOrders {
 		order1.setStatus(OrderStatus.PickedUp);
 		
 	}
-
 }
+```
 
 Design a key-value data store:
 ==============================
