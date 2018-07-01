@@ -72,8 +72,8 @@ Design Youtube:
 
 Design chat application - like whatsapp:
 ========================================
-1. Use case
-	-User A sends a msg to User B
+1. Use case:
+	- User A sends a msg to User B
 		- User A sends a msg to chat server
 		- Server sends an acknowledgement (a single tick mark)
 		- Now there are 2 cases:
@@ -738,6 +738,7 @@ Twitter design (HiredInTech):
 	Favoriting a tweet - POST /api/users/<username>/tweets/<tweetid>/favorites
 	```
 	
+	Detailed diagram:
 	![alt text](https://train.hiredintech.com/lecture_materials/twitter_problem_system_design.png)
 	
 Netflix design:
