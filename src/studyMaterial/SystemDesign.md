@@ -700,7 +700,7 @@ Twitter design (HiredInTech):
 		- Scale vertically
 		- Then partition into multiple small DBs
 4. Low level design:
-```
+	```
 	Schema design:
 	- User table
 		user_id
@@ -724,7 +724,7 @@ Twitter design (HiredInTech):
 		user_id
 		tweet_id
 		created_at
-```	
+	```	
 	RESTful APIs:
 	```
 	Get profile details of a user - GET /api/users/<username>
