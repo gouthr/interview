@@ -92,20 +92,20 @@ after the request.
 to send status online of the user has been online for more than say 5 mins.
 
 A simple flow of events:
--User registers for his account 
--User logs in with his credentials 
--User adds/edits/deletes contacts 
--User sends message to his contact 
--User receives message from his contact 
--User logs out of the server 
+	- User registers for his account 
+	- User logs in with his credentials 
+	- User adds/edits/deletes contacts 
+	- User sends message to his contact 
+	- User receives message from his contact 
+	- User logs out of the server 
 
 Server side: 
--User account added to account-list 
--User credentials verified while logging in and session created if success 
--User contacts are managed with three operations addition, deletion, modification 
--User message is queued in his contacts message queue 
--User is delivered message from his queue if any 
--User session is deleted
+	- User account added to account-list 
+	- User credentials verified while logging in and session created if success 
+	- User contacts are managed with three operations addition, deletion, modification 
+	- User message is queued in his contacts message queue 
+	- User is delivered message from his queue if any 
+	- User session is deleted
 
 Data structures:
 ```
@@ -118,21 +118,21 @@ struct Group { Message posts[]; User list[];}
 Design an eCommerce website like amazon:
 ========================================
 1. Data model
-	-Users
+	- Users
 		- user details of the purchaser
-	-Product (Can have a product Category)
-		- product details inlcuding category and price
-	-Order
-		- shopping cart oreder details like amount, quantity, total price
+	- Product (Can have a product Category)
+		- product details including category and price
+	- Order
+		- shopping cart order details like amount, quantity, total price
 		
 	Relational DB vs NoSQL DB
-		-Relational DB like MySQL would need a product table. Product table would have a number of 
+		- Relational DB like MySQL would need a product table. Product table would have a number of 
 		columns each representing a attribute of a product.
-		-NoSQL has the advantage of specifying only the details needed for that particular product. 
+		- NoSQL has the advantage of specifying only the details needed for that particular product. 
 		Other attributes of the product can be null. Details can be stored something like a JSON.
 		
 2. Concurrency, consistency and Availability are very important when scaling an eCommerce site
-	-Concurrency - suppose there is a single copy of the book remaining. How to ensure concurrency if
+	- Concurrency - suppose there is a single copy of the book remaining. How to ensure concurrency if
 	2 users are trying to buy the same.
 		- Optimistic concurrency control (OCC) - Lock the entire row for the transaction.
 		This approach is better if there are a lot of conflicts.
@@ -142,13 +142,13 @@ Design an eCommerce website like amazon:
 		For a site like amazon with so many products and categories, there being a conflict is less likely, 
 		PCC is better suited here.
 		
-	-Consistency and availability go hand in hand. We need thousands of resources/servers for better availability.
+	- Consistency and availability go hand in hand. We need thousands of resources/servers for better availability.
 	Increased availability reduces the consistency as the values need to be consistent across all resources.
-		-Strong consistency - The updates are atomic across all resources like in a single system.
-		-Weak consistency - The updates are not consistent across resources. In this case, it is upto
+		- Strong consistency - The updates are atomic across all resources like in a single system.
+		- Weak consistency - The updates are not consistent across resources. In this case, it is upto
 		the clients to make a decision. If a shopping cart has different values across different hosts,
 		it might be more beneficial to pick the cart with more items.
-		-Eventual consistency - The updates become consistent eventually over time but maybe inconsistent
+		- Eventual consistency - The updates become consistent eventually over time but maybe inconsistent
 		in the mean time.
 
 Shopping-cart data structure:
@@ -183,9 +183,9 @@ Item
 Design HitCounter - Number of visitors in the last 1 min:
 =========================================================
 Simplest approach:
-	Log users in a DB along with timestamp, then filter and return count of visitors in the last 1m - O(n),
+	- Log users in a DB along with timestamp, then filter and return count of visitors in the last 1m - O(n),
 	n is the number of visitors
-	A simple optimization would be to sort based on timestamp
+	- A simple optimization would be to sort based on timestamp
 
 A better approach would be to maintain a queue (linkedlist) and keep appending users to the list, when the timestamp
 of first entry in the queue is > 1m, remove the first entry from list. Time efficiency is optimized to O(1) put space 
@@ -269,29 +269,29 @@ User case:
 User's browser  --> Web server ---> DB
 
 Data Model:
-	-Users
-		-userId
-		-userName
-		-userCreditCard
-		-userCreditCardExpiry
-		-userCVV
-	-Events
-		-eventId
-		-eventDate
-		-eventVenue
-		-eventDescription
-	-Seats
-		-seatId
-		-seatSection
-		-seatRow
-		-seatNumber
-		-seatPrice
-		-seatAvailable
-		-eventId
-	-Purchases
-		-userId
-		-eventId
-		-seatId
+	- Users
+		- userId
+		- userName
+		- userCreditCard
+		- userCreditCardExpiry
+		- userCVV
+	- Events
+		- eventId
+		- eventDate
+		- eventVenue
+		- eventDescription
+	- Seats
+		- seatId
+		- seatSection
+		- seatRow
+		- seatNumber
+		- seatPrice
+		- seatAvailable
+		- eventId
+	- Purchases
+		- userId
+		- eventId
+		- seatId
 
 Concurrency: What happens if 2 users book the same seat to the same event at the same time
 Use a ACID DB. Check for seat availability at the start of the transaction. Before committing the transaction
@@ -507,15 +507,15 @@ One of the most commonly used cache is LRU (Least Recently Used) cache. It works
 cache queue
 
 LRU design:
-It involves having a hash-map to store the key and Node mapping.
-Node is maintained in a doubly linked list with head and tail pointers.
+	- It involves having a hash-map to store the key and Node mapping.
+	- Node is maintained in a doubly linked list with head and tail pointers.
 
 Eviction policies:
-LRU - least recently used
-Random replacement - random element is replaced
-LFU - least frequently used is evicted. A count is maintained, and the entry with least count is evicted
-W-TinyLFU - It is similar to LFU but it uses a time window since sometimes an item is only used frequently in the past, 
-but LFU will still keep this item for a long while.
+	1. LRU - least recently used
+	2. Random replacement - random element is replaced
+	3. LFU - least frequently used is evicted. A count is maintained, and the entry with least count is evicted
+	4. W-TinyLFU - It is similar to LFU but it uses a time window since sometimes an item is only used frequently in the past, 
+	but LFU will still keep this item for a long while.
 
 Concurrency: This is handled by using a lock but that slows the performance. One way to elevate performance 
 is to use a distributed cache. Now the data is spit across multiple machines and there is less contention for locks.
@@ -530,41 +530,41 @@ in cache and returns the result back.
 Design Uber/Lyft:
 =================
 User cases:
-	Major-
-	-Customer to driver matching
-		-Matching riders to nearest drivers
-	-Routing/ETA
-		-Providing an estimated time of arrival to rider
-	Minor-
-	-Payment processing
-	-Feedback processing
+	- Major
+		- Customer to driver matching
+			- Matching riders to nearest drivers
+		- Routing/ETA
+			- Providing an estimated time of arrival to rider
+	- Minor
+		- Payment processing
+		- Feedback processing
 
 Storage:
-	-Every trip needs to be recorded and stored. Have a primary and backup DB.
-	-The data is also archived into Date Warehouse systems for analytics/trends
+	- Every trip needs to be recorded and stored. Have a primary and backup DB.
+	- The data is also archived into Date Warehouse systems for analytics/trends
 Cache:
-	-Cache will be used for retrieving constant (non-real time) data like maps and events. For real time data
+	- Cache will be used for retrieving constant (non-real time) data like maps and events. For real time data
 	persistent cache like Redis can be used
 Logging:
-	-Every rider and driver location data needs to be logged for legal reasons - in case of attack etc.
-	-Message queue like Kafka can be used to log both rider and driver locations periodically (like every 4 secs)
+	- Every rider and driver location data needs to be logged for legal reasons - in case of attack etc.
+	- Message queue like Kafka can be used to log both rider and driver locations periodically (like every 4 secs)
 Web-server:
-	-Micro-services based approach - separate independent services for every feature/functionality
-	-Need to ensure provisioning (pushing static code to web servers. Terraform is a tool used for provisioning)
+	- Micro-services based approach - separate independent services for every feature/functionality
+	- Need to ensure provisioning (pushing static code to web servers. Terraform is a tool used for provisioning)
 	 is done correctly so rider requests can be routed to any state-less webs server
-	-Services are deployed in docker containers. These can be managed independently as if they were hosted on
+	- Services are deployed in docker containers. These can be managed independently as if they were hosted on
 	separate hosts. Mesos is used to manage bringing up/down these cluster of services.
 	
 Testing:
-	-Shadow fleet environment can be used to test cases where any of the number of services can go down. This is done
+	- Shadow fleet environment can be used to test cases where any of the number of services can go down. This is done
 	by using tools like ChaosMonkey/Hailstorm which is used to shutdown services abruptly.
 
 Algorithm:
-	-Cities and roads connecting them are represented as graph nodes and edges respectively
-	-Dijkstra's algorithm to determine the shortest distance between any 2 points in a graph
-	-Distance between nodes can be pre-calculated based on speed zones. Since these are static, these can be
+	- Cities and roads connecting them are represented as graph nodes and edges respectively
+	- Dijkstra's algorithm to determine the shortest distance between any 2 points in a graph
+	- Distance between nodes can be pre-calculated based on speed zones. Since these are static, these can be
 	pre-calculated and for taking into consideration things like traffic, historical data for similar trips can be used
-	-For places where uber is launched recently, no historical data is present. In those cases, cities are partitioned into
+	- For places where uber is launched recently, no historical data is present. In those cases, cities are partitioned into
 	small cells and something like Dijkstra's algorithm is used in real time to predict ETA. Traffic in adjacent cells can also
 	affect the ETA. This also needs to be taken into account.
 
@@ -591,19 +591,19 @@ Uber specific architecture - Matt Ranney talk:
 Design a URL shortening service like bit.ly:
 ============================================
 1. Use cases:
-	Major-
-	-Shorten - Given a url, shorten and return the shortened url
-	-Redirect - Given a shortened url, redirect to the original url
-	Minor-
-	-Custom url
-	-Analytics
-	-Automatic link expiration
-	-Manual link removal
-	-UI vs API
+	- Major
+		- Shorten - Given a url, shorten and return the shortened url
+		- Redirect - Given a shortened url, redirect to the original url
+	- Minor
+		- Custom url
+		- Analytics
+		- Automatic link expiration
+		- Manual link removal
+		- UI vs API
 	
 2. Constraints:
-	-Traffic - Requests per second
-	-Data - Amount of storage needed
+	- Traffic - Requests per second
+	- Data - Amount of storage needed
 
 	Lets consider twitter. There are about 500M new tweets every day. That is 15B per month.
 	Lets take 20% of those tweets are urls == 300M per month
@@ -618,13 +618,13 @@ Design a URL shortening service like bit.ly:
 	That is, 100M*12*5*506 = 6B*506 bytes approx = 3TB for 5 years
 	
 3. Abstract design:
-	1. Apllication servcie layer
-		-Shotering servcie
-		-Redirection service
+	1. Aplication service layer
+		- Shortening service
+		- Redirection service
 	2. Data service layer
-		-a huge key:value map
+		- a huge key:value map
 	
-	hash_url = convertBase62(md5(originalurl+salt))[:6]
+	hash_url = convertBase62(md5(originalUrl+salt))[:6]
 	
 	```
 	/**
@@ -671,14 +671,14 @@ Design a URL shortening service like bit.ly:
 	
 5. Scalable design
 	1. Application service layer
-		-Start with a single server
-		-Add a load balancer with a cluster of machines to handle spike-y traffic and to deal with availability
+		- Start with a single server
+		- Add a load balancer with a cluster of machines to handle spike-y traffic and to deal with availability
 	2. Data storage
-		-Start with a single MySQL server
-		-Add a mappings table with 2 fields, hash and originalUrl
-		-Add an index of hashes for quicker retrievals
-		-As the load increases, vertically scale the server
-		-Eventually, partition the data into multiple small DBs and distribute the load using the first char of hash
+		- Start with a single MySQL server
+		- Add a mappings table with 2 fields, hash and originalUrl
+		- Add an index of hashes for quicker retrievals
+		- As the load increases, vertically scale the server
+		- Eventually, partition the data into multiple small DBs and distribute the load using the first char of hash
 		and mod with the number of machines. Think about master-slave architecture (for more reads from replica slaves)
 
 Twitter design (HiredInTech):
@@ -744,82 +744,52 @@ Twitter design (HiredInTech):
 Netflix design:
 ===============
 
-To see why let’s look at some impressive Netflix statistics for 2017.
+Let’s look at some impressive Netflix statistics for 2017.
 
-Netflix has more than 110 million subscribers.
-Netflix operates in more than 200 countries. 
-Netflix has nearly $3 billion in revenue per quarter.
-Netflix adds more than 5 million new subscribers per quarter.
-Netflix plays more than 1 billion hours of video each week. As a comparison, YouTube streams 1 billion hours of video every day 
+- Netflix has more than 110 million subscribers.
+- Netflix operates in more than 200 countries. 
+- Netflix has nearly $3 billion in revenue per quarter.
+- Netflix adds more than 5 million new subscribers per quarter.
+- Netflix plays more than 1 billion hours of video each week. As a comparison, YouTube streams 1 billion hours of video every day 
 while Facebook streams 110 million hours of video every day.
-Netflix played 250 million hours of video on a single day in 2017.
-Netflix accounts for over 37% of peak internet traffic in the United States.
-Netflix plans to spend $7 billion on new content in 2018. 
+- Netflix played 250 million hours of video on a single day in 2017.
+- Netflix accounts for over 37% of peak internet traffic in the United States.
+- Netflix plans to spend $7 billion on new content in 2018. 
 
 Finally: Here’s What Happens When You Press Play
 It’s been a long road getting here. We’ve learned a lot. Here’s what we’ve learned so far:
 
-Netflix can be divided into three parts: the backend, the client, and the CDN. 
-All requests from Netflix clients are handled in AWS.
-All video is streamed from a nearby Open Connect Appliance (OCA) in the Open Connect CDN.
-Netflix operates out of three AWS regions and can usually handle a failure in any region without members even noticing.
-New video content is transformed by Netflix into many different formats so the best format can be selected for viewing 
-based on the device type, network quality, geographic location, and the member’s subscription plan.
-Every day, over Open Connect, Netflix distributes video throughout the world, based on what they predict members in each
+- Netflix can be divided into three parts: the backend, the client, and the CDN. 
+- All requests from Netflix clients are handled in AWS.
+- All video is streamed from a nearby Open Connect Appliance (OCA) in the Open Connect CDN
+- Netflix operates out of three AWS regions and can usually handle a failure in any region without members even noticing
+- New video content is transformed by Netflix into many different formats so the best format can be selected for viewing 
+based on the device type, network quality, geographic location, and the member’s subscription plan
+- Every day, over Open Connect, Netflix distributes video throughout the world, based on what they predict members in each
 location will want to watch.
+
 Here’s a picture of how Netflix describes the play process:
 
 ![alt text](https://c1.staticflickr.com/5/4598/25067243468_6e16c1052a.jpg?__SQUARESPACE_CACHEVERSION=1512840290262)
 
 Now, let’s complete the picture:
-You select a video to watch using a client running on some device. The client sends a play request, indicating which
+- You select a video to watch using a client running on some device. The client sends a play request, indicating which
 video you want to play, to Netflix’s Playback Apps service running in AWS.
-We’ve not talked about this before, but a big part of what happens after you hit play has to do with licensing. Not every 
+- We’ve not talked about this before, but a big part of what happens after you hit play has to do with licensing. Not every 
 location in the world has a license to view every video. Netflix must determine if you have a valid license to view a particular 
 video. We won’t talk about how that works—it’s really boring—but keep in mind it’s always happening. One reason Netflix started 
 developing its own content is to avoid licensing issues. Netflix wants to release a show to everyone in the world all at the 
 same time. Creating its own content is the easiest way for Netflix to avoid worrying about licensing problems.
-Taking into account all the relevant information, the Playback Apps service returns URLs for up to ten different OCA servers. 
+- Taking into account all the relevant information, the Playback Apps service returns URLs for up to ten different OCA servers. 
 These are the same sort of URLs you use all the time in your web browser. Netflix uses your IP address and information from ISPs 
 to identify which OCA clusters are best for you to use.
-The client intelligently selects which OCA to use. It does this by testing the quality of the network connection to each OCA. 
-It will connect to the fastest, most reliable OCA first. The client keeps running these tests throughout the video streaming process.
+- The client intelligently selects which OCA to use. It does this by testing the quality of the network connection to each OCA. 
+- It will connect to the fastest, most reliable OCA first. The client keeps running these tests throughout the video streaming process.
 The client probes to figure out the best way to receive content from the OCA.
-The client connects to the OCA and starts streaming video to your device. 
+- The client connects to the OCA and starts streaming video to your device. 
 Have you noticed when watching a video the picture quality varies? Sometimes it will look pixelated, and after awhile the 
 picture snaps back to HD quality? That’s because the client is adapting to the quality of the network. If the network quality 
 declines, the client lowers video quality to match. The client will switch to another OCA when the quality declines too much.
 That’s what happens when you press play on Netflix.
 
 Original source link with complete details - http://highscalability.com/blog/2017/12/11/netflix-what-happens-when-you-press-play.html
-
-	
-
-	
-	
-	
-	
-
-
-
-
-
-
-	
-	
-
-
-
-	
-	
-
-
-
-			
-	
-	
-
-
-
-
-
