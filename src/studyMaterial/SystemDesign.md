@@ -7,12 +7,12 @@ Lets define twitter to its MVP (Minimum Viable Product).
 2. Users can read other user's feed whom they follow
 
 Data model:
-User and Feed objects
-Relation between users - one user following other user
-Relation between users and feeds - every feed has a owner user
+-User and Feed objects
+-Relation between users - one user following other user
+-Relation between users and feeds - every feed has a owner user
 
 Server feed:
-List tweets from users they follow with the most recent at the top. Don't have to list all the tweets. 
+-List tweets from users they follow with the most recent at the top. Don't have to list all the tweets. 
 Say top 20 at a time - Pagination. The feed could be ranked based on time or other personal traits like
 user's common interests. Tweets from users from the same location. Tweets from users with most common friends.
 Tweets from famous celebrities followed by the user.
