@@ -216,6 +216,8 @@ public class NumberImpl {
 		
 		int[][] arr19 = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
 		System.out.println("Spiral matrix output: " + numImpl.spiralMatrix(arr19));
+		
+		System.out.println("Haversine: " + haversine(36.12, -86.67, 33.94, -118.40));
 	}
 
 	/* 
@@ -263,6 +265,20 @@ public class NumberImpl {
 			}
 		}
 		return false;
+	}
+	
+	public int[] twoSum(int[] numbers, int target) {
+	    int[] result = new int[2];
+	    Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+	    for (int i = 0; i < numbers.length; i++) {
+	        if (map.containsKey(target - numbers[i])) {
+	            result[1] = i + 1;
+	            result[0] = map.get(target - numbers[i]);
+	            return result;
+	        }
+	        map.put(numbers[i], i + 1);
+	    }
+	    return result;
 	}
 	
 	public int[] unionSortedArrays(int[] arr1, int[] arr2) {
@@ -358,7 +374,7 @@ public class NumberImpl {
 				arr[j++] = tmp[i++];
 			}
 		}
-		if (tmp[n-2] != tmp[n-1]) {
+		if (arr[j-1] != tmp[n-1]) {
 			arr[j++] = tmp[n-1];
 		}
 		return j;
@@ -384,6 +400,57 @@ public class NumberImpl {
 		
 		System.out.println("Indices of start and end of duplicate sorted array: Start= " + st + "; end=" + (i-1));
 	}
+	
+
+//	class GFG 
+//	{
+//	    //if x is present in arr[] then returns the index of
+//	    //FIRST occurrence of x in arr[0..n-1], otherwise
+//	    //returns -1 
+//	    public static int first(int arr[], int low, int high, int x, int n)
+//	    {
+//	        if(high >= low)
+//	        {
+//	            int mid = low + (high - low)/2;
+//	            if( ( mid == 0 || x > arr[mid-1]) && arr[mid] == x)
+//	                return mid;
+//	             else if(x > arr[mid])
+//	                return first(arr, (mid + 1), high, x, n);
+//	            else
+//	                return first(arr, low, (mid -1), x, n);
+//	        }
+//	    return -1;
+//	    }
+//	  
+//	    //if x is present in arr[] then returns the index of
+//	    //LAST occurrence of x in arr[0..n-1], otherwise
+//	    //returns -1 
+//	    public static int last(int arr[], int low, int high, int x, int n)
+//	    {
+//	        if (high >= low)
+//	        {
+//	            int mid = low + (high - low)/2;
+//	            if (( mid == n-1 || x < arr[mid+1]) && arr[mid] == x)
+//	                 return mid;
+//	            else if (x < arr[mid])
+//	                return last(arr, low, (mid -1), x, n);
+//	            else
+//	                return last(arr, (mid + 1), high, x, n);
+//	        }
+//	    return -1;
+//	    }
+//	     
+//	    public static void main (String[] args)
+//	    {
+//	         
+//	        int arr[] = {1, 2, 2, 2, 2, 3, 4, 7, 8, 8};
+//	        int n = arr.length;
+//	        int x = 8;
+//	        System.out.println("First Occurrence = " + first(arr, 0, n-1, x, n));
+//	        System.out.println("Last Occurrence = " + last(arr, 0, n-1, x, n));
+//	 
+//	    }
+//	}
 	
 	public void randomize(int[] arr) {
 		int n = arr.length -1;
@@ -1578,6 +1645,18 @@ public class NumberImpl {
             this.index = index;
             this.value = value;
         }
+    }
+    
+    public static final double R = 6372.8; // In kilometers
+    public static double haversine(double lat1, double lon1, double lat2, double lon2) {
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        lat1 = Math.toRadians(lat1);
+        lat2 = Math.toRadians(lat2);
+ 
+        double a = Math.pow(Math.sin(dLat / 2),2) + Math.pow(Math.sin(dLon / 2),2) * Math.cos(lat1) * Math.cos(lat2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        return R * c;
     }
 	
 }
