@@ -1033,6 +1033,44 @@ public class TreeImpl {
 	}
 	
 	/**
+	 * Given an expression tree, evaluate its value.
+	 * 
+	 * @param root
+	 * @return
+	 */
+	public Integer evalExpressionTree(TreeNodeCh root) {
+		if (root != null) {		
+			if (root.left == null && root.right == null) {
+				return Integer.parseInt(root.data);
+			}
+			
+			int left = evalExpressionTree(root.left);
+			int right = evalExpressionTree(root.right);
+			
+			if (root.data.equals("+")) {
+				return left + right;
+			}
+			if (root.data.equals("-")) {
+				return left - right;
+			}
+			if (root.data.equals("*")) {
+				return left * right;
+			}
+			if (root.data.equals("/")) {
+				return left / right;
+			}
+		}
+		
+		return null;
+	}
+	
+	public class TreeNodeCh {
+		String data;
+		TreeNodeCh left;
+		TreeNodeCh right;
+	}
+	
+	/**
 	 * Connect all the adjacent nodes at the same level in a binary tree.
 	 * 
 	 * Input Tree
