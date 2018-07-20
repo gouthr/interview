@@ -3,8 +3,8 @@ package numbers;
 public class DFS {
 	
 	public static void main(String[] args) {
-		int[][] arr =  {{1, 1, 0, 0, 0},
-						{1, 1, 0, 0, 0},
+		int[][] arr =  {{1, 1, 0, 0, 1},
+						{1, 1, 0, 1, 0},
 						{0, 0, 1, 0, 0},
 						{0, 0, 0, 1, 1}};
 		System.out.println("Number of islands: " + countIslands(arr));
@@ -61,7 +61,23 @@ public class DFS {
 	}
 	
 	private static void dfsMarking(int[][] arr, int i, int j, int m, int n) {
-		if (i<0 || i>=m || j<0 || j>=n || arr[i][j]!=1) {
+		// Code for wrap around support
+		if (i<0) {
+			i = i+m;
+		} else if (i >= m) {
+			i = i-m;
+		} else if (j < 0) {
+			j = j+n;
+		} else if (j >= n) {
+			j = j-n;
+		}
+		
+		// Code for NO wrap-around
+		// if (i<0 || i>=m || j<0 || j>=n || arr[i][j]!=1) {
+		//	return;
+		// }
+		
+		if (arr[i][j]!=1) {
 			return;
 		}
 		arr[i][j] = 0;
