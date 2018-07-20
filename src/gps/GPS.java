@@ -62,24 +62,8 @@ public class GPS {
     	Location locC = arrLoc[2];
     	Location locD = arrLoc[3];
     	
-/*    	Location locA = new Location(1, 2);
-    	Location locB = new Location(3, 2);
-    	Location locC = new Location(2, 6);
-    	Location locD = new Location(10, 6);*/
-    	
     	double distAB = haversineDistance(locA, locB);
     	double distCD = haversineDistance(locC, locD);
-/*    	double distAC = haversineDistance(locA, locC);
-    	double distCA = haversineDistance(locC, locA);
-    	double distBD = haversineDistance(locB, locD);
-    	double distDB = haversineDistance(locD, locB);
-    	
-    	System.out.println("Dist AB: " + distAB);
-    	System.out.println("Dist CD: " + distCD);
-    	System.out.println("Dist AC: " + distAC);
-    	System.out.println("Dist CA: " + distCA);
-    	System.out.println("Dist BD: " + distBD);
-    	System.out.println("Dist DB: " + distDB);*/
     	
     	/**
     	 * Two paths are possible: [A->C->D->B] or [C->A->B->D]
@@ -89,15 +73,10 @@ public class GPS {
     	 */
     	if (distCD > distAB) {
     		System.out.println("Detour [C->A->B->D] is shorter.");
-    		// double distCABD = distCA + distAB + distBD;
-    		// System.out.println("Total detour distance: " + distCABD);
     	} else if (distCD == distAB) {
     		System.out.println("Both detours, [C->A->B->D] and [A->C->D->B] are the same.");
     	} else {
     		System.out.println("Detour [A->C->D->B] is shorter.");
-    		 // double distACDB = distAC + distCD + distDB;
-    		// System.out.println("Total detour distance: " + distACDB);
-    	}
-    	
+    	}  	
     }
 }
