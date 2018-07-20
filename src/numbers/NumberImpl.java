@@ -216,8 +216,6 @@ public class NumberImpl {
 		
 		int[][] arr19 = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
 		System.out.println("Spiral matrix output: " + numImpl.spiralMatrix(arr19));
-		
-		System.out.println("Haversine: " + haversine(36.12, -86.67, 33.94, -118.40));
 	}
 
 	/* 
@@ -1646,17 +1644,4 @@ public class NumberImpl {
             this.value = value;
         }
     }
-    
-    public static final double R = 6372.8; // In kilometers
-    public static double haversine(double lat1, double lon1, double lat2, double lon2) {
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-        lat1 = Math.toRadians(lat1);
-        lat2 = Math.toRadians(lat2);
- 
-        double a = Math.pow(Math.sin(dLat / 2),2) + Math.pow(Math.sin(dLon / 2),2) * Math.cos(lat1) * Math.cos(lat2);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        return R * c;
-    }
-	
 }
