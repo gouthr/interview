@@ -1,4 +1,4 @@
-package lyftChallenege;
+package autoSuggest;
 
 public class TrieNode {
 	public TrieNode[] links;

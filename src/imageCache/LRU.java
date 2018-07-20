@@ -1,4 +1,4 @@
-package lyft;
+package imageCache;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;

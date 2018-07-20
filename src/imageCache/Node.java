@@ -1,4 +1,4 @@
-package lyft;
+package imageCache;
 
 /**
  * Node data structure of the queue.
