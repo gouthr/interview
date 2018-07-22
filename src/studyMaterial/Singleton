@@ -1,0 +1,7 @@
+public class A {
+  private static A a;
+  private A() {}
+  public static giveMeAnA() {
+    if (a == null) a = new A();
+    return a;
+  }
