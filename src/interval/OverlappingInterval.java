@@ -1,5 +1,6 @@
 package interval;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -109,6 +110,40 @@ public class OverlappingInterval {
 	    }
 	    
 	    return heap.size();
+	}
+	
+	/**
+	 * Given a list of intervals which are occupied and a start and end time, find the free time available b/w start
+	 *  and end times.
+	 * 
+	 */
+	public List<Interval> freeMeetingRoomTime(List<Interval> intervals, int start, int end) {
+		if (intervals == null || intervals.size() == 0) {
+			return Collections.emptyList();
+		}
+
+		// Sort based on start time
+		Collections.sort(intervals, new Comparator<Interval>() {
+			@Override
+			public int compare(Interval o1, Interval o2) {
+				return o1.start - o2.start;
+			}
+		});
+		
+		List<Interval> res = new ArrayList<>();
+		Interval[] arr = (Interval[]) intervals.toArray();
+		
+		int begin = start;
+		for(int i=0; i<arr.length; i++) {
+			if (begin >= end) {
+				break;
+			}
+			if (arr[i].start > begin) {
+				res.add(new Interval(begin, Math.min(end, arr[i].start)));
+			}
+			begin = Math.max(arr[i].end, begin);
+		}
+		return res;
 	}
 	
 	public static void main(String[] args) {
