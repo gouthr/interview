@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -44,6 +45,10 @@ public class NumberImpl {
 			System.out.print(resEle + " ");
 		}
 		System.out.println();
+		int[] unionarr1 = {1, 2, 2, 3};
+		int[] unionarr2 = {1, 4, 5};
+		List<Integer> resList2 = numImpl.unionOfUnsortedArrays(unionarr1, unionarr2);
+		System.out.println("Union of 2 unsorted arrays: " + resList2);
 		
 		// Max contiguous sum
 		int[] arr3 = {3, 5, -9, 2, 4, -1, 7 };
@@ -322,6 +327,27 @@ public class NumberImpl {
 			}
 		}
 		return res;
+	}
+	
+	public List<Integer> unionOfUnsortedArrays(int[] arr1, int[] arr2) {
+		if (arr1 == null || arr2 == null || arr1.length == 0 || arr2.length == 0) {
+			return Collections.emptyList();
+		}
+		
+		List<Integer> res = new ArrayList<>();
+		Map<Integer, Integer> map = new HashMap<>();
+		for (int i=0; i<arr1.length; i++) {
+			map.put(arr1[i], map.getOrDefault(arr1[i], 0)+1);
+			res.add(arr1[i]);
+		}
+		
+		for (int i=0; i<arr2.length; i++) {
+			if (!map.containsKey(arr2[i])) {
+				res.add(arr2[i]);
+			}
+		}
+		return res;
+		
 	}
 	
 	public int maxContiguousSum(int[] arr) {
