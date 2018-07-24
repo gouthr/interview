@@ -1,58 +1,44 @@
 package threads;
 
-public class EvenOddTask implements Runnable {
+public class EvenOddTask {
 	
-	private boolean isOdd = true;
-	private int max;
-	private int start;
+	private int numsInSeq;
+	private int count;
 	
-	public EvenOddTask(int max, int start) {
-		this.max = max;
-		this.start = start;
+	public EvenOddTask(int numsInSeq) {
+		this.numsInSeq = numsInSeq;
+		this.count = 1;
 	}
 	
-	public void run() {
-		int number = (start == 1) ? 1 : 2;
-		while (number <= max) {
-			if (number % 2 != 0) {
-				oddNumber(number);
-			} else {
-				evenNumber(number);
+	public synchronized void printer(int num) {
+		while (count < numsInSeq) {
+			while (count % 2 != num) {
+				try {
+					wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
-			number += 1;
+			System.out.println(Thread.currentThread().getName() + " : " + count);
+			count++;
+			notifyAll();
 		}
 	}
 	
-	public synchronized void evenNumber(int number) {
-		while(isOdd) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+	public static void main(String[] args) {
+		EvenOddTask task = new EvenOddTask(10);
+		Thread t1 = new Thread("EvenThread") {
+			public void run() {
+				task.printer(0);
 			}
-		}
-		System.out.println("Even: " + number);
-		isOdd = true;
-		notify();
-	}
-	
-	public synchronized void oddNumber(int number) {
-		while(!isOdd) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		System.out.println("Odd: " + number);
-		isOdd = false;
-		notify();
-	}
-	
-	public static void main(String[]  args) {
-		Thread t1 = new Thread(new EvenOddTask(10, 2));
-		Thread t2 = new Thread(new EvenOddTask(10, 1));
+		};
 		t1.start();
+		
+		Thread t2 = new Thread("OddThread") {
+			public void run() {
+				task.printer(1);
+			}
+		};
 		t2.start();
 		
 		try {
