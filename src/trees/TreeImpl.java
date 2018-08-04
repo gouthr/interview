@@ -24,7 +24,7 @@ public class TreeImpl {
 
 	public static void main(String[] args) {
 		TreeImpl tree = new TreeImpl();
-		//TreeNode root = createTree(tree);
+		//TreeNode root = tree.createTree();
 		TreeNode root = tree.insertTreeNode(null, 5);
 		root = tree.insertTreeNode(root, 3);
 		root = tree.insertTreeNode(root, 7);
@@ -189,12 +189,12 @@ public class TreeImpl {
 		tree.BTPaths(root);
 	}
 	
-	public static TreeNode createTree(TreeImpl tree) {
-		TreeNode root = tree.new TreeNode(1);
-		TreeNode a = tree.new TreeNode(2);
-		TreeNode b = tree.new TreeNode(3);
-		TreeNode c = tree.new TreeNode(4);
-		TreeNode d = tree.new TreeNode(5);
+	public TreeNode createTree() {
+		TreeNode root = new TreeNode(1);
+		TreeNode a = new TreeNode(2);
+		TreeNode b = new TreeNode(3);
+		TreeNode c = new TreeNode(4);
+		TreeNode d = new TreeNode(5);
 		
 		root.left = a;
 		root.right = b;
@@ -424,6 +424,16 @@ public class TreeImpl {
 		}
 		return cntLeaf;
 	}
+	
+    int getLeafCount(Node node)  
+    { 
+        if (node == null) 
+            return 0; 
+        if (node.left == null && node.right == null) 
+            return 1; 
+        else
+            return getLeafCount(node.left) + getLeafCount(node.right); 
+    } 
 	
 	public void spiralTreeTraversal(TreeNode root) {
 		if (root == null) {
