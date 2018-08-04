@@ -1048,4 +1048,75 @@ public class StringImpl {
         }
         return indexAns;
     }
+    
+	/**
+	 * You are given a license key represented as a string S which consists only
+	 * alphanumeric character and dashes. The string is separated into N+1
+	 * groups by N dashes.
+	 * 
+	 * Given a number K, we would want to reformat the strings such that each
+	 * group contains exactly K characters, except for the first group which
+	 * could be shorter than K, but still must contain at least one character.
+	 * Furthermore, there must be a dash inserted between two groups and all
+	 * lowercase letters should be converted to uppercase.
+	 * 
+	 * Given a non-empty string S and a number K, format the string according to
+	 * the rules described above.
+	 * 
+	 * @param S
+	 * @param K
+	 * @return
+	 */
+    public String licenseKeyFormatting(String S, int K) {
+    	S = S.replaceAll("-", "");
+    	int n = S.length();
+        if (n == 0) {
+            return "";
+        }
+    	StringBuilder sb = new StringBuilder();
+    	int cnt = 0;
+    	for(int i=n-1; i>=0; i--) {
+    		sb.append(S.charAt(i));
+    		cnt++;
+    		if (cnt == K) {
+    			sb.append("-");
+    			cnt = 0;
+    		}
+    	}
+    	String res = sb.reverse().toString().toUpperCase();
+    	if (res.charAt(0) == '-') {
+    		return res.substring(1);
+    	}
+    	return res;
+        
+    }
+    
+	/**
+	 * Given two strings A and B, find the minimum number of times A has to be
+	 * repeated such that B is a substring of it. If no such solution, return
+	 * -1.
+	 * 
+	 * For example, with A = "abcd" and B = "cdabcdab".
+	 * 
+	 * Return 3, because by repeating A three times (“abcdabcdabcd”), B is a
+	 * substring of it; and B is not a substring of A repeated two times
+	 * ("abcdabcd").
+	 * 
+	 * @param A
+	 * @param B
+	 * @return
+	 */
+    public int repeatedStringMatch(String A, String B) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(A);
+        int i = 1;
+        while (sb.indexOf(B) < 0) {
+        	if (sb.length() - A.length() > B.length()) {
+        		return -1;
+        	}
+            sb.append(A);
+        	i++;
+        }
+        return i;
+    }
 }
