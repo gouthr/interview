@@ -229,6 +229,9 @@ public class NumberImpl {
 			System.out.print(res9[i]);
 		}
 		System.out.println();
+		
+		//Next greater permutation
+		System.out.println("Next greater permutation: " + numImpl.nextGreaterPermutation("12345"));
 	}
 
 	/**
@@ -1711,5 +1714,36 @@ public class NumberImpl {
         int[] res = new int[n+1];
         res[0] = 1;
         return res;
+	}
+	
+	public String nextGreaterPermutation(String num) {
+		StringBuilder sb = new StringBuilder(num);
+		int len = sb.length();
+		boolean swapDone = false;
+		int pos = -1;
+		for (int i=len-1; i>0; i--) {
+			if (sb.charAt(i) > sb.charAt(i-1)) {
+				swap(sb, i, i-1);
+				swapDone = true;
+				pos = i-1;
+				break;
+			}
+		}
+		if (swapDone) {
+			int i = pos + 1;
+			int j = sb.length() - 1;
+			while (i < j) {
+				swap(sb, i, j);
+				i++;
+				j--;
+			}
+		}
+		return sb.toString();
+	}
+	
+	private void swap(StringBuilder str, int i, int j) {
+		char tmp = str.charAt(i);
+		str.setCharAt(i, str.charAt(j));
+		str.setCharAt(j, tmp);
 	}
 }
