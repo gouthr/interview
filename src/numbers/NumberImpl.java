@@ -240,6 +240,9 @@ public class NumberImpl {
 	 * Solve it without division operator and in O(n
 	 */
 	public int[] productArray(int[] arr) {
+		if (arr == null || arr.length == 0) {
+			return new int[0];
+		}
 		int len = arr.length;
 		int[] left = new int[arr.length];
 		int[] right = new int[arr.length];

@@ -590,7 +590,6 @@ public class StringImpl {
 				map.put(key, value);
 			} else {
 				keyValue.add(str);
-				map.put(key, keyValue);
 			}
 		}
 		List<List<String>> res = new ArrayList<List<String>>();
