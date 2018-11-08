@@ -5,7 +5,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Bounded buffer producer consumer problem.
+ * Bounded buffer producer consumer problem using condition variable.
  *
  */
 public class BoundedBuffer {
