@@ -15,18 +15,12 @@ public class PeekingIterator implements Iterator<Integer>{
 	}
 	
 	public Integer peek() {
-		if (iter.hasNext()) {
-			return next;
-		}
-		return null;
+		return next;
 	}
 	
 	@Override
 	public boolean hasNext() {
-		if (next != null) {
-			return true;
-		}
-		return false;
+		return next != null;
 	}
 
 	@Override
