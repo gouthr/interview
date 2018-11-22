@@ -197,6 +197,14 @@ public class StringImpl {
 		char[] chars = {'a','a','b','b','c','c','c'};
 		System.out.println("String compression length " + strImpl.compress(chars));
 		
+		System.out.println("Longest substring with 2 unique characters: " + strImpl.lengthOfLongestSubstringTwoDistinct("ccaabbb"));
+		
+		// backspace compare
+		System.out.println("Backspace compare:");
+		System.out.println(strImpl.backspaceCompare("ab#c", "ad#c"));
+		System.out.println(strImpl.backspaceCompare("ab##", "c#d#"));
+		System.out.println(strImpl.backspaceCompare("a##c", "#a#c"));
+		System.out.println(strImpl.backspaceCompare("a#c", "b"));
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -1117,5 +1125,176 @@ public class StringImpl {
         	i++;
         }
         return i;
+    }
+    
+    /**
+     * Longest substring with 2 unique characters.
+     * 
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstringTwoDistinct(String s) {
+        final HashMap<Character, Integer> map = new HashMap<>();
+        final char[] chArr = s.toCharArray();
+        int i = 0;
+        int res = Integer.MIN_VALUE;
+        for (int j=0; j<chArr.length; j++) {
+            map.put(chArr[j], map.getOrDefault(chArr[j], 0) + 1);
+            while (map.size() > 2) {
+            	map.put(chArr[i], map.get(chArr[i])-1);
+            	if (map.get(chArr[i]) == 0) {
+            		map.remove(chArr[i]);
+            	}
+            	i++;
+            }
+            res = Math.max(res, j-i+1);
+        }
+        return res;
+    }
+    
+    /**
+     * There is a garden with N slots. In each slot, there is a flower. The N flowers will bloom one by one in N days. In each day, there will be exactly one flower blooming and it will be in the status of blooming since then.
+		
+		Given an array flowers consists of number from 1 to N. Each number in the array represents the place where the flower will open in that day.
+		
+		For example, flowers[i] = x means that the unique flower that blooms at day i will be at position x, where i and x will be in the range from 1 to N.
+		
+		Also given an integer k, you need to output in which day there exists two flowers in the status of blooming, and also the number of flowers between them is k and these flowers are not blooming.
+		
+		If there isn't such day, output -1.
+		
+		Example 1:
+		Input: 
+		flowers: [1,3,2]
+		k: 1
+		Output: 2
+		Explanation: In the second day, the first and the third flower have become blooming.
+		Example 2:
+		Input: 
+		flowers: [1,2,3]
+		k: 1
+		Output: -1
+     * @param flowers
+     * @param k
+     * @return
+     */
+    public int kEmptySlots(int[] flowers, int k) {
+        int[] days = new int[flowers.length];
+        for (int i = 0; i < days.length; i++) {
+            days[flowers[i] - 1] = i + 1;
+        }
+        int left = 0;
+        int right = k + 1;
+        int res = Integer.MAX_VALUE;
+        for (int i = 1; right < days.length; i++) {
+            // current days[i] is valid, continue scanning
+            if (days[i] > days[left] && days[i] > days[right]) {
+                continue;
+            }
+           // reach boundary of sliding window, since previous number are all valid, record result  
+            if (i == right) {
+                res = Math.min(res, Math.max(days[left],days[right]));
+            }
+            // not valid, move the sliding window
+            left = i;
+            right = left + k + 1;
+        }
+        return res == Integer.MAX_VALUE ? -1 : res;
+    }
+    
+    /**
+     * Given two strings S and T, return if they are equal when both are typed into empty text editors. # means a backspace character.
+
+		Example 1:
+		
+		Input: S = "ab#c", T = "ad#c"
+		Output: true
+		Explanation: Both S and T become "ac".
+		Example 2:
+		
+		Input: S = "ab##", T = "c#d#"
+		Output: true
+		Explanation: Both S and T become "".
+		Example 3:
+		
+		Input: S = "a##c", T = "#a#c"
+		Output: true
+		Explanation: Both S and T become "c".
+		Example 4:
+		
+		Input: S = "a#c", T = "b"
+		Output: false
+		Explanation: S becomes "c" while T becomes "b".
+     * @param S
+     * @param T
+     * @return
+     */
+    public boolean backspaceCompare(String S, String T) {
+    	char[] arrS = S.toCharArray();
+    	StringBuilder sbS = new StringBuilder();
+    	int i=0;
+    	while (i<arrS.length) {
+    		if (sbS.length()==0 && arrS[i] == '#') {
+    			i++;
+    			continue;
+    		} else if (sbS.length()>=1 && arrS[i] == '#') {
+    			sbS.replace(sbS.length()-1, sbS.length(), "");
+    		} else {
+    			sbS.append(arrS[i]);
+    		}
+    		i++;
+    	}
+    	
+    	char[] arrT = T.toCharArray();
+    	StringBuilder sbT = new StringBuilder();
+    	i=0;
+    	while (i<arrT.length) {
+    		if (sbT.length()==0 && arrT[i] == '#') {
+    			i++;
+    			continue;
+    		} else if (sbT.length()>=1 && arrT[i] == '#') {
+    			sbT.replace(sbT.length()-1, sbT.length(), "");
+    		} else {
+    			sbT.append(arrT[i]);
+    		}
+    		i++;
+    	}
+    	
+    	if (sbS.toString().equals(sbT.toString())) {
+    		return true;
+    	}
+    	return false;
+    }
+    
+    /**
+     * Most common word in a paragraph, not in banned list.
+     * 
+     * @param paragraph
+     * @param banned
+     * @return
+     */
+    public String mostCommonWord(String paragraph, String[] banned) {
+        if (paragraph == null || banned == null) {
+            return null;
+        }
+        Map<String, Integer> map = new HashMap<>();
+        List<String> bannedList = Arrays.asList(banned);
+        String[] words = paragraph.replaceAll("\\W+", " ").toLowerCase().split("\\s+"); // replace non-word characters with space
+        for (String word : words) {
+        	if (!bannedList.contains(word)){
+        		map.put(word, map.getOrDefault(word, 0)+1);
+        	} else {
+                map.put(word, -1);
+            }
+        }
+        Arrays.sort(words, new Comparator<String>() {
+
+			@Override
+			public int compare(String o1, String o2) {
+				return map.get(o2) - map.get(o1);
+			}	
+        });
+        
+        return words[0];
     }
 }
