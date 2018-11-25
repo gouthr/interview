@@ -1,0 +1,14 @@
+public int addWithOverflowCheck(int a, int b) {
+    // the cast of a is required, to make the + work with long precision,
+    // if we just added (a + b) the addition would use int precision and
+    // the result would be cast to long afterwards!
+    long result = ((long) a) + b;
+    if (result > Integer.MAX_VALUE) {
+         throw new RuntimeException("Overflow occured");
+    } else if (result < Integer.MIN_VALUE) {
+         throw new RuntimeException("Underflow occured");
+    }
+    // at this point we can safely cast back to int, we checked before
+    // that the value will be withing int's limits
+    return (int) result;
+}
