@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * When to use which one :
@@ -1296,5 +1297,103 @@ public class StringImpl {
         });
         
         return words[0];
+    }
+    
+    /**
+     * Regex matching.
+     *  Given an input string (s) and a pattern (p), implement regular expression matching with support for '.' and '*'.
+
+		'.' Matches any single character.
+		'*' Matches zero or more of the preceding element.
+		The matching should cover the entire input string (not partial).
+		
+		Note:
+		
+		s could be empty and contains only lowercase letters a-z.
+		p could be empty and contains only lowercase letters a-z, and characters like . or *.
+		Example 1:
+		
+		Input:
+		s = "aa"
+		p = "a"
+		Output: false
+		Explanation: "a" does not match the entire string "aa".
+		Example 2:
+		
+		Input:
+		s = "aa"
+		p = "a*"
+		Output: true
+		Explanation: '*' means zero or more of the precedeng element, 'a'. Therefore, by repeating 'a' once, it becomes "aa".
+		Example 3:
+		
+		Input:
+		s = "ab"
+		p = ".*"
+		Output: true
+		Explanation: ".*" means "zero or more (*) of any character (.)".
+		Example 4:
+		
+		Input:
+		s = "aab"
+		p = "c*a*b"
+		Output: true
+		Explanation: c can be repeated 0 times, a can be repeated 1 time. Therefore it matches "aab".
+     * @param s
+     * @param p
+     * @return
+     */
+    public boolean isMatch(String s, String p) {
+    	if (p.isEmpty()) {
+    		return s.isEmpty();
+    	}
+    	
+    	if (p.length() >=2 && p.charAt(1) == '*') {
+            // x* matches empty string or at least one character: x* -> xx*
+            // *s is to ensure s is non-empty
+    		return (isMatch(s, p.substring(2)) || (!s.isEmpty() && (s.charAt(0) == p.charAt(0) || p.charAt(0)=='.') && isMatch(s.substring(1), p)));
+    	} else {
+    		return !s.isEmpty() && (s.charAt(0) == p.charAt(0) || p.charAt(0)=='.') && isMatch(s.substring(1), p.substring(1));
+    	}
+    }
+    
+    /**
+     * To some string S, we will perform some replacement operations that replace groups of letters with new ones (not necessarily the same size).
+
+		Each replacement operation has 3 parameters: a starting index i, a source word x and a target word y.  The rule is that if x starts at position i in the original string S, then we will replace that occurrence of x with y.  If not, we do nothing.
+
+		Example 1:
+
+		Input: S = "abcd", indexes = [0,2], sources = ["a","cd"], targets = ["eee","ffff"]
+		Output: "eeebffff"
+		Explanation: "a" starts at index 0 in S, so it's replaced by "eee".
+		"cd" starts at index 2 in S, so it's replaced by "ffff".
+		Example 2:
+		
+		Input: S = "abcd", indexes = [0,2], sources = ["ab","ec"], targets = ["eee","ffff"]
+		Output: "eeecd"
+		Explanation: "ab" starts at index 0 in S, so it's replaced by "eee". 
+		"ec" doesn't starts at index 2 in the original S, so we do nothing.
+
+     * @param S
+     * @param indexes
+     * @param sources
+     * @param targets
+     * @return
+     */
+    public String findReplaceString(String S, int[] indexes, String[] sources, String[] targets) {
+    	TreeMap<Integer, Integer> tm = new TreeMap<>();
+    	for (int i=0; i<indexes.length; i++) {
+    		tm.put(indexes[i], i);
+    	}
+    	
+    	StringBuilder sb = new StringBuilder(S);
+    	for (int key : tm.descendingKeySet()) {
+    		int index = tm.get(key);
+    		if (S.startsWith(sources[index], indexes[index])) {
+    			sb.replace(indexes[index], indexes[index]+sources[index].length(), targets[index]);
+    		}
+    	}
+    	return sb.toString();
     }
 }
