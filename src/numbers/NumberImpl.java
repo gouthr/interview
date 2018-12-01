@@ -746,6 +746,50 @@ public class NumberImpl {
 	}
 	
 	/**
+	 * You are a professional robber planning to rob houses along a street. Each
+	 * house has a certain amount of money stashed. All houses at this place are
+	 * arranged in a circle. That means the first house is the neighbor of the
+	 * last one. Meanwhile, adjacent houses have security system connected and
+	 * it will automatically contact the police if two adjacent houses were
+	 * broken into on the same night.
+	 * 
+	 * Given a list of non-negative integers representing the amount of money of
+	 * each house, determine the maximum amount of money you can rob tonight
+	 * without alerting the police.
+	 * 
+	 * @param nums
+	 * @return
+	 */
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        return Math.max(robUtil(nums, 1, nums.length-1), robUtil(nums, 0, nums.length-2));
+    }
+    
+    private int robUtil (int[] nums, int start, int end) {
+        if (start == end) {
+            return nums[start];
+        }
+        int prevIncl = nums[start];
+        int prevExcl = 0;
+        
+        int curIncl = 0;
+        int curExcl = 0;
+        
+        for (int i=start+1; i<=end; i++) {
+            curIncl = nums[i] + prevExcl;
+            curExcl = Math.max(prevIncl, prevExcl);
+            prevIncl = curIncl;
+            prevExcl = curExcl;
+        }
+        return Math.max(curIncl, curExcl);
+    }
+	
+	/**
 	 * Find k most frequent occurring elements in the array.
 	 * 
 	 */
