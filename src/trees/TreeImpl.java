@@ -2,10 +2,12 @@ package trees;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.Stack;
 
 /* Binary search tree time complexity
@@ -1137,6 +1139,36 @@ public class TreeImpl {
 			this.left = this.right = this.nextRight = null;
 		}
 	}
+	
+	/**
+	 * Given a binary tree, return all duplicate subtrees. For each kind of
+	 * duplicate subtrees, you only need to return the root node of any one of
+	 * them.
+	 * 
+	 * Two trees are duplicate if they have the same structure with same node
+	 * values.
+	 * 
+	 * @param root
+	 * @return
+	 */
+    public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+        List<TreeNode> res = new LinkedList<>();
+        HashMap<String, Integer> map = new HashMap<>();
+        preOrderTraversal(root, res, map);
+        return res;
+    }
+    
+    private String preOrderTraversal(TreeNode root, List<TreeNode> res, HashMap<String, Integer> map) {
+    	if (root == null) {
+    		return "#";
+    	}
+    	String serialize = root.data + "," + preOrderTraversal(root.left, res, map) + "," + preOrderTraversal(root.right, res, map);
+    	if (map.getOrDefault(serialize, 0) == 1) {
+    		res.add(root);
+    	}
+		map.put(serialize, map.getOrDefault(serialize, 0)+1);
+		return serialize;
+    }
 	
 	/**
 	 * Tree node with parent pointer.
