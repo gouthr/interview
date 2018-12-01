@@ -232,6 +232,9 @@ public class NumberImpl {
 		
 		//Next greater permutation
 		System.out.println("Next greater permutation: " + numImpl.nextGreaterPermutation("12345"));
+		
+    	int[][] envelopes = {{30,50},{12,2},{3,4},{12,15}};
+		System.out.println("Max envelopes: " + numImpl.maxEnvelopes(envelopes));
 	}
 
 	/**
@@ -1804,4 +1807,58 @@ public class NumberImpl {
 		
 		return numSeen && numAfterE;
 	}
+	
+	/**
+	 * You have a number of envelopes with widths and heights given as a pair of integers (w, h). One envelope can fit into another if and only if both the width and height of one envelope is greater than the width and height of the other envelope.
+
+		What is the maximum number of envelopes can you Russian doll? (put one inside other)
+		
+		Note:
+		Rotation is not allowed.
+		
+		Example:
+		
+		Input: [[5,4],[6,4],[6,7],[2,3]]
+		Output: 3 
+		Explanation: The maximum number of envelopes you can Russian doll is 3 ([2,3] => [5,4] => [6,7]).
+	 * @param envelopes
+	 * @return
+	 */
+    public int maxEnvelopes(int[][] envelopes) {
+        if (envelopes == null || envelopes.length == 0) {
+        	return 0;
+        }
+        if (envelopes.length == 1) {
+        	return 1;
+        }
+        // Sort the width in ascending order and if the width is same, sort the height in descending order
+        Arrays.sort(envelopes, new Comparator<int[]>() {
+			@Override
+			public int compare(int[] o1, int[] o2) {
+				if (o1[0] == o2[0]) {
+					return o2[1] - o1[1];
+				} 
+				return o1[0] - o2[0];
+			}
+        });
+        
+        // find longest increasing subsequence on the height values only
+        int[] heights = new int[envelopes.length];
+        int[] lis = new int[envelopes.length];
+        for (int i=0; i<envelopes.length; i++) {
+        	heights[i] = envelopes[i][1];
+        	lis[i] = 1;
+        }
+        
+        int max = 1;
+        for (int i=1; i<envelopes.length; i++) {
+        	for (int j=0; j<i; j++) {
+        		if (heights[i] > heights[j] && lis[i] < lis[j]+1) {
+        			lis[i] = lis[j] + 1;
+        			max = Math.max(max, lis[i]);
+        		}
+        	}
+        }       
+        return max;
+    }
 }
