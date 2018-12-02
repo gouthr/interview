@@ -1185,18 +1185,29 @@ public class TreeImpl {
 	 * @return
 	 */
     public int rob(TreeNode root) {
+        return robUtil(root, new HashMap<TreeNode, Integer>());
+    }
+    
+    private int robUtil(TreeNode root, HashMap<TreeNode, Integer> map) {
         if (root == null) {
             return 0;
         }
-        int children = rob(root.left) + rob(root.right);
+        if (map.containsKey(root)) {
+            return map.get(root);
+        }
+
         int sum = 0;
         if (root.left != null) {
-            sum = rob(root.left.left) + rob(root.left.right);
+            sum = robUtil(root.left.left, map) + robUtil(root.left.right, map);
         }
         if (root.right != null) {
-            sum += rob(root.right.left) + rob(root.right.right);
+            sum += robUtil(root.right.left, map) + robUtil(root.right.right, map);
         }
-        return Math.max(root.data + sum, children);
+        int children = robUtil(root.left, map) + robUtil(root.right, map);
+        
+        int res = Math.max(root.data + sum, children);
+        map.put(root, res);
+        return res;
     }
 	
 	/**
