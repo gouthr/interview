@@ -68,9 +68,12 @@ public class Graph {
 		for(int i=0; i<v; i++) {
 			visited[i] = false;
 		}
-
-		dfsUtil(5, visited, q);
-
+		
+		for (int i=v-1; i>=0; i--) {
+			if (!visited[i]) {
+				dfsUtil(i, visited, q);
+			}
+		}
 		
 		while(!q.isEmpty()) {
 			System.out.print(q.remove() + " ");
