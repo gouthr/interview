@@ -537,6 +537,33 @@ public class NumberImpl {
 		return f1;
 	}
 	
+	/** Sqroot using binary search
+		 // if mid*mid<x => mid<=x/mid (e.g.mid=3,x=10)
+        // if mid<=x/mid => mid*mid<=x
+	 * 
+	 * @param x
+	 * @return
+	 */
+    public int mySqrt(int x) {
+        if (x == 0) {
+            return 0;
+        }
+        int lo = 1;
+        int hi = x;
+        while (lo <= hi) {
+            int mid = lo + (hi-lo)/2;
+            if (mid <= x/mid){
+                if (mid+1 > x/(mid+1)) {
+                    return mid;
+                }
+                lo = mid + 1;
+            } else {
+                hi = mid - 1;
+            }
+        }
+        return -1;
+    }
+	
 	/**
 	 * Given an array of int, find a contiguous sub-array whose product is maximum.
 	 * 
