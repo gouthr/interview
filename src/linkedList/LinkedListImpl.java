@@ -167,7 +167,38 @@ public class LinkedListImpl {
         }
         return dummy.next;
     }
+    
+    /**
+     * Rotate the linked list counter clockwise k times.
+     * 
+     * @param head
+     * @param k
+     * @return
+     */
+    public Node rotateCounterClockwise(Node head, int k) {
+    	Node newHead = head;
+    	for (int i=0; i<k; i++) {
+    		newHead = rotateCounterClockwiseOnce(newHead);
+    	}
+    	return newHead;
+    }
 	
+    private Node rotateCounterClockwiseOnce(Node head) {
+    	Node lastNode = null;
+    	Node tmp = head;
+    	while (tmp != null) {
+    		lastNode = tmp;
+    		tmp = tmp.next;
+    	}
+    	
+    	tmp = head;
+    	head = head.next;
+    	lastNode.next = tmp;
+    	tmp.next = null;
+    	return head;
+
+    }
+    
 	public static void main(String[] args) {
 		LinkedListImpl list = new LinkedListImpl();
 		// 2->3->20->5->10->15
