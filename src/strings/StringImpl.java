@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
@@ -206,6 +208,11 @@ public class StringImpl {
 		System.out.println(strImpl.backspaceCompare("ab##", "c#d#"));
 		System.out.println(strImpl.backspaceCompare("a##c", "#a#c"));
 		System.out.println(strImpl.backspaceCompare("a#c", "b"));
+		
+		// Second most repeated character in a string
+		String testStr = "aaabbb";
+		System.out.println("Second most frequent occuring character in a string + (" + testStr + "): " + strImpl.secondMostRepeatedCharInString(testStr));
+		
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -1395,5 +1402,45 @@ public class StringImpl {
     		}
     	}
     	return sb.toString();
+    }
+    
+    /**
+     * Second most frequent character in a string. If 2 characters have the same frequency, return the lower character in ascii value.
+     * @param str
+     * @return
+     */
+    public Character secondMostRepeatedCharInString(String str) {
+    	if (str == null || str.length() == 0 || str.length() == 1) {
+    		return null;
+    	}
+    	Map<Character, Integer> map = new HashMap<>();
+    	for (int i=0; i<str.length(); i++) {
+    		Character ch = str.charAt(i);
+    		map.put(ch, map.getOrDefault(ch, 0)+1);
+    	}
+    	if (map.size() <=1) {
+    		return null;
+    	}
+    	List<Character> candidates = new ArrayList<Character>(map.keySet());
+    	Collections.sort(candidates, new Comparator<Character>() {
+			@Override
+			public int compare(Character o1, Character o2) {
+				return map.get(o1) != map.get(o2)? map.get(o2) - map.get(o1) : o1.compareTo(o2);
+			}
+    	});
+    	if (map.get(candidates.get(0)) == map.get(candidates.get(candidates.size()-1))) {
+    		return null;
+    	}
+    	
+    	int resIndex = -1;
+    	for (int i=0; i<candidates.size()-1; i++) {
+    		if (map.get(candidates.get(i)) == map.get(candidates.get(i+1))) {
+    			continue;
+    		} else {
+    			resIndex = i+1;
+    			break;
+    		}
+    	}
+		return candidates.get(resIndex);
     }
 }
