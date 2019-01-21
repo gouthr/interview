@@ -1,0 +1,11 @@
+REST stands for Representational State Transfer
+It is a stateless architecture
+Every resource is defined as a URI - Uniform Resource Identifier
+4 major actions performed on resources - POST(create), GET(read), PUT(edit) and DELETE(delete)
+It follows HATEOAS principle - Hypermedia As The Engine Of Application State - It states that no document should explain how to access and use that resource. Every response has to be intuitive to give more information of other related actions.
+Eg - Say we are making a RESTful call to list mailboxes for a user, we could provide the URI to access the messages in that mailbox as part of the response.
+
+Advantages of REST:
+Independent development for client and server
+Ease of scalability
+Independent of language - only the exchange portocol needs to be JSON or XML
