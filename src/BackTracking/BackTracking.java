@@ -29,10 +29,12 @@ public class BackTracking {
 		System.out.println(res1);
 		
 		System.out.println("Combinations of numbers that add upto the given target: ");
-		int[] arr4 = {1, 3, 2};
+		int[] arr4 = {1, 2, 5, 6};
 		List<List<Integer>> res4 = new ArrayList<List<Integer>>();
-		bt.combinationSum(arr4, 5, new ArrayList<Integer>(), res4, 0);
+		bt.combinationSum(arr4, 11, new ArrayList<Integer>(), res4, 0);
 		System.out.println(res4);
+		System.out.println("Combinations of numbers that add upto the given target using DP: " + bt.combinationSumDpWays(arr4, 11));
+		System.out.println("Min no. of coins that add upto the given target using DP: " + bt.combinationSumMinCoinsDP(arr4, 11));
 		
 		System.out.println("Powerset of the given int array: ");
 		List<List<Integer>> res2 = new ArrayList<List<Integer>>();
@@ -112,6 +114,63 @@ public class BackTracking {
 		}
 	}
 	
+	/**
+	 * Return the no. of ways a target value can be reached give the coins array.
+	 * DP way.
+	 * 
+	 * @param coins
+	 * @param target
+	 * @return
+	 */
+	public int combinationSumDpWays(int[] coins, int target) {
+		if (coins == null || coins.length == 0) {
+			return 0;
+		}
+		
+		int n = coins.length;
+		int[] ways = new int[target+1];
+		ways[0] = 1; // No. of ways 0 value can be reached = 1 way using 0 coins
+		
+		for (int j = 0; j < n; j++) {
+			for (int i = 1; i <= target; i++) {
+				if (coins[j] <= i) {
+					ways[i] += ways[i - coins[j]];
+				}
+			}
+		}
+		
+		return ways[target];
+	}
+	
+	/** 
+	 * Min no. of coins needed to return the target value using the coins arr.
+	 * @param coins
+	 * @param target
+	 * @return
+	 */
+	public int combinationSumMinCoinsDP(int[] coins, int target) {
+		if (coins == null || coins.length == 0 || target == 0) {
+			return 0;
+		}
+		
+		int[] minCoins = new int[target+1];
+		minCoins[0] = 0;
+		
+		for (int i=1; i<=target; i++) {
+			minCoins[i] = Integer.MAX_VALUE;
+		}
+		
+		for (int i=0; i<coins.length; i++) {
+			for (int j=1; j<=target; j++) {
+				if (coins[i] <= j) {
+					if ((1 + minCoins[j-coins[i]]) < minCoins[j]) {
+						minCoins[j] = 1 + minCoins[j-coins[i]];
+					}
+				}
+			}
+		}
+		return minCoins[target];
+	}
 	
 	/**
 	 * Given an int array, find all combinations of size k. Assume unique ints.
