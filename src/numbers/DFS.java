@@ -1,5 +1,8 @@
 package numbers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DFS {
 	
 	public static void main(String[] args) {
@@ -8,6 +11,8 @@ public class DFS {
 						{0, 0, 1, 0, 0},
 						{0, 0, 0, 1, 1}};
 		System.out.println("Number of islands: " + countIslands(arr));
+		int[][] positions = {{0,0},{0,1},{1,2},{2,1}};
+		numIslands2(3, 3, positions);
 		
 		char[][] arr1 = {{'A','B','C','E'}, 
 						{'S','F','C','S'}, 
@@ -142,5 +147,60 @@ public class DFS {
 		used[i][j] = false;
 		return (res1||res2||res3||res4);
 	}
+	
+	/**
+	 * A 2d grid map of m rows and n columns is initially filled with water. We may perform an addLand operation which turns the water at position (row, col) into a land. Given a list of positions to operate, count the number of islands after each addLand operation. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+		Example:
+		
+		Input: m = 3, n = 3, positions = [[0,0], [0,1], [1,2], [2,1]]
+		Output: [1,1,2,3]
+	 * @param m
+	 * @param n
+	 * @param positions
+	 * @return
+	 */
+    public static List<Integer> numIslands2(int m, int n, int[][] positions) {
+        int[][] arr = new int[m][n];
+        List<Integer> res = new ArrayList<>();
+        for (int[] eachPos : positions) {
+            int row = eachPos[0]; 
+            int col = eachPos[1];
+            populate(arr, row, col);
+            numIslandsUtil(arr, m, n, res);
+        }
+        
+        return res;
+    }
+    
+    private static void populate(int[][] arr, int r, int c) {
+        arr[r][c] = 1;
+    }
+    
+    private static void numIslandsUtil(int[][] arr, int m, int n, List<Integer> res) {
+        boolean[][] visited = new boolean[m][n];
+        int count = 0;
+        for (int i=0; i<m; i++) {
+            for (int j=0; j<n; j++) {
+                if (arr[i][j] == 1 && !visited[i][j]) {
+                    dfsMarking(arr, i, j, m, n, visited);
+                    count++;
+                }
+            }
+        }
+        res.add(count);
+    }
+    
+    private static void dfsMarking(int[][] arr, int i, int j, int m, int n, boolean[][] visited) {
+        if (i<0 || i>=m || j<0 || j>=n || arr[i][j] != 1 || visited[i][j]) {
+            return;
+        }
+        
+        visited[i][j] = true;
+        dfsMarking(arr, i+1, j, m, n, visited);
+        dfsMarking(arr, i-1, j, m, n, visited);
+        dfsMarking(arr, i, j+1, m, n, visited);
+        dfsMarking(arr, i, j-1, m, n, visited);
+    }
 
 }
