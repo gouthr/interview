@@ -2092,4 +2092,45 @@ public class NumberImpl {
         }
         return res;
     }
+    
+    /**
+     * Random pick with weighted index.
+     * Given an array w of positive integers, where w[i] describes the weight of index i, write a function pickIndex which randomly picks an index in proportion to its weight.
+
+			Note:
+			
+			1 <= w.length <= 10000
+			1 <= w[i] <= 10^5
+			pickIndex will be called at most 10000 times.
+
+     */
+    Random rand;
+    int[] sum;
+    public NumberImpl(int[] w) {
+        for (int i=1; i<w.length; i++) {
+            w[i] += w[i-1];
+        }
+        sum = w;
+        rand = new Random();
+    }
+    
+    public int pickIndex() {
+        int index = rand.nextInt(sum[sum.length-1])+1;
+        int lo = 0;
+        int hi = sum.length-1;
+        
+        while(lo < hi) {
+            int mid = lo + (hi-lo)/2;
+            if (sum[mid] == index) {
+                return mid;
+            } else if (index > sum[mid]) {
+                lo = mid+1;
+            } else {
+                hi = mid;
+            }
+        }
+        return lo;
+    }
+    
+    public NumberImpl(){}
 }
