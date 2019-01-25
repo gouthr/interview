@@ -1,6 +1,7 @@
 package trees;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -1208,6 +1209,62 @@ public class TreeImpl {
         int res = Math.max(root.data + sum, children);
         map.put(root, res);
         return res;
+    }
+    
+    // Definition for a Node.
+    class GNode {
+        public int val;
+        public List<GNode> children;
+
+        public GNode() {}
+
+        public GNode(int _val,List<GNode> _children) {
+            val = _val;
+            children = _children;
+        }
+    };
+    /**
+     * Serialize and deserialize an n-ary tree.
+     * 
+     * @param root
+     * @return
+     */
+    // Encodes a tree to a single string.
+    public String serialize(GNode root) {
+        StringBuilder sb = new StringBuilder();
+        serializeUtil(root, sb);
+        return sb.toString();
+    }
+    
+    private void serializeUtil(GNode root, StringBuilder sb) {
+        if (root != null) {
+            sb.append(String.valueOf(root.val)).append("#");
+            sb.append(String.valueOf(root.children.size())).append("#");
+            for (GNode child : root.children) {
+                serializeUtil(child, sb);
+            }
+        }
+    }
+
+    // Decodes your encoded data to tree.
+    public GNode deserialize(String data) {
+        if (data != null && !data.isEmpty()) {
+            String[] parts = data.split("#");
+            Queue<String> q = new LinkedList<>(Arrays.asList(parts));
+            return deserializeUtil(q);
+        }
+        return null;
+    }
+    
+    private GNode deserializeUtil(Queue<String> q) {
+        int val = Integer.parseInt(q.remove());
+        GNode root = new GNode(val, null);
+        root.children = new ArrayList<GNode>();
+        int size = Integer.parseInt(q.remove());
+        for (int i=0; i<size; i++) {
+            root.children.add(deserializeUtil(q));
+        }
+        return root;
     }
 	
 	/**
