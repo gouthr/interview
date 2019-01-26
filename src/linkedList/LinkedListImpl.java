@@ -199,6 +199,76 @@ public class LinkedListImpl {
 
     }
     
+    class Node2 {
+    	int data;
+    	Node2 next;
+    	Node2 down;
+    	
+    	public Node2 (int data) {
+    		this.data = data;
+    	}
+    }
+    
+    static Node2 last;
+    
+    /**
+     * Flatten a list depth wise. Down nodes are processed before processing next nodes.
+     * 
+     * @param node
+     * @return
+     */
+    public Node2 flattenListDepth(Node2 node) {
+    	if (node == null) {
+    		return null;
+    	}
+    	
+    	last = node;
+    	
+    	Node2 next = node.next;
+    	
+    	if (node.down != null) {
+    		node.next = flattenListDepth(node.down);
+    	}
+    	
+    	if (next != null) {
+    		last.next = flattenListDepth(next);
+    	}
+    	
+    	return node;    	
+    }
+    
+    /**
+     * Flatten list width wise. The next nodes at each level are processed before the down nodes. Processing is level wise.
+     * 
+     * @param node
+     * @return
+     */
+    public Node2 flattenListWidth(Node2 node) {
+    	if (node == null) {
+    		return null;
+    	}
+    	
+    	Node2 tail = node;
+    	while (tail.next != null) {
+    		tail = tail.next;
+    	}
+    	
+    	Node2 cur = node;
+    	while(cur != tail) {
+    		if (cur.down != null) {
+    			tail.next = cur.down;
+	    		Node2 tmp = cur.down;
+	    		while (tmp.next != null) {
+	    			tmp = tmp.next;
+	    		}
+	    		tail = tmp;
+    		}
+    		cur = cur.next;
+    	}
+    	
+    	return node;
+    }
+    
 	public static void main(String[] args) {
 		LinkedListImpl list = new LinkedListImpl();
 		// 2->3->20->5->10->15
