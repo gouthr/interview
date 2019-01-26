@@ -1,0 +1,70 @@
+I would not return the "real" connection object from the pool, but a wrapper which gives the pool control of connection life cycle, instead of the client.
+
+Assume you have a really simple connection, which you can read int values from:
+
+interface Connection {
+    int read(); // reads an int from the connection
+    void close(); // closes the connection
+}
+
+An implementation reading from a stream could look like this (ignoring exceptions, EOF handling, etc):
+
+class StreamConnection implements Connection {
+    private final InputStream input;
+    int read(){ return input.read(); }
+    void close(){ input.close(); }
+}
+
+Furthermore, let's assume you have a pool for StreamConnections that looks like this (again, ignoring exceptions, concurrency, etc):
+
+class StreamConnectionPool {
+    List<StreamConnection> freeConnections = openSomeConnectionsSomehow();
+    StreamConnection borrowConnection(){ 
+        if (freeConnections.isEmpty()) throw new IllegalStateException("No free connections");
+        return freeConnections.remove(0); 
+    }
+    void returnConnection(StreamConnection conn){
+        freeConnections.add(conn);
+    }
+}
+
+The basic idea here is OK, but we can't be sure the connections are returned, and we can't be sure they aren't closed and then returned, or that you don't return a connection which came from another source altogether.
+
+The solution is (of course) another layer of indirection: Make a pool which returns a wrapper Connection which, instead of closing the underlying connection when close() is called, returns it to the pool:
+
+class ConnectionPool {
+
+    private final StreamConnectionPool streamPool = ...;
+
+    Connection getConnection() {
+        final StreamConnection realConnection = streamPool.borrowConnection();
+        return new Connection(){
+            private boolean closed = false;
+            int read () {
+                if (closed) throw new IllegalStateException("Connection closed"); 
+                return realConnection.read();
+            }
+            void close() {
+                if (!closed) {
+                    closed = true;
+                    streamPool.returnConnection(realConnection);
+                }
+            }
+            protected void finalize() throws Throwable {
+                try {
+                    close();
+                } finally {
+                    super.finalize();
+                }
+            }
+        };
+    }
+}
+
+This ConnectionPool would be the only thing the client code ever sees. Assuming it is the sole owner of the StreamConnectionPool, this approach has several advantages:
+
+Reduced complexity and minimal impact on client code - the only difference between opening connections yourself and using the pool is that you use a factory to get hold of Connections (which you might already do, if you're using dependency injection). Most importantly, you always clean up your resources in the same way, i.e., by calling close(). Just like you don't care what read does, as long as it gives you the data you need, you don't care what close() does, as long as it releases the resources you've claimed. You shouldn't have to think whether this connection is from a pool or not.
+
+Protection against malicious/incorrect usage - clients can only return resources they've retrieved from the pool; they can't close the underlying connections; they can't use connections they've already returned... etc.
+
+"Guaranteed" returning of resources - thanks to our finalize implementation, even if all references to a borrowed Connection is lost, it is still returned to the pool (or does at least stand a chance to be returned). The connection will of course be held longer than necessary this way - possibly indefinitely, since finalization isn't guaranteed to ever run - but it's a small improvement.
