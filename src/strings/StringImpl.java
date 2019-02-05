@@ -1494,4 +1494,35 @@ public class StringImpl {
         
         return res;
     }
+    
+    /**
+     * Encode a list of strings into a single string and decode back.
+     * 
+     * @param strs
+     * @return
+     */
+    // Encodes a list of strings to a single string.
+    public String encode(List<String> strs) {
+        if (strs == null || strs.size() == 0) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String str : strs) {
+            sb.append(str.length()).append("/").append(str);
+        }
+        return sb.toString();
+    }
+
+    // Decodes a single string to a list of strings.
+    public List<String> decode(String s) {
+        List<String> res = new ArrayList<>();
+        int i = 0;
+        while(i<s.length()) {
+            int hash = s.indexOf("/", i);
+            int size = Integer.parseInt(s.substring(i, hash));
+            i = hash + size + 1;
+            res.add(s.substring(hash+1, i));
+        }
+        return res;
+    }
 }
