@@ -236,6 +236,9 @@ public class NumberImpl {
 		
     	int[][] envelopes = {{30,50},{12,2},{3,4},{12,15}};
 		System.out.println("Max envelopes: " + numImpl.maxEnvelopes(envelopes));
+		
+		int[] arr21 = {-3, 1, 3, 5, 7}; 
+		System.out.println("No. of ways to reach target using the array: " + numImpl.findWaysToTarget(arr21, 6));
 	}
 
 	/**
@@ -2131,6 +2134,35 @@ public class NumberImpl {
         }
         return lo;
     }
+    
+	/**
+	 * Given an integer array, find number of ways to calculate a target number
+	 * using only array elements and addition or subtraction operator.
+	 * 
+	 * @param arr
+	 * @param target
+	 * @return
+	 */
+    public int findWaysToTarget(int[] arr, int target) {
+    	return findWaysToTargetUtil(arr, arr.length, target);
+    }
+    
+    private int findWaysToTargetUtil(int[] arr, int n, int target) {
+    	if (n<=0 && target != 0) {
+    		return 0;
+    	}
+    	if (target == 0) {
+    		return 1;
+    	}
+        // Return total count of three cases 
+        // 1. Don't consider current element 
+        // 2. Consider current element and subtract it from target 
+        // 3. Consider current element and add it to target
+    	return findWaysToTargetUtil(arr, n-1, target-arr[n-1]) + 
+    			findWaysToTargetUtil(arr, n-1, target+arr[n-1]) +
+    			findWaysToTargetUtil(arr, n-1, target);
+    }
+    
     
     public NumberImpl(){}
 }
