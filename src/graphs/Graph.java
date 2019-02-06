@@ -27,6 +27,20 @@ public class Graph {
         
         System.out.println("DFS of the given graph:");
         g.dfs();
+        
+        Graph graph = new Graph(4); 
+        graph.addEdge(0, 1); 
+        graph.addEdge(0, 2); 
+        graph.addEdge(1, 2); 
+        graph.addEdge(2, 0); 
+        graph.addEdge(2, 3); 
+        graph.addEdge(3, 3); 
+          
+        if(graph.isCycle()) 
+            System.out.println("Graph contains cycle"); 
+        else
+            System.out.println("Graph doesn't "
+                                    + "contain cycle"); 
 
 	}	
 	
@@ -103,6 +117,44 @@ public class Graph {
 			}
 		}
 		stack.push(vertex);
+	}
+	
+	/**
+	 * Returns true is a cycle exists in the graph.
+	 * @return
+	 */
+	public boolean isCycle() {
+		boolean[] visited = new boolean[v]; // visited vertices
+		boolean[] recurStack = new boolean[v]; // visited vertices in the recursion stack
+		for (int i=0; i<v; i++) {
+			if (isCycleUtil(i, visited, recurStack)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isCycleUtil(int src, boolean[] visited, boolean[] recurSt) {
+		if (recurSt[src]) {
+			return true;
+		}
+		
+		// So as to not visit the visited vertices again
+		if (visited[src]) {
+			return false;
+		}
+		
+		visited[src] = true;
+		
+		recurSt[src] = true;		
+		for (int i=0; i<adj[src].size(); i++) {
+			if (isCycleUtil(adj[src].get(i), visited, recurSt)) {
+				return true;
+			}
+		}
+		recurSt[src] = false;
+		
+		return false;
 	}
 	
 	/** 
