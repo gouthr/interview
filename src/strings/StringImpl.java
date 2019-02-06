@@ -213,6 +213,13 @@ public class StringImpl {
 		String testStr = "aaabbb";
 		System.out.println("Second most frequent occuring character in a string + (" + testStr + "): " + strImpl.secondMostRepeatedCharInString(testStr));
 		
+        String str21 = "this is a test string"; 
+        String pat = "tist";
+        
+        String str22 = "geeksforgeeks";
+        String pat22 = "ork";
+        System.out.println("Smallest window is : " + strImpl.findMinWindow(str21, pat));
+        System.out.println("Smallest window is : " + strImpl.findMinWindow(str22, pat22));
 	}
 	
 	public void permute(StringBuilder str, int start, int end) {
@@ -1524,5 +1531,71 @@ public class StringImpl {
             res.add(s.substring(hash+1, i));
         }
         return res;
+    }
+    
+    /**
+	 * Given two strings string1 and string2, find the smallest substring in
+	 * string1 containing all characters of string2 efficiently. For Example:
+	 * 
+	 * Input : string = "this is a test string" pattern = "tist" Output :
+	 * Minimum window is "t stri" Explanation: "t stri" contains all the
+	 * characters of pattern.
+	 * 
+	 * Input : string = "geeksforgeeks" pattern = "ork" Output : Minimum window
+	 * is "ksfor"
+	 * 
+	 * @param str
+	 * @param pat
+	 * @return
+	 */
+    public String findMinWindow(String str, String pat) {
+    	if (str == null || pat == null || str.length() == 0 || pat.length() == 0) {
+    		return "";
+    	}
+    	
+    	int m = str.length();
+    	int n = pat.length();
+    	
+    	if (m<n) {
+    		return "";
+    	}
+    	
+    	int[] strMap = new int[256];
+    	int[] patMap = new int[256];
+    	
+    	for (int i=0; i<n; i++) {
+    		patMap[pat.charAt(i)]++;
+    	}
+    	int count = 0;
+    	int start = 0;
+    	int minWin = Integer.MAX_VALUE;
+    	int startIndex = -1;
+    	for (int j=0; j<m; j++) {
+    		strMap[str.charAt(j)]++;
+    		
+    		if (patMap[str.charAt(j)]!=0 && strMap[str.charAt(j)] <= patMap[str.charAt(j)]) {
+    			count++;
+    		}
+    		
+    		if (count == n) {
+    			// One of the windows found
+    			while (strMap[str.charAt(start)] > patMap[str.charAt(start)]) {
+    				strMap[str.charAt(start)]--;
+    				start++;
+    			}
+
+	    		int winLen = j - start + 1;
+	    		if (winLen < minWin) {
+	    			minWin = winLen;
+	    			startIndex = start;
+	    		}
+    		}
+    	}
+    	
+    	if (startIndex == -1) {
+    		return "";
+    	}
+    	
+    	return str.substring(startIndex, startIndex+minWin);
     }
 }
