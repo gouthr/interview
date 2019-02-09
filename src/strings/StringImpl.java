@@ -1598,4 +1598,32 @@ public class StringImpl {
     	
     	return str.substring(startIndex, startIndex+minWin);
     }
+    
+    /**
+     * Returns true if s is a subsequence of t.
+     * @param s
+     * @param t
+     * @return
+     */
+    public boolean isSubsequence(String s, String t) {
+    	if (s == null || s.isEmpty()) {
+    		return true;
+    	}
+    	
+    	int m = t.length();
+    	int n = s.length();
+    	int indexS = 0;
+    	int indexT = 0;
+    	
+    	while (indexT < m) {
+    		if (s.charAt(indexS) == t.charAt(indexT)) {
+    			indexS++;
+    			if (indexS == n) {
+    				return true;
+    			}
+    		}
+			indexT++;
+    	}
+    	return false;
+    }
 }
