@@ -41,6 +41,26 @@ public class Graph {
         else
             System.out.println("Graph doesn't "
                                     + "contain cycle"); 
+        
+        // Create a graph given in the above diagram 
+        Graph g1 = new Graph(5); 
+        g1.addEdge(1, 0); 
+        g1.addEdge(0, 2); 
+        g1.addEdge(2, 0); 
+        g1.addEdge(0, 3); 
+        g1.addEdge(3, 4); 
+        if (g1.isCycleUndirected()) 
+            System.out.println("Undirected Graph contains cycle"); 
+        else
+            System.out.println("Undirected Graph doesn't contains cycle"); 
+  
+        Graph g2 = new Graph(3); 
+        g2.addEdge(0, 1); 
+        g2.addEdge(1, 2); 
+        if (g2.isCycleUndirected()) 
+            System.out.println("Undirected Graph contains cycle"); 
+        else
+            System.out.println("Undirected Graph doesn't contains cycle"); 
 
 	}	
 	
@@ -74,6 +94,7 @@ public class Graph {
 	
 	public void addEdge(int v, int w) {
 		adj[v].add(w);
+		// adj[w].add(v); // For an undirected graph both directions need to be populated
 	}
 	
 	public void dfs() {
@@ -120,7 +141,7 @@ public class Graph {
 	}
 	
 	/**
-	 * Returns true is a cycle exists in the graph.
+	 * Returns true is a cycle exists in a directed graph.
 	 * @return
 	 */
 	public boolean isCycle() {
@@ -157,6 +178,42 @@ public class Graph {
 		return false;
 	}
 	
+	/**
+	 * Returns true if a cycle exists in a undirected graph.
+	 * @return
+	 */
+	public boolean isCycleUndirected() {
+		boolean[] visited = new boolean[v];
+		
+		for (int i=0; i<v; i++) {
+			if (!visited[i]) {
+				if (isCycleUndirectedUtil(i, visited, -1)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private boolean isCycleUndirectedUtil(int src, boolean[] visited, int parent) {
+		visited[src] = true;
+		
+		for (int i=0; i<adj[src].size(); i++) {
+            // If an adjacent is not visited, then recur for that 
+            // adjacent
+			if (!visited[adj[src].get(i)]) {
+				if (isCycleUndirectedUtil(adj[src].get(i), visited, src)) {
+					return true;
+				}
+			} else if (visited[adj[src].get(i)] && adj[src].get(i) != parent) {
+	            // If an adjacent is visited and not parent of current 
+	            // vertex, then there is a cycle
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/** 
 	 * Clone an undirected graph.
 	 * 
@@ -164,17 +221,20 @@ public class Graph {
 	 * @return
 	 */
 	public UndirectedGraphNode clone(UndirectedGraphNode node) {
+		Map<UndirectedGraphNode, UndirectedGraphNode> map = new HashMap<>();
+		return cloneUtil(node, map);
+	}
+	private UndirectedGraphNode cloneUtil(UndirectedGraphNode node, Map<UndirectedGraphNode, UndirectedGraphNode> map) {
 		if (node == null) {
 			return null;
 		}
 		
-		Map<Integer, UndirectedGraphNode> map = new HashMap<>();
-		if (map.containsKey(node.label)) {
-			return map.get(node.label);
+		if (map.containsKey(node)) {
+			return map.get(node);
 		}
 		
 		UndirectedGraphNode clone = new UndirectedGraphNode(node.label);
-		map.put(clone.label, clone);
+		map.put(node, clone);
 		for (UndirectedGraphNode neighbor : node.neighbors) {
 			clone.neighbors.add(clone(neighbor));
 		}
