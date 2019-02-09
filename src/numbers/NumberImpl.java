@@ -1649,6 +1649,46 @@ public class NumberImpl {
 	}
 	
 	/**
+	 * Integer to roman.
+	 * 
+	 * @param num
+	 * @return
+	 */
+    public String intToRoman(int num) {
+        if (num <= 0) {
+            return "";
+        }
+      
+        String[] thousands = {"", "M", "MM", "MMM"};
+        String[] hundreds = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"}; 
+        String[] tens = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
+        String[] units = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+        
+        int i = 0;
+        int rem = 0;
+        StringBuilder res = new StringBuilder();
+        while (num > 0) {
+            rem = num % 10;
+            if (i == 0) {
+                res.insert(0, units[rem]);
+            }
+            if (i == 1) {
+                res.insert(0, tens[rem]);
+            }
+            if (i == 2) {
+                res.insert(0, hundreds[rem]);
+            }
+            if (i == 3) {
+                res.insert(0, thousands[rem]);
+            }
+            i++;
+            num = num/10;
+        }
+        
+        return res.toString();
+    }
+	
+	/**
 	 * 
 	 * Given a matrix of m x n elements (m rows, n columns), return all elements
 	 * of the matrix in spiral order.
