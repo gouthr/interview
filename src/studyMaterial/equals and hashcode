@@ -1,0 +1,32 @@
+Common mistakes with equals() and hashcode()
+Forgetting to override hashcode() along with the equals() method or vice versa.
+Not overriding equals() and hashcode() when using hash collections like HashSet.
+Returning a constant value in the hashcode() method instead of returning a unique code per object.
+Using == and equals interchangeably. The == compares Object references, whereas equals() compares object values.
+
+What to remember about equals() and hashcode()
+It’s a good practice to always override equals() and hashcode() methods in your POJOs.
+Use an effective algorithm to generate a unique hashcode.
+When overriding the equals() method, always override the hashcode() method as well.
+The equals() method should compare the whole state of objects: values from fields.
+The hashcode() method could be the ID of a POJO.
+When the result of comparing two object's hashcodes is false, the equals() method should also be false.
+If equals() and hashcode() are not overridden when using hash collections, the collection will have duplicate elements.
+
+In order to achieve a fully working custom equality mechanism, it is mandatory to override hashcode() each time you override equals(). 
+Follow the tips below and you'll never have leaks in your custom equality mechanism:
+
+If two objects are equal, they MUST have the same hash code.
+If two objects have the same hash code, it doesn't mean that they are equal.
+Overriding equals() alone will make your business fail with hashing data structures like: HashSet, HashMap, HashTable ... etc.
+		HashSet stores its elements in memory buckets. Each bucket is linked to a particular hash code. 
+		When calling students.add(alex1), Java stores alex1 inside a bucket and links it to the value of alex1.hashcode(). 
+		Now any time an element with the same hash code is inserted into the set, it will just replace alex1. 
+		However, since alex2 has a different hash code, it will be stored in a separate bucket and will be considered a totally different object.
+Overriding hashcode() alone doesn't force Java to ignore memory addresses when comparing two objects.
+
+
+
+The compareTo method is the sole member of the Comparable interface, and is not a member of Object. However, it's quite similar in nature to equals and hashCode. 
+It provides a means of fully ordering objects.
+An alternative to implementing Comparable is passing Comparator objects as parameters.
