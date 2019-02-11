@@ -1,6 +1,7 @@
 package BackTracking;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +88,51 @@ public class BackTracking {
 			tmp.remove(tmp.size()-1);
 		}
 	}
+	
+	/**
+	 * Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+		Example:
+		
+		Input: [1,1,2]
+		Output:
+		[
+		  [1,1,2],
+		  [1,2,1],
+		  [2,1,1]
+		]
+	 * @param nums
+	 * @return
+	 */
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (nums == null || nums.length == 0) {
+            return res;
+        }
+        Arrays.sort(nums);
+        boolean[] visited = new boolean[nums.length];
+        permuteUtil(nums, new ArrayList<Integer>(), res, visited);
+        return res;
+    }
+    
+    private void permuteUtil(int[] nums, List<Integer> tmp, List<List<Integer>> res, boolean[] visited) {
+        if (tmp.size() == nums.length) {
+            res.add(new ArrayList<Integer>(tmp));
+            return;
+        }
+        for (int i=0; i<nums.length; i++) {
+        	// skip the value we've used, or,
+        	// when a number has the same value with its previous, we can use this number only if his previous is used
+            if (visited[i] || (i>0 && nums[i] == nums[i-1] && !visited[i-1])) {
+                continue;
+            }
+            visited[i] = true;
+            tmp.add(nums[i]);
+            permuteUtil(nums, tmp, res, visited);
+            visited[i] = false;
+            tmp.remove(tmp.size()-1);
+        }
+    }
 	
 	/**
 	 * Given an integer array, generate all possible combinations of numbers
