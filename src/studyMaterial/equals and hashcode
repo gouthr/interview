@@ -1,10 +1,24 @@
+equals and hashcode:
+=====================
+These methods are used for equality comparison of 2 objects in java. Both these methods need to be overridden to determine
+if 2 objects are equal. By default equals() method returns the memory address of the object and hashcode() returns the integer
+equivalent of memory address. By contract, if 2 objects in java are equal, then their hashcode has to be the same. But if 2 objects
+have the same hashcode, then they might not necessarily be equal.
+hashcode() comes into picture for collections like HashSet and HashMap which depend on the hashcode() functionality to group them
+into buckets. 2 objects might have the same hashcode() and belong to the same bucket but they might not be equal. On the contrary, 
+if 2 objects map to different hashcode()/buckets, they will be treated as different and added to the set. By default, 2 objects with
+the same values (for all its fields) will have different hashcode(default hashcode implementation) and hence will be added as 2 
+separate entities in a set. To map them to the same entity, hashcode() needs to be overridden in addition to equals method.
+
 Common mistakes with equals() and hashcode()
+=============================================
 Forgetting to override hashcode() along with the equals() method or vice versa.
 Not overriding equals() and hashcode() when using hash collections like HashSet.
 Returning a constant value in the hashcode() method instead of returning a unique code per object.
 Using == and equals interchangeably. The == compares Object references, whereas equals() compares object values.
 
 What to remember about equals() and hashcode()
+===============================================
 It’s a good practice to always override equals() and hashcode() methods in your POJOs.
 Use an effective algorithm to generate a unique hashcode.
 When overriding the equals() method, always override the hashcode() method as well.
@@ -26,7 +40,14 @@ Overriding equals() alone will make your business fail with hashing data structu
 Overriding hashcode() alone doesn't force Java to ignore memory addresses when comparing two objects.
 
 
+compareTo method:
+==================
+compareTo method is used for ordering objects in java. Typical usage is in sorting functionality. Arrays.sort(), Collections.sort(), 
+TreeSet, TreeMap. Objects need to implement the comparable interface to implement the compareTo method. Another alternative is to
+pass the Comparator class to Arrays.sort() or Collections.sort().
 
-The compareTo method is the sole member of the Comparable interface, and is not a member of Object. However, it's quite similar in nature to equals and hashCode. 
+
+The compareTo method is the sole member of the Comparable interface, and is not a member of Object. However, it's quite similar in 
+nature to equals and hashCode. 
 It provides a means of fully ordering objects.
 An alternative to implementing Comparable is passing Comparator objects as parameters.
