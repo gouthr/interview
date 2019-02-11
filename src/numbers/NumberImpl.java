@@ -385,6 +385,26 @@ public class NumberImpl {
 		return maxsum;
 	}
 	
+    public int maxSubArray(int[] nums) {
+        int sum = 0;
+        int maxsum = 0;
+        int max = Integer.MIN_VALUE;
+        int cnt = 0;
+        for (int i=0; i<nums.length; i++) {
+            sum += nums[i];
+            if (sum < 0) {
+                cnt++;
+                max = Math.max(max, sum);
+                sum = 0;
+            }
+            maxsum = Math.max(maxsum, sum);
+        }
+        if (cnt == nums.length) {
+            return max;
+        }
+        return maxsum;
+    }
+	
 	public void separateEvenOdd(int[] arr) {
 		int n = arr.length;
 		int i = 0;
