@@ -44,23 +44,32 @@ public class Graph {
         
         // Create a graph given in the above diagram 
         Graph g1 = new Graph(5); 
-        g1.addEdge(1, 0); 
-        g1.addEdge(0, 2); 
-        g1.addEdge(2, 0); 
-        g1.addEdge(0, 3); 
-        g1.addEdge(3, 4); 
+        g1.addEdge(1, 0);
+        g1.addEdge(0, 1);
+        g1.addEdge(0, 2);
+        g1.addEdge(2, 0);
+        g1.addEdge(2, 1);
+        g1.addEdge(1, 2);
+        g1.addEdge(0, 3);
+        g1.addEdge(3, 0);
+        g1.addEdge(3, 4);
+        g1.addEdge(4, 3);
         if (g1.isCycleUndirected()) 
             System.out.println("Undirected Graph contains cycle"); 
         else
-            System.out.println("Undirected Graph doesn't contains cycle"); 
+            System.out.println("Undirected Graph doesn't contain cycle"); 
   
-        Graph g2 = new Graph(3); 
-        g2.addEdge(0, 1); 
-        g2.addEdge(1, 2); 
+        Graph g2 = new Graph(4); 
+        g2.addEdge(0, 1);
+        g2.addEdge(1, 0);
+        g2.addEdge(1, 2);
+        g2.addEdge(2, 1);
+        g2.addEdge(3, 1);
+        g2.addEdge(1, 3);
         if (g2.isCycleUndirected()) 
             System.out.println("Undirected Graph contains cycle"); 
         else
-            System.out.println("Undirected Graph doesn't contains cycle"); 
+            System.out.println("Undirected Graph doesn't contain cycle"); 
 
 	}	
 	
