@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -1656,5 +1657,64 @@ public class StringImpl {
             }
         }
         return tmp;
+    }
+    
+    /**
+     * Given a non-empty string s and an integer k, rearrange the string such that the same characters are at least distance k from each other.
+
+		All input strings are given in lowercase letters. If it is not possible to rearrange the string, return an empty string "".
+		
+		Example 1:
+		
+		Input: s = "aabbcc", k = 3
+		Output: "abcabc" 
+		Explanation: The same letters are at least distance 3 from each other.
+		Example 2:
+		
+		Input: s = "aaabc", k = 3
+		Output: "" 
+		Explanation: It is not possible to rearrange the string.
+		Example 3:
+		
+		Input: s = "aaadbbcc", k = 2
+		Output: "abacabcd"
+		Explanation: The same letters are at least distance 2 from each other.
+     * @param s
+     * @param k
+     * @return
+     */
+    public String rearrangeString(String s, int k) {
+        if (s==null || s.length() == 0) {
+            return "";
+        }
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i=0; i<s.length(); i++) {
+            map.put(s.charAt(i), map.getOrDefault(s.charAt(i), 0)+1);
+        }
+        
+        Queue<Map.Entry<Character, Integer>> pq = new PriorityQueue<>(new Comparator<Map.Entry<Character, Integer>>() {
+            public int compare(Map.Entry<Character, Integer> e1, Map.Entry<Character, Integer> e2) {
+                return e2.getValue() - e1.getValue();
+            }
+        });
+        pq.addAll(map.entrySet());
+        
+        Queue<Map.Entry<Character, Integer>> q = new LinkedList<>();
+        StringBuilder sb = new StringBuilder();
+        while(!pq.isEmpty()) {
+            Map.Entry<Character, Integer> first = pq.poll();
+            sb.append(first.getKey());
+            first.setValue(first.getValue()-1);
+            q.add(first);
+            if (q.size() < k) {
+                continue;
+            }
+            Map.Entry<Character, Integer> second = q.poll();
+            if (second.getValue() > 0) {
+                pq.add(second);
+            }
+        }
+        return (sb.length() == s.length())? sb.toString() : "";
+        
     }
 }
