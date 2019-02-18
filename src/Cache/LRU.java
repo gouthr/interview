@@ -91,4 +91,17 @@ public class LRU {
 			map.put(key, created);
 		}
 	}
+	
+	public static void main(String[] args) {
+		LRU cache = new LRU(2);
+		cache.setKey(1, 1);
+		cache.setKey(2, 2);
+		System.out.println(cache.getKey(1));
+		cache.setKey(3, 3);
+		System.out.println(cache.getKey(2));
+		cache.setKey(4, 4);
+		System.out.println(cache.getKey(1));
+		System.out.println(cache.getKey(3));
+		System.out.println(cache.getKey(4));
+	}
 }
