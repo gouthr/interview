@@ -1,10 +1,10 @@
 package strings;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * You are given several logs that each log contains a unique id and timestamp.
@@ -37,34 +37,30 @@ import java.util.TreeMap;
  *
  */
 class LogSystem {
-    
-    Map<String, Integer> map;
-    List<String> granularity;
-    int[] pos;
+    private Map<Integer, String> map;
+    private List<String> granularity;
+    int[] units;
     
     public LogSystem() {
-        map = new TreeMap<>();
+        map = new HashMap<>();
         granularity = Arrays.asList("Year", "Month", "Day", "Hour", "Minute", "Second");
-        pos = new int[] {4, 7, 10, 13, 16, 19};
+        units = new int[] {4, 7, 10, 13, 16, 19};
     }
     
     public void put(int id, String timestamp) {
-        map.put(timestamp, id);
+        map.put(id, timestamp);
     }
     
     public List<Integer> retrieve(String s, String e, String gra) {
-        List<Integer> res = new ArrayList<>();
-		for (String timestamp : map.keySet()) {
-			String timeConsidered = timestamp.substring(0, pos[granularity.indexOf(gra)]);
-			if (timeConsidered.compareTo(s.substring(0, pos[granularity.indexOf(gra)])) < 0) {
-                continue;
+        List<Integer> res = new LinkedList<>();
+        for (Integer id : map.keySet()) {
+            String timestamp = map.get(id);
+            int pos = units[granularity.indexOf(gra)];
+            String timestampTrimmed = timestamp.substring(0, pos);
+            if (timestampTrimmed.compareTo(s.substring(0, pos)) >= 0 && timestampTrimmed.compareTo(e.substring(0, pos)) <= 0) {
+                res.add(id);
             }
-                
-			if (timeConsidered.compareTo(e.substring(0, pos[granularity.indexOf(gra)])) > 0) {
-				break;
-			}
-            res.add(map.get(timestamp));
-		}
+        }
         return res;
     }
 }
