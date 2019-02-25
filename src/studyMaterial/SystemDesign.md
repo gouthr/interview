@@ -793,3 +793,62 @@ declines, the client lowers video quality to match. The client will switch to an
 That’s what happens when you press play on Netflix.
 
 Original source link with complete details - http://highscalability.com/blog/2017/12/11/netflix-what-happens-when-you-press-play.html
+
+Logging system design:
+======================
+
+Design a logging system. The system contains multiple application servers which are logging the information to file system. In this scenario, we want to check and alarm in case an exception is thrown in any of the servers. We want a system that checks for appearance of specific words, "Error", "Exception", "Disk Full" etc. in the logs of any of the servers. How would you design this system? 
+What if we want to scale the system in future?
+
+I believe, we can implement observer pattern between all application servers serving as event creator and a listener working as a observer which is subscribed to this app servers. The moment desired condition is encountered in any app server, it calls its update function to pass on this information to the listener (could be a messaging queue), and then listener pass on the this message to a parser module which will parse the message and accordingly will send the message to the concrete implementation of logging interface (Error, Warning, DiskFull... etc) 
+
+This way the system remains open to be scaled in future.
+1. New app servers can be added in future. All it has to do is to implement the subject Interface and implement the functionality to register the observer.
+2. Observer (listener will have to subcribe to the new subject)
+3. In case new pattern comes (Out of Memory, Application Error...) in future, they will have their own concrete implementation of logging interface.
+In total allowing all major actors to be independent to each other.
+
+The main aspects you will need to address are: collection, transport, storage, and analysis. In some special cases, you may also want to have an alerting capability as well.
+
+Collection: 
+Applications create logs in different ways, some log through syslog, others log directly to files. If you consider a typical web application running on a linux hosts, there will be a dozen or more log files in /var/log as well as a few application specific logs in home directories or other locations.
+
+If you are supporting a web based application and your developers or operations staff need access to log data quickly in order to troubleshoot live issues, you need a solution that is able to monitor changes to log files in near real-time. If you are using a file replication based approach where files are replicated to a central server on a fixed schedule, then you can only inspect logs as frequently as the replication runs. A one minute rsync cron job might not be fast enough when your site is down and you are waiting for the relevant log data to be replicated.
+
+On the other hand, if you need to analyze log data offline for calculating metrics or other batch related work, a file replication strategy might be a good fit.
+
+Transport: 
+Log data can accumulate quickly on multiple hosts. Transporting it reliably and quickly to your centralized location may need additional tooling in order to effectively transmit it and ensure data is not lost.
+
+Frameworks such as Scribe, Flume, Heka, Logstash, Chukwa, fluentd, nsq and Kafka are designed for transporting large volumes of data from one host to another reliably. Although each of these frameworks addresses the transport problem, they do so quite differently.
+
+For example, Scribe, nsq and Kafka, require clients to log data via their API. Typically, application code is written to log directly to these sources which allows them to reduce latency and improve reliability. If you want to centralize typical log file data, you would need something to tail and stream the logs via their respective APIs. If you control the app that is logging the data you want to collect, these can be much more efficient.
+
+Logstash, Heka, fluentd and Flume provide a number of input sources but also support natively tailing files and transporting them reliably. These are a better fit for more general log collection.
+
+While rsyslog and Syslog-ng are typically thought of as the defacto log collector, not all applications use syslog.
+
+Storage: 
+Now that your log data is being transfered, it needs a destination. Your centralized storage system needs to be able to handle the growth in data over time. Each day will add a certain amount of storage that is relative to the number of hosts and processes that are generating log data.
+
+How you store things depends on a few things:
+
+How long should it be stored - If the logs are for long-term, archival purposes and do not require immediate analysis, S3, AWS Glacier, or tape backup might be a suitable option since they provide relatively low cost for large volumes of data. If you only need a few days or months worth of logs, storing them on some form distributed storage systems such as HDFS, Cassandara, MongoDB or ElasticSearch also works well. If you only need a few hours worth of retention for real-time analysis, Redis might work as well.
+
+Your environments data volume. - A days worth of logs for Google is much different than a days worth of logs for ACME Fishing Supplies. The storage system you chose should allow you to scale-out horizontally if your data volume will be large.
+
+How will you need to access the logs - Some storage is not suitable for real-time or even batch analysis. AWS Glacier or tape backup can take hours to load a file. These don’t work if you need log access for production troubleshooting. If you plan to do more interactive data analysis, storing log data in ElasticSearch or HDFS may allow you work with the raw data more effectively. Some log data is so large that it can only be analyzed in more batch oriented frameworks. The defacto standard is this case is Apache Hadoop along with HDFS.
+
+Analysis: 
+Once your logs are stored on a centralized storage platform, you need a way to analyze them. The most common approach is a batch oriented process that runs periodically. If you are storing log data in HDFS, Hive or Pig might help analyzing the data easier than writing native MapReduce jobs.
+
+If you need a UI for analysis, you can store parsed log data in ElasticSearch and use a front-end such as Kibana or Graylog2 to query and inspect the data. The log parsing can be handled by Logstash, Heka or applications logging with JSON directly. This approach allows more real-time, interactive access to the data but is not really suited for a mass batch processing.
+
+Alerting: 
+The last component that is sometimes nice to have is the ability to alert on log patterns or calculated metrics based on log data. Two common uses for this are error reporting and monitoring.
+
+Most log data is not interesting but errors almost always indicate a problem. It’s much more effective to have the logging system email or notify respective parties when errors ocurr instead of having someone repeatedly watch for the events. There are several services that solely provide application error logging such as Sentry or HoneyBadger. These can also aggregate repetitve exceptions which can give you and idea of how frequently an error is occuring.
+
+Another use case is monitoring. For example, you may have hundreds of web servers and want to know if they start returning 500 status codes. If you can parse your web log files and record a metric on the status code, you can then trigger alerts when that metric crosses a certain threshold. Riemann is designed for detecting scenarios just like this.
+
+Reference - http://jasonwilder.com/blog/2013/07/16/centralized-logging-architecture/
