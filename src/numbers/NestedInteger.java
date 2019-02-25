@@ -190,9 +190,6 @@ public class NestedInteger {
 		@Override
 		public Integer next() {
 			NestedInteger front = st.pop();
-			for (int i=front.getList().size()-1; i>=0; i--) {
-				st.push(front.getList().get(i));
-			}
 			return front.getInteger();
 		}
 	}
