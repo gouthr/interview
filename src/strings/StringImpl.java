@@ -1776,4 +1776,76 @@ public class StringImpl {
         return (sb.length() == s.length())? sb.toString() : "";
         
     }
+    
+    /**
+	 * There is a new alien language which uses the latin alphabet. However, the
+	 * order among letters are unknown to you. You receive a list of non-empty
+	 * words from the dictionary, where words are sorted lexicographically by
+	 * the rules of this new language. Derive the order of letters in this
+	 * language.
+	 * 
+	 * Example 1:
+	 * 
+	 * Input: [ "wrt", "wrf", "er", "ett", "rftt" ]
+	 * 
+	 * Output: "wertf"
+	 * 
+	 * @param words
+	 * @return
+	 */
+    public String alienOrder(String[] words) {
+        if (words == null || words.length == 0) {
+            return "";
+        }
+        Map<Character, Integer> degree = new HashMap<>();
+        Map<Character, Set<Character>> map = new HashMap<>();
+        
+        for (String word : words) {
+            for (char ch : word.toCharArray()) {
+                degree.put(ch, 0);
+            }
+        }
+        
+        for (int i=0; i<words.length-1; i++) {
+            String first = words[i];
+            String next = words[i+1];
+            int len = Math.min(first.length(), next.length());
+            for (int j=0; j<len; j++) {
+                if (first.charAt(j) != next.charAt(j)) {
+                    Set<Character> set = map.get(first.charAt(j));
+                    if (set == null) {
+                        set = new HashSet<Character>();
+                    }
+                    if (!set.contains(next.charAt(j))) {
+                        set.add(next.charAt(j));
+                        map.put(first.charAt(j), set);
+                        degree.put(next.charAt(j), degree.get(next.charAt(j))+1);
+                    }
+                    break;
+                }
+            }
+        }
+        
+        Queue<Character> q = new LinkedList<>();
+        for (Character key : degree.keySet()) {
+            if (degree.get(key) == 0) {
+                q.add(key);
+            }
+        }
+        String res = "";    
+        while (!q.isEmpty()) {
+            char ele = q.poll();
+            res+=ele;
+            if (map.containsKey(ele)) {
+                for (char ch : map.get(ele)) {
+                    int val = degree.get(ch)-1;
+                    degree.put(ch, val);
+                    if (val == 0) {
+                        q.add(ch);
+                    }
+                }
+            }
+        }
+        return res.length()==degree.size()?res:"";
+    }
 }
