@@ -892,7 +892,12 @@ public class TreeImpl {
 	 * @param newRoot
 	 * @return
 	 */
-	public TreeNode upsideDownTree(TreeNode root, TreeNode newRoot) {
+	private TreeNode newRoot = null;
+	public TreeNode upsideDownTree(TreeNode root) {
+		upsideDownTreeUtil(root);
+		return newRoot;
+	}
+	public TreeNode upsideDownTreeUtil(TreeNode root) {
 		if (root == null) {
 			return root;
 		}
@@ -900,7 +905,7 @@ public class TreeImpl {
 			newRoot = root;
 			return root;
 		}
-		TreeNode parent = upsideDownTree(root.left, newRoot);
+		TreeNode parent = upsideDownTreeUtil(root.left);
 		parent.left = root.right;
 		parent.right = root;
 		root.left = root.right = null;
