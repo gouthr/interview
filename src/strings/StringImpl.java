@@ -15,6 +15,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
+import java.util.Stack;
 import java.util.TreeMap;
 
 /**
@@ -1847,5 +1848,88 @@ public class StringImpl {
             }
         }
         return res.length()==degree.size()?res:"";
+    }
+    
+	/**
+	 * Given a chemical formula (given as a string), return the count of each
+	 * atom.
+	 * 
+	 * An atomic element always starts with an uppercase character, then zero or
+	 * more lowercase letters, representing the name.
+	 * 
+	 * 1 or more digits representing the count of that element may follow if the
+	 * count is greater than 1. If the count is 1, no digits will follow. For
+	 * example, H2O and H2O2 are possible, but H1O2 is impossible.
+	 * 
+	 * Two formulas concatenated together produce another formula. For example,
+	 * H2O2He3Mg4 is also a formula.
+	 * 
+	 * A formula placed in parentheses, and a count (optionally added) is also a
+	 * formula. For example, (H2O2) and (H2O2)3 are formulas.
+	 * 
+	 * Given a formula, output the count of all elements as a string in the
+	 * following form: the first name (in sorted order), followed by its count
+	 * (if that count is more than 1), followed by the second name (in sorted
+	 * order), followed by its count (if that count is more than 1), and so on.
+	 * 
+	 * @param formula
+	 * @return
+	 */
+    public String countOfAtoms(String formula) {
+        if (formula == null || formula.length() == 0) {
+            return "";
+        }
+        Map<String, Integer> map = new HashMap<>();
+        Stack<Map<String, Integer>> st = new Stack<>();
+        int i = 0;
+        int n = formula.length();
+        while (i<n) {
+            char ch = formula.charAt(i);
+            i++;
+            if (ch == '(') {
+                st.push(map);
+                map = new HashMap<>();
+            } else if (ch == ')') {
+                int val = 0;
+                while(i<n && Character.isDigit(formula.charAt(i))) {
+                    val = val*10 + formula.charAt(i++)-'0';
+                }
+                if (val == 0) {
+                    val = 1;
+                }
+                Map<String, Integer> tmp = map;
+                if (!st.isEmpty()) {
+                    map = st.pop();
+                    for (String key : tmp.keySet()) {
+                        map.put(key, map.getOrDefault(key, 0) + tmp.get(key)*val);
+                    }
+                }
+            } else {
+                int start = i-1;
+                while (i<n && Character.isLowerCase(formula.charAt(i))) {
+                    i++;
+                }
+                String sub = formula.substring(start, i);
+                int val = 0;
+                while(i<n && Character.isDigit(formula.charAt(i))) {
+                    val = val*10 + formula.charAt(i++)-'0';
+                }
+                if (val == 0) val = 1;
+                map.put(sub, map.getOrDefault(sub, 0) + val);
+            }
+        }
+        List<String> resStr = new ArrayList<>();
+        for (String str : map.keySet()) {
+            resStr.add(str);
+        }
+        Collections.sort(resStr);
+        StringBuilder res = new StringBuilder();
+        for (String str : resStr) {
+            res.append(str);
+            if (map.get(str) > 1) {
+                res.append(map.get(str));
+            }
+        }
+        return res.toString();
     }
 }
