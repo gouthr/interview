@@ -9,8 +9,6 @@ import java.util.Set;
  * start = "hit"
  * end = "cog"
  * dict = ["hit", "hot","dot","dog","lot","log", "cog"]
- * 
- * @author gouthr
  *
  */
 
@@ -26,9 +24,9 @@ public class WordLadder {
 		}
 	}
 	
-	public static int wordDistance(WordLadder wl, String stWord, String endWord, Set<String> dict) {
+	public int wordDistance(String stWord, String endWord, Set<String> dict) {
 		LinkedList<Word> q = new LinkedList<Word>();
-		q.add(wl.new Word(stWord, 1));
+		q.add(new Word(stWord, 1));
 		
 		while(!q.isEmpty()) {
 			Word topWord = q.remove();
@@ -43,12 +41,13 @@ public class WordLadder {
 			for(int i=0; i<wordArr.length; i++) {
 				for(char c='a'; c<='z'; c++) {
 					char tmp = wordArr[i];
-					if (wordArr[i] != c) {
-						wordArr[i] = c;
+					if (wordArr[i] == c) {
+						continue;
 					}
+					wordArr[i] = c;
 					String newWord = new String(wordArr);
 					if (dict.contains(newWord)) {
-						q.add(wl.new Word(newWord, dist+1));
+						q.add(new Word(newWord, dist+1));
 						dict.remove(newWord);
 					}
 					wordArr[i] = tmp;
@@ -70,7 +69,7 @@ public class WordLadder {
 		dict.add("log");
 		dict.add("cog");
 		dict.add("hit");
-		int res = wordDistance(wl, "hit", "cog", dict);
+		int res = wl.wordDistance("hit", "cog", dict);
 		System.out.println(res);
 
 	}
