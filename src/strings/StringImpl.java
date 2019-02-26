@@ -56,6 +56,10 @@ import java.util.TreeMap;
  *
  */
 public class StringImpl {
+	
+    public StringImpl() {
+	}
+
 
 	public static void main(String[] args) throws Exception {
 		StringImpl strImpl = new StringImpl();
@@ -392,6 +396,52 @@ public class StringImpl {
 		}		
 		return minDist;
 	}
+	
+	/**
+	 * Optimized solution of the above problem.
+	 * Design a class which receives a list of words in the constructor, and
+	 * implements a method that takes two words word1 and word2 and return the
+	 * shortest distance between these two words in the list. Your method will
+	 * be called repeatedly many times with different parameters.
+	 */
+    private Map<String, List<Integer>> wordPosition;
+    public StringImpl(String[] words) {
+    	wordPosition = new HashMap<>();
+        List<Integer> list = null;
+        for (int i=0; i<words.length; i++) {
+            if (!wordPosition.containsKey(words[i])) {
+                list = new ArrayList<Integer>();
+                wordPosition.put(words[i], list);
+            }
+            list = wordPosition.get(words[i]);
+            list.add(i);
+            wordPosition.put(words[i], list);
+        }
+    }
+    
+	public int shortest(String word1, String word2) {
+        List<Integer> l1 = wordPosition.get(word1);
+        List<Integer> l2 = wordPosition.get(word2);
+        
+        int m = l1.size();
+        int n = l2.size();
+        int i = 0;
+        int j = 0;
+        int res = Integer.MAX_VALUE;
+        while(i<m && j<n) {
+            int val1 = l1.get(i);
+            int val2 = l2.get(j);
+            
+            if (val1 < val2) {
+                res = Math.min(res, val2-val1);
+                i++;
+            } else if (val2 < val1) {
+                res = Math.min(res, val1-val2);
+                j++;
+            }
+        }
+        return res;
+    }
 
 	/**
 	 * The idea is to simply pick every character and move both the sides till
