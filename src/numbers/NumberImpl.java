@@ -306,6 +306,33 @@ public class NumberImpl {
 	    return result;
 	}
 	
+	/**
+	 * Two sum optimized on add method.
+	 */
+    private Map<Integer, Integer> numFreq = new HashMap<>();
+    
+    /** Add the number to an internal data structure.. */
+    public void add(int number) {
+        if (numFreq.containsKey(number)) {
+        	numFreq.put(number, 2);
+        } else {
+        	numFreq.put(number, 1);
+        }
+    }   
+    /** Find if there exists any pair of numbers which sum is equal to the value. */
+    public boolean find(int value) {
+        for (int key : numFreq.keySet()) {
+            int diff = value - key;
+            if (numFreq.containsKey(diff)) {
+                int num = numFreq.get(diff);
+                if (key != diff || num==2) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+	
 	public int[] unionSortedArrays(int[] arr1, int[] arr2) {
 		int[] res = new int[arr1.length + arr2.length];
 		int i = 0, j = 0, k = 0;
