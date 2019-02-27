@@ -118,7 +118,7 @@ public class NumberImpl {
 		
 		// max sub array product
 		int[] arr8 = {2, 3, -5, 1, 0, -17, 23, 3};
-		System.out.println("Max sub-array product: " + numImpl.maxProductSubarray(arr8));
+		System.out.println("Max sub-array product: " + numImpl.maxProduct(arr8));
 		
 		// kth largest number in an array
 		// {-17, -5, 0, 1, 2, 3, 3, 23}
@@ -620,35 +620,29 @@ public class NumberImpl {
 	 * Given an array of int, find a contiguous sub-array whose product is maximum.
 	 * 
 	 */
-	public int maxProductSubarray(final int[] arr) {
-		int n = arr.length;
-		int max_ending_here = 1;
-		int min_ending_here = 1;
-		int max_so_far = Integer.MIN_VALUE;
-		
-		for (int i=0; i<n; i++) {
-			if (arr[i] > 0) {
-				max_ending_here *= arr[i];
-				min_ending_here = Math.min(min_ending_here*arr[i], 1);
-			}
-			
-			if (arr[i] == 0) {
-				max_ending_here = 1;
-				min_ending_here = 1;
-			}
-			
-			if (arr[i] < 0) {
-				int tmp = min_ending_here;
-				min_ending_here = max_ending_here * arr[i];
-				max_ending_here = Math.max(tmp*arr[i], 1);
-			}
-			
-			if (max_so_far < max_ending_here) {
-				max_so_far = max_ending_here;
-			}
-		}
-		return max_so_far;		
-	}
+    public int maxProduct(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int maxSoFar = 1;
+        int minSoFar = 1;
+        int max = Integer.MIN_VALUE;
+        for (int i=0; i<nums.length; i++) {
+            if (nums[i] >= 0) {
+                maxSoFar = Math.max(maxSoFar*nums[i], nums[i]);
+                minSoFar = Math.min(minSoFar*nums[i], nums[i]);
+            }
+            
+            if (nums[i] < 0) {
+                int tmp = maxSoFar;
+                maxSoFar = Math.max(minSoFar*nums[i], nums[i]);
+                minSoFar = Math.min(tmp * nums[i], nums[i]);
+            }
+            
+            max = Math.max(max, maxSoFar);
+        }
+        return max;
+    }
 	
 	public void stockBuySell1Time(int[] arr) {
 		int max = 0;
