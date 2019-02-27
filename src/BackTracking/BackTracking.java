@@ -209,7 +209,8 @@ public class BackTracking {
 		for (int i=0; i<coins.length; i++) {
 			for (int j=1; j<=target; j++) {
 				if (coins[i] <= j) {
-					if ((1 + minCoins[j-coins[i]]) < minCoins[j]) {
+					// minCoins[j-coins[i]] !=Integer.MAX_VALUE is needed so as to not overflow if that value is not set yet
+					if (minCoins[j-coins[i]] !=Integer.MAX_VALUE && (1 + minCoins[j-coins[i]]) < minCoins[j]) {
 						minCoins[j] = 1 + minCoins[j-coins[i]];
 					}
 				}
