@@ -84,12 +84,15 @@ public class Graph {
 		}
 	}
 	
+	public void addEdge(int v, int w) {
+		adj[v].add(w);
+		// adj[w].add(v); // For an undirected graph both directions need to be populated
+	}
+	
 	public void topologicalSort() {
 		Stack<Integer> stack = new Stack<Integer>();
 		boolean[] visited = new boolean[v];
-		for(int i=0; i<v; i++) {
-			visited[i] = false;
-		}
+
 		for(int i=0; i<v; i++) {
 			if (!visited[i]) {
 				topologicalSortUtil(i, visited, stack);
@@ -100,18 +103,23 @@ public class Graph {
 		}
 		System.out.println();
 	}
-	
-	public void addEdge(int v, int w) {
-		adj[v].add(w);
-		// adj[w].add(v); // For an undirected graph both directions need to be populated
+		
+	private void topologicalSortUtil(int vertex, boolean[] visited, Stack<Integer> stack) {
+		visited[vertex] = true;
+		
+		Iterator<Integer> it = adj[vertex].iterator();
+		while(it.hasNext()) {
+			Integer nv = it.next();
+			if (!visited[nv]) {
+				topologicalSortUtil(nv, visited, stack);
+			}
+		}
+		stack.push(vertex);
 	}
 	
 	public void dfs() {
 		boolean[] visited = new boolean[v];
 		Queue<Integer> q = new LinkedList<Integer>();
-		for(int i=0; i<v; i++) {
-			visited[i] = false;
-		}
 		
 		for (int i=v-1; i>=0; i--) {
 			if (!visited[i]) {
@@ -134,19 +142,6 @@ public class Graph {
 				dfsUtil(nv, visited, q);
 			}
 		}
-	}
-	
-	private void topologicalSortUtil(int vertex, boolean[] visited, Stack<Integer> stack) {
-		visited[vertex] = true;
-		
-		Iterator<Integer> it = adj[vertex].iterator();
-		while(it.hasNext()) {
-			Integer nv = it.next();
-			if (!visited[nv]) {
-				topologicalSortUtil(nv, visited, stack);
-			}
-		}
-		stack.push(vertex);
 	}
 	
 	/**
@@ -229,11 +224,8 @@ public class Graph {
 	 * @param node
 	 * @return
 	 */
+	Map<UndirectedGraphNode, UndirectedGraphNode> map = new HashMap<>();
 	public UndirectedGraphNode clone(UndirectedGraphNode node) {
-		Map<UndirectedGraphNode, UndirectedGraphNode> map = new HashMap<>();
-		return cloneUtil(node, map);
-	}
-	private UndirectedGraphNode cloneUtil(UndirectedGraphNode node, Map<UndirectedGraphNode, UndirectedGraphNode> map) {
 		if (node == null) {
 			return null;
 		}
