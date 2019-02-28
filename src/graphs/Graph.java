@@ -251,4 +251,60 @@ public class Graph {
 			this.neighbors = new ArrayList<>();
 		}
 	}
+	
+	/**
+	 * Test for a valid tree. Note: A tree is acyclic and all the nodes form one
+	 * connected component. Given n nodes labeled from 0 to n-1 and a list of
+	 * undirected edges (each edge is a pair of nodes), write a function to
+	 * check whether these edges make up a valid tree.
+	 * 
+	 * @param n
+	 * @param edges
+	 * @return
+	 */
+    public boolean validTree(int n, int[][] edges) {
+        List[] adj = new ArrayList[n];
+        for (int i=0; i<n; i++) {
+            adj[i] = new ArrayList<Integer>();
+        }
+        for (int i=0; i<edges.length; i++) {
+            adj[edges[i][0]].add(edges[i][1]);
+            adj[edges[i][1]].add(edges[i][0]);
+        }
+        
+        boolean[] visited = new boolean[n];
+        int cnt = 0;
+        for (int i=0; i<n; i++) {
+            if (!visited[i]) {
+                if (isCycle(adj, i, visited, -1)) {
+                    return false;
+                }
+                cnt++;
+            }
+        }
+        
+        for (int i=0; i<n; i++) {
+            if (!visited[i] || cnt!=1) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private boolean isCycle(List[] adj, int src, boolean[] visited, int parent) {
+        visited[src] = true;
+        
+        for (Integer vertex : (List<Integer>)adj[src]) {
+            if (!visited[vertex]) {
+                if (isCycle(adj, vertex, visited, src)) {
+                    return true;
+                }
+            } else {
+                if (vertex != parent) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
