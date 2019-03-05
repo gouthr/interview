@@ -2428,5 +2428,36 @@ public class NumberImpl {
         return false;
     }
     
+	/**
+	 * Sparse matrix multiplication. Given two sparse matrices A and B, return
+	 * the result of AB.
+	 * 
+	 * You may assume that A's column number is equal to B's row number.
+	 * 
+	 * @param A
+	 * @param B
+	 * @return
+	 */
+    public int[][] multiply(int[][] A, int[][] B) {
+        int mA = A.length;
+        int nA = A[0].length;
+        int nB = B[0].length;
+        
+        int[][] C = new int[mA][nB];
+        
+        for (int i=0; i<mA; i++) {
+            for (int k=0; k<nA; k++) {
+                if (A[i][k] != 0) {
+                    for (int j=0; j<nB; j++) {
+                        if (B[k][j] != 0) {
+                            C[i][j] += A[i][k]*B[k][j];   
+                        }
+                    }   
+                }
+            }
+        }
+        return C;
+    }
+    
     public NumberImpl(){}
 }
