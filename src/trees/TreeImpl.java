@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeMap;
 
 /* Binary search tree time complexity
 Insertion, deletion and searching in a binary search tree are:
@@ -918,34 +919,35 @@ public class TreeImpl {
 	 *
 	 * @param root
 	 */
-	public void printLeafNodes(TreeNode root) {
-		Map<Integer, List<TreeNode>> map = new HashMap<>();
-		printLeafNodesUtil(root, map);
-		
-		int size = map.size();
-		for(int i=0; i<size; i++) {
-			if (map.get(i) != null) {
-				for(TreeNode node : map.get(i)) {
-					System.out.print(node.data + " ");
-				}
-				System.out.println();
-			}
-		}
-	}
-	
-	private int printLeafNodesUtil(TreeNode root, Map<Integer, List<TreeNode>> map) {
-		if (root != null) {
-			int l = printLeafNodesUtil(root.left, map);
-			int r = printLeafNodesUtil(root.right, map);
-			
-			int h = Math.max(l, r) + 1;
-			List<TreeNode> val = map.get(h) != null? map.get(h) : new ArrayList<TreeNode>();
-			val.add(root);
-			map.put(h, val);
-			return h;
-		}
-		return 0;
-	}
+    public List<List<Integer>> findLeaves(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+        Map<Integer, List<Integer>> map = new TreeMap<>();
+        findLeavesUtil(root, map);
+        for (int key : map.keySet()) {
+            res.add(map.get(key));
+        }
+        return res;
+    }
+    
+    private int findLeavesUtil(TreeNode root, Map<Integer, List<Integer>> map) {
+        if (root == null) {
+            return 0;
+        }
+        int lh = findLeavesUtil(root.left, map);
+        int rh = findLeavesUtil(root.right, map);
+        int h = 1 + Math.max(lh, rh);
+        if (!map.containsKey(h)) {
+            map.put(h, new ArrayList<Integer>());
+        }
+        List<Integer> list = map.get(h);
+        list.add(root.data);
+        map.put(h, list);
+        root.left = root.right = null;
+        return h;
+    }
 	
 	/**
 	 * Trim nodes of a tree outside the range min-max.
