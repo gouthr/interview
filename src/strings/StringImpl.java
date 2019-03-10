@@ -158,7 +158,7 @@ public class StringImpl {
 		System.out.println("Edit distance between 2 strings optimized: " + strImpl.editDistanceDP("sunday", "saturday"));
 
 		// Longest substring of str (pwwkew)with no repeating characters
-		System.out.println("Longest substring of str (pwwkew)with no repeating characters: " + strImpl.longestSubstringWithoutRepeatingChars("pwwkew"));
+		System.out.println("Longest substring of str (abba)with no repeating characters: " + strImpl.longestSubstringWithoutRepeatingChars("abba"));
 		
 		// Reverse words in a string
 		System.out.println("Reverse words in a string: " + strImpl.reverseWordsInString("the sky is     blue"));
@@ -791,7 +791,7 @@ public class StringImpl {
 		int index = 0;
 		for (int i=0; i<str.length(); i++) {
 			if (map.containsKey(str.charAt(i))) {
-				index = map.get(str.charAt(i)) + 1;
+				index = Math.max(index, map.get(str.charAt(i)) + 1);
 			} 
 			map.put(str.charAt(i), i);
 			if (max < i-index+1) {
