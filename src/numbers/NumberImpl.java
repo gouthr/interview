@@ -232,14 +232,15 @@ public class NumberImpl {
 		}
 		System.out.println();
 		
-		//Next greater permutation
-		System.out.println("Next greater permutation: " + numImpl.nextGreaterPermutation("12345"));
-		
     	int[][] envelopes = {{30,50},{12,2},{3,4},{12,15}};
 		System.out.println("Max envelopes: " + numImpl.maxEnvelopes(envelopes));
 		
 		int[] arr21 = {-3, 1, 3, 5, 7}; 
 		System.out.println("No. of ways to reach target using the array: " + numImpl.findWaysToTarget(arr21, 6));
+		
+		int[] nums = {3,2,1,0,4};
+		int[] nums34 = {2,3,1,1,4};
+		System.out.println("Can jump: " + numImpl.canJump(nums));
 	}
 
 	/**
@@ -1879,30 +1880,62 @@ public class NumberImpl {
         return res;
 	}
 	
-	public String nextGreaterPermutation(String num) {
-		StringBuilder sb = new StringBuilder(num);
-		int len = sb.length();
-		boolean swapDone = false;
-		int pos = -1;
-		for (int i=len-1; i>0; i--) {
-			if (sb.charAt(i) > sb.charAt(i-1)) {
-				swap(sb, i, i-1);
-				swapDone = true;
-				pos = i-1;
-				break;
-			}
-		}
-		if (swapDone) {
-			int i = pos + 1;
-			int j = sb.length() - 1;
-			while (i < j) {
-				swap(sb, i, j);
-				i++;
-				j--;
-			}
-		}
-		return sb.toString();
-	}
+	/**
+	 * Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
+
+		If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
+		
+		The replacement must be in-place and use only constant extra memory.
+		
+		Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand column.
+		
+		1,2,3 → 1,3,2
+		3,2,1 → 1,2,3
+		1,1,5 → 1,5,1
+		
+		According to Wikipedia, a man named Narayana Pandita presented the following simple algorithm to solve this problem in the 14th century.
+
+		Find the largest index k such that nums[k] < nums[k + 1]. If no such index exists, just reverse nums and done.
+		Find the largest index l > k such that nums[k] < nums[l].
+		Swap nums[k] and nums[l].
+		Reverse the sub-array nums[k + 1:].
+	 * @param nums
+	 */
+    public void nextPermutation(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return;
+        }
+        
+        int i = 0;
+        for (i=nums.length-1; i>0; i--) {
+            if (nums[i] > nums[i-1]) {
+                break;
+            }
+        }
+        if (i==0) {
+            Arrays.sort(nums);
+            return;
+        }
+        
+        for (int j=nums.length-1; j>i-1; j--) {
+            if (nums[j] > nums[i-1]) {
+                swap(nums, i-1, j);
+                break;
+            }
+        }
+        int j = nums.length-1;
+        while (i<j) {
+            swap(nums, i, j);
+            i++;
+            j--;
+        }
+    }
+    
+    private void swap(int[] nums, int a , int b) {
+        int tmp = nums[a];
+        nums[a] = nums[b];
+        nums[b] = tmp;
+    }
 	
 	private void swap(StringBuilder str, int i, int j) {
 		char tmp = str.charAt(i);
@@ -2426,6 +2459,43 @@ public class NumberImpl {
             }
         }
         return false;
+    }
+    
+    /**
+     * Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+		Each element in the array represents your maximum jump length at that position.
+		
+		Determine if you are able to reach the last index.
+		
+		Example 1:
+		
+		Input: [2,3,1,1,4]
+		Output: true
+		Explanation: Jump 1 step from index 0 to 1, then 3 steps to the last index.
+		Example 2:
+		
+		Input: [3,2,1,0,4]
+		Output: false
+		Explanation: You will always arrive at index 3 no matter what. Its maximum
+		             jump length is 0, which makes it impossible to reach the last index.
+     */
+    public boolean canJump(int[] nums) {
+    	if (nums == null || nums.length == 0) {
+    		return false;
+    	}
+    	
+    	if (nums.length == 1) {
+    		return true;
+    	}
+    	
+    	int reach = 0;
+    	int i = 0;
+    	for (i=0; i<nums.length && reach >= i; i++) {
+    		reach = Math.max(i+nums[i], reach);
+    	}
+    	
+    	return i==nums.length;
     }
     
 	/**
