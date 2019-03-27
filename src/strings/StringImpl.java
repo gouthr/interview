@@ -222,8 +222,8 @@ public class StringImpl {
         String str21 = "this is a test string"; 
         String pat = "tist";
         
-        String str22 = "geeksforgeeks";
-        String pat22 = "ork";
+        String str22 = "cabwefgewcwaefgcf";
+        String pat22 = "cae";
         System.out.println("Smallest window is : " + strImpl.findMinWindow(str21, pat));
         System.out.println("Smallest window is : " + strImpl.findMinWindow(str22, pat22));
 	}

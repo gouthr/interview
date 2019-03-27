@@ -307,4 +307,48 @@ public class Graph {
         }
         return false;
     }
+    
+    /**
+     * Given a directed, acyclic graph of N nodes.  Find all possible paths from node 0 to node N-1, and return them in any order.
+
+		The graph is given as follows:  the nodes are 0, 1, ..., graph.length - 1.  graph[i] is a list of all nodes j for which the edge (i, j) exists.
+		
+		Example:
+		Input: [[1,2], [3], [3], []] 
+		Output: [[0,1,3],[0,2,3]] 
+		Explanation: The graph looks like this:
+		0--->1
+		|    |
+		v    v
+		2--->3
+		There are two paths: 0 -> 1 -> 3 and 0 -> 2 -> 3.
+     * @param graph
+     * @return
+     */
+    public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
+        int n = graph.length;
+        List<Integer> path = new ArrayList<>();
+        List<List<Integer>> res = new ArrayList<>();
+        boolean[] visited = new boolean[n];
+        allPaths(graph, 0, n-1, path, res, visited);
+        return res;
+    }
+    
+    private void allPaths(int[][] grid,  int src, int dest, List<Integer> path, List<List<Integer>> res, boolean[] visited) {
+        visited[src] = true;
+        path.add(src);
+        if (src == dest) {
+            res.add(new ArrayList<Integer>(path));
+            visited[src] = false;
+            return;
+        }
+        
+        for (Integer node : grid[src]) {
+            if (!visited[node]) {
+                allPaths(grid, node, dest, path, res, visited);
+                path.remove(path.size()-1);
+            }
+        }
+        visited[src] = false;
+    }
 }
