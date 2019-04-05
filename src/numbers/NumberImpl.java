@@ -2571,5 +2571,39 @@ public class NumberImpl {
         return true;
     }
     
+    /**
+     * Given a non-negative integer numRows, generate the first numRows of Pascal's triangle.
+     * Input: 5
+		Output:
+		[
+		     [1],
+		    [1,1],
+		   [1,2,1],
+		  [1,3,3,1],
+		 [1,4,6,4,1]
+		]
+     * @param numRows
+     * @return
+     */
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (numRows == 0) {
+            return res;
+        }
+        
+        for (int i=0; i<=numRows; i++) {
+            List<Integer> tmp = new ArrayList<>();
+            for (int j=0; j<i; j++) {
+                if (j==0 || j==i-1) {
+                    tmp.add(1);
+                } else {
+                    tmp.add(res.get(i-1).get(j-1) + res.get(i-1).get(j));
+                }
+            }
+            res.add(tmp);
+        }
+        return res.subList(1, res.size());
+    }
+    
     public NumberImpl(){}
 }
