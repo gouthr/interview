@@ -127,11 +127,13 @@ public class StringImpl {
 		// String decodings
 		System.out.println("String Decodings: ");
 	    HashSet<String> result = new HashSet<String>();
-	    strImpl.strDecodings("", "1123", result);
+	    strImpl.strDecodings("", "103", result);
 	    for (String s : result) {
 	    	System.out.print(s + ", ");
 	    }
 	    System.out.println();
+	    
+	    System.out.println("Number of decodings: " + strImpl.numDecodings("103"));
 	    
 	    // Word break problem
 	    final List<String> dict = new ArrayList<String>();
