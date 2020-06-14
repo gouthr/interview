@@ -1,0 +1,6 @@
+What is the difference between (low + high) / 2 and low + (high - low) / 2?
+
+When you add two signed 32-bit integers, you always run the risk of overflow. 
+You can try it yourself with low = 1 and high = Integer.MAX_VALUE. 
+You'll notice however that the second way stops this overflow from occurring, 
+and you get your expected result.
