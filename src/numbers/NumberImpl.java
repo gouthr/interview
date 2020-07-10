@@ -2636,5 +2636,68 @@ public class NumberImpl {
         return res.subList(1, res.size());
     }
     
+    /**
+     * Given an integer array of size n, find all elements that appear more than ⌊ n/3 ⌋ times.
+
+		Note: The algorithm should run in linear time and in O(1) space.
+		
+		Example 1:
+		
+		Input: [3,2,3]
+		Output: [3]
+		Example 2:
+		
+		Input: [1,1,1,3,3,2,2,2]
+		Output: [1,2]
+	 * Note: Refer to Boyer-Moore majority vote algorithm.
+     * @param nums
+     * @return
+     */
+    public List<Integer> majorityElement(int[] nums) {
+        int cnt1 = 0;
+        int cnt2 = 0;
+        List<Integer> res = new ArrayList<>();
+        if (nums == null || nums.length == 0) {
+            return res;
+        }
+        int num1 = nums[0];
+        int num2 = nums[0];
+        
+        for (int num : nums) {
+            if (num == num1) {
+                cnt1++;
+            } else if (num == num2) {
+                cnt2++;
+            } else if (cnt1 == 0) {
+                cnt1++;
+                num1 = num;
+            } else if (cnt2 == 0) {
+                cnt2++;
+                num2 = num;
+            } else {
+                cnt1--;
+                cnt2--;
+            }
+        }
+        
+        cnt1 = 0;
+        cnt2 = 0;
+        for (int num : nums) {
+            if (num == num1) {
+                cnt1++;
+            } else if (num == num2) {
+                cnt2++;
+            }
+        }
+        
+        if (cnt1 > nums.length/3) {
+            res.add(num1);
+        }
+        if (cnt2 > nums.length/3) {
+            res.add(num2);
+        }
+        return res;
+    }
+    
     public NumberImpl(){}
 }
