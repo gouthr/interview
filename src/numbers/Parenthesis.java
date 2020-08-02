@@ -133,4 +133,48 @@ public class Parenthesis {
 			generateParenthesisUtil(str+")", open, close+1, count, res);
 		}
 	}
+	
+	/**
+	 * Given a string s of '(' , ')' and lowercase English characters. 
+
+		Your task is to remove the minimum number of parentheses ( '(' or ')', in any positions ) 
+		so that the resulting parentheses string is valid and return any valid string.
+		
+		Formally, a parentheses string is valid if and only if:
+		
+		It is the empty string, contains only lowercase characters, or
+		It can be written as AB (A concatenated with B), where A and B are valid strings, or
+		It can be written as (A), where A is a valid string.
+	 * @param s
+	 * @return
+	 */
+    public String minRemoveToMakeValid(String s) {
+        int n = s.length();
+        boolean[] mark = new boolean[n];
+        Stack<Integer> st = new Stack<>();
+        
+        int i = 0;
+        while (i<n) {
+            if (s.charAt(i) == '(') {
+                st.push(i);
+            } else if (s.charAt(i) == ')') {
+                if (!st.isEmpty()) {
+                    mark[st.pop()] = true;
+                    mark[i] = true;
+                }
+            } else {
+                mark[i] = true;
+            }
+            i++;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        
+        for (int j=0; j<n; j++) {
+            if (mark[j]) {
+                sb.append(s.charAt(j));
+            }
+        }
+        return sb.toString();
+    }
 }
