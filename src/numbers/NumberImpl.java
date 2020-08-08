@@ -815,6 +815,51 @@ public class NumberImpl {
 	}
 	
 	/**
+	 * If readreadMultiCall can be called multiple times.
+	 * Example:
+	 * File file("abc");
+		Solution sol;
+		// Assume buf is allocated and guaranteed to have enough space for storing all characters from the file.
+		sol.read(buf, 1); // After calling your read method, buf should contain "a". We read a total of 1 character 
+		from the file, so return 1.
+		sol.read(buf, 2); // Now buf should contain "bc". We read a total of 2 characters from the file, so return 2.
+		sol.read(buf, 1); // We have reached the end of file, no more characters can be read. So return 0.
+	 */
+    private int bufPtr = 0;
+    private int bufCnt = 0;
+    private char[] buf4 = new char[4];
+    
+    /**
+     * @param buf Destination buffer
+     * @param n   Number of characters to read
+     * @return    The number of actual characters read
+     */
+    public int readMultiCall(char[] buf, int n) {
+        int ptr = 0;
+        
+        while(ptr < n) {
+            if (bufCnt == 0) {
+                //bufCnt = read4(buf4); //Commented for code to compile. This line exists.
+            }
+            
+            while(ptr<n && bufPtr<bufCnt) {
+                buf[ptr++] = buf4[bufPtr++];
+            }
+            
+            if (bufCnt < 4) {
+                break;
+            }
+            
+            if (bufPtr == bufCnt) {
+                bufPtr = 0;
+                bufCnt = 0;
+            }
+            
+        }
+        return ptr;
+    }
+	
+	/**
 	 * Given an array of positive numbers, find the maximum sum of a subsequence
 	 * with the constraint that no 2 numbers in the sequence should be adjacent
 	 * in the array. So 3 2 7 10 should return 13 (sum of 3 and 10) or 3 2 5 10
