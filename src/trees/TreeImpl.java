@@ -879,6 +879,29 @@ public class TreeImpl {
 	}
 	
 	/**
+	 * 
+	 * Given the root node of a binary search tree, return the sum of values of all nodes 
+	 * with value between L and R (inclusive).
+	 * The binary search tree is guaranteed to have unique values.
+	 * @param root
+	 * @param L
+	 * @param R
+	 * @return
+	 */
+    public int rangeSumBST(TreeNode root, int L, int R) {
+        if (root == null) {
+            return 0;
+        }
+        if (root.data < L) {
+            return rangeSumBST(root.right, L, R);
+        }
+        if (root.data > R) {
+            return rangeSumBST(root.left, L, R);
+        }
+        return root.data + rangeSumBST(root.left, L, R) + rangeSumBST(root.right, L, R);
+    }  
+	
+	/**
 	 * Given a binary tree where all the right nodes are either leaf nodes with
 	 * a sibling (a left node that shares the same parent node) or empty, flip
 	 * it upside down and turn it into a tree where the original right nodes
