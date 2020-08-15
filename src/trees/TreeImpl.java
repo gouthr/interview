@@ -899,7 +899,59 @@ public class TreeImpl {
             return rangeSumBST(root.left, L, R);
         }
         return root.data + rangeSumBST(root.left, L, R) + rangeSumBST(root.right, L, R);
-    }  
+    }
+    
+    /**
+     * Given a non-empty binary tree, find the maximum path sum.
+
+		For this problem, a path is defined as any sequence of nodes from some starting node to 
+		any node in the tree along the parent-child connections.
+ 		The path must contain at least one node and does not need to go through the root.
+ 		
+	 	Input: [1,2,3]
+	
+	       1
+	      / \
+	     2   3
+
+		Output: 6
+		Example 2:
+		
+		Input: [-10,9,20,null,null,15,7]
+		
+		   -10
+		   / \
+		  9  20
+		    /  \
+		   15   7
+		
+		Output: 42
+     */
+    private int maxSum;
+    
+    public int maxPathSum(TreeNode root) {
+        maxSum = Integer.MIN_VALUE;
+        maxPathSumUtil(root);
+        return maxSum;
+    }
+    
+    private int maxPathSumUtil(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = Math.max(0, maxPathSumUtil(root.left));
+        int right = Math.max(0, maxPathSumUtil(root.right));
+        maxSum = Math.max(maxSum, left+right+root.data);
+        return Math.max(left, right) + root.data;
+        /**Just want to add a explanation about the last two lines based on my comprehension.
+
+        maxValue = Math.max(maxValue, left + right + node.val);
+        return Math.max(left, right) + node.val;
+        maxValue is the value which recording whether this current root is the final root, 
+        so we use left + right + node.val. But to the upper layer(after return statement), 
+        we cannot choose both left and right brunches, so we need to select the larger one, 
+        so we use max(left, right) + node.val to prune the lower brunch.**/
+    }
 	
 	/**
 	 * Given a binary tree where all the right nodes are either leaf nodes with
