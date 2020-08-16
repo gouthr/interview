@@ -1611,6 +1611,73 @@ public class StringImpl {
     }
     
     /**
+     * Given a string s and a non-empty string p, find all the start indices of p's anagrams in s.
+
+		Strings consists of lowercase English letters only and the length of both strings s and 
+		p will not be larger than 20,100.
+
+		The order of output does not matter.
+		Input:
+		s: "cbaebabacd" p: "abc"
+		
+		Output:
+		[0, 6]
+		
+		Explanation:
+		The substring with start index = 0 is "cba", which is an anagram of "abc".
+		The substring with start index = 6 is "bac", which is an anagram of "abc".
+		
+		Reference - https://leetcode.com/problems/find-all-anagrams-in-a-string/discuss/92007/Sliding-Window-algorithm-template-to-solve-all-the-Leetcode-substring-search-problem
+
+     * @param s
+     * @param p
+     * @return
+     */
+    public List<Integer> findAnagrams(String s, String p) {
+        Map<Character, Integer> map = new HashMap<>();
+        if (s.length() < p.length()) {
+            return Collections.EMPTY_LIST;
+        }
+        // frequency map
+        for (char ch : p.toCharArray()) {
+            map.put(ch, map.getOrDefault(ch, 0)+1);
+        }
+        
+        List<Integer> res = new ArrayList<>();
+        
+        int begin = 0;
+        int end = 0;
+        int counter = map.size();
+        
+        while(end < s.length()) {
+            char ch = s.charAt(end);
+            if (map.containsKey(ch)) {
+                map.put(ch, map.get(ch)-1);
+                if (map.get(ch) == 0) {
+                    counter--;
+                }
+            }
+            end++;
+            
+            while(counter == 0) {
+                // found one window
+                char ch1 = s.charAt(begin);
+                if (map.containsKey(ch1)) {
+                    map.put(ch1, map.get(ch1)+1);
+                    if (map.get(ch1) > 0){
+                        counter++;
+                    }
+                }
+                if (end - begin == p.length()) {
+                   res.add(begin); 
+                }
+                begin++;
+            }
+        }
+        return res;
+    }
+    
+    /**
 	 * Given two strings string1 and string2, find the smallest substring in
 	 * string1 containing all characters of string2 efficiently. For Example:
 	 * 
