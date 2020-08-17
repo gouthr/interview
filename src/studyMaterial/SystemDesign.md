@@ -852,3 +852,22 @@ Most log data is not interesting but errors almost always indicate a problem. It
 Another use case is monitoring. For example, you may have hundreds of web servers and want to know if they start returning 500 status codes. If you can parse your web log files and record a metric on the status code, you can then trigger alerts when that metric crosses a certain threshold. Riemann is designed for detecting scenarios just like this.
 
 Reference - http://jasonwilder.com/blog/2013/07/16/centralized-logging-architecture/
+
+Kafka architecture - Log systems:
+=================================
+
+Kafka consists of 3 major parts:
+1. Kafka producers - produce messages to be written to the clusters
+2. Kafka clusters - consist of a set of brokers. Brokers host what are known as topics which is basically messages of a certain type. Topics can be partitioned to enable distributed system and scaling.
+3. Kafka consumers - apps that consume from the topics. There exists consumer groups where consumers in a group has access to only one partition of a topic. Having a single consumer in a group (as a unit of parallelism) helps to NOT to have any coordination between them.
+
+Kafka Brokers:
+Kafka brokers maintain log segment files where messages are appended to the end of the log file. Log segment files are of fixed size and flushed to persistent store at fixed time intervals or when the files reach a predetermined size. Messages are available for consumers to consume when the messages are persisted. Consumers are blocked if there are no messages to consume. Brokers maintain offset of messages as index. Brokers maintain the start offset of every log segment file in an index.
+
+Brokers are also state-less in the sense the consumers pull the data and maintain the offset of where to read-back from. Messages in the broker are persisted for an SLA amount of time (similar to TTL). Consumers once they consume a message, provide the next offset to read from the broker based on the previous message offset and length of message read previously.
+
+Kafka uses Zookeeper for the following tasks: (1) detecting the addition and the removal of brokers and consumers, (2) triggering a rebalance process in each consumer when the above events happen, and (3) maintaining the consumption relationship and keeping track of the consumed offset of each partition. Specifically, when each broker or consumer starts up, it stores its information in a broker or consumer registry in Zookeeper. The broker registry contains the broker’s host name and port, and the set of topics and partitions stored on it. The consumer registry includes the consumer group to which a consumer belongs and the set of topics that it subscribes to. Each consumer group is associated with an ownership registry and an offset registry in Zookeeper. The ownership registry has one path for every subscribed partition and the path value is the id of the consumer currently consuming from this partition (we use the terminology that the consumer owns this partition). The offset registry stores for each subscribed partition, the offset of the last consumed message in the partition. 
+
+In this section, we describe how we use Kafka at LinkedIn. Figure3 shows a simplified version of our deployment. We have one Kafka cluster co-located with each datacenter where our userfacing services run. The frontend services generate various kinds of log data and publish it to the local Kafka brokers in batches. We rely on a hardware load-balancer to distribute the publish requests to the set of Kafka brokers evenly. The online consumers of Kafka run in services within the same datacenter.  We also deploy a cluster of Kafka in a separate datacenter for offline analysis, located geographically close to our Hadoop cluster and other data warehouse infrastructure. This instance of Kafka runs a set of embedded consumers to pull data from the Kafka instances in the live datacenters. We then run data load jobs to pull data from this replica cluster of Kafka into Hadoop and our data warehouse, where we run various reporting jobs and analytical process on the data. We also use this Kafka cluster for prototyping and have the ability to run simple scripts against the raw event streams for ad hoc querying. Without too much tuning, the end-to-end latency for the complete pipeline is about 10 seconds on average, good enough for our requirements
+
+Refer to this paper for further details - http://notes.stephenholiday.com/Kafka.pdf
