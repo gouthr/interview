@@ -425,20 +425,18 @@ public class TreeImpl {
 		
 		Note: The length of path between two nodes is represented by the number of edges between them.
 	 */
-    private int max = 0;
+    int ans;
     public int diameterOfBinaryTree(TreeNode root) {
-        diameterOfBinaryTreeUtil(root);
-        return max;
+        ans = 1;
+        depth(root);
+        return ans - 1;
     }
-    
-    private int diameterOfBinaryTreeUtil(TreeNode root) {
-        if (root == null) {
-            return 0;
-        }
-        int l = diameterOfBinaryTreeUtil(root.left);
-        int r = diameterOfBinaryTreeUtil(root.right);
-        max = Math.max(max, l+r);
-        return Math.max(l, r) + 1;
+    public int depth(TreeNode node) {
+        if (node == null) return 0;
+        int L = depth(node.left);
+        int R = depth(node.right);
+        ans = Math.max(ans, L+R+1);
+        return Math.max(L, R) + 1;
     }
 	
 	public int countTreeNodes(TreeNode root) {
