@@ -448,6 +448,37 @@ public class TreeImpl {
 		return cntNodes;
 	}
 	
+	/**
+	 * Diameter of an n-ary tree
+	 * @param root
+	 * @return
+	 */
+/*    private int max = 0;
+    
+    public int diameter(Node root) {
+        getHeight(root);
+        return max;
+    }
+    
+    private int getHeight(Node root) {
+        if (root == null) {
+            return 0;
+        }
+        int max1 = 0;
+        int max2 = 0;
+        for (Node child : root.children) {
+            int height = getHeight(child);
+            if (height > max1) {
+                max2 = max1;
+                max1 = height;
+            } else if (height > max2) {
+                max2 = height;
+            }
+        }
+        max = Math.max(max, max1+max2);
+        return 1 + Math.max(max1, max2);
+    }*/
+	
 	public int countLeafTreeNodes(TreeNode root) {
 		if (root != null) {
 			countLeafTreeNodes(root.left);
