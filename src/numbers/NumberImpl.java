@@ -1219,6 +1219,68 @@ public class NumberImpl {
 	}
 	
 	/**
+	 * Given an array of integers nums sorted in ascending order, find the starting and ending position 
+	 * of a given target value.
+
+		If target is not found in the array, return [-1, -1].
+		
+		Input: nums = [5,7,7,8,8,10], target = 8
+		Output: [3,4]
+	 * @param nums
+	 * @param target
+	 * @return
+	 */
+    public int[] searchRange(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
+            return new int[] {-1, -1};
+        }
+        
+        int beginIndex = 0;
+        int endIndex = nums.length - 1;
+        
+        int st = findStart(nums, target, beginIndex, endIndex);
+        int end = findEnd(nums, target, beginIndex, endIndex);
+        
+        return new int[] {st, end};
+    }
+    
+    private int findStart(int[] nums, int target, int low, int high) {
+        while (low <= high) {
+            int mid = low + (high-low)/2;
+            if (mid > 0 && nums[mid] == target && nums[mid-1] != target) {
+                return mid;
+            } else if (mid > 0 && nums[mid] == target) {
+                return findStart(nums, target, low, mid-1);
+            } else if (mid == 0 && nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] < target) {
+                return findStart(nums, target, mid+1, high);
+            } else {
+                return findStart(nums, target, low, mid-1);
+            }
+        }
+        return -1;
+    }
+    
+    private int findEnd(int[] nums, int target, int low, int high) {
+        while (low <= high) {
+            int mid = low + (high-low)/2;
+            if (mid < high && nums[mid] == target && nums[mid+1] != target) {
+                return mid;
+            } else if (mid < high && nums[mid] == target) {
+                return findEnd(nums, target, mid+1, high);  
+            } else if (mid == high && nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] < target) {
+                return findEnd(nums, target, mid+1, high);
+            } else {
+                return findEnd(nums, target, low, mid-1);
+            }
+        }
+        return -1;
+    }
+	
+	/**
 	 * Given n non-negative integers representing an elevation map where the
 	 * width of each bar is 1, compute how much water it is able to trap after
 	 * raining.
