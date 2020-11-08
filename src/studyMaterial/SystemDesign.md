@@ -853,6 +853,8 @@ Another use case is monitoring. For example, you may have hundreds of web server
 
 Reference - http://jasonwilder.com/blog/2013/07/16/centralized-logging-architecture/
 
+Reference - https://www.youtube.com/watch?v=JaCA_pVS_1Y
+
 Kafka architecture - Log systems:
 =================================
 
