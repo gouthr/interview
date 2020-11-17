@@ -1898,6 +1898,56 @@ public class StringImpl {
     }
     
     /**
+     * You have an array of logs.  Each log is a space delimited string of words.
+
+		For each log, the first word in each log is an alphanumeric identifier.  Then, either:
+		
+		Each word after the identifier will consist only of lowercase letters, or;
+		Each word after the identifier will consist only of digits.
+		We will call these two varieties of logs letter-logs and digit-logs.  
+		It is guaranteed that each log has at least one word after its identifier.
+		
+		Reorder the logs so that all of the letter-logs come before any digit-log.  
+		The letter-logs are ordered lexicographically ignoring identifier, with the identifier used in case of ties.  
+		The digit-logs should be put in their original order.
+		
+		Return the final order of the logs.
+     * @param logs
+     * @return
+     */
+    public String[] reorderLogFiles(String[] logs) {
+        Comparator<String> myComp = new Comparator<String>() {
+            public int compare(String s1, String s2) {
+                String s1NonIdentifier = s1.substring(s1.indexOf(" ")+1);
+                String s2NonIdentifier = s2.substring(s2.indexOf(" ")+1);
+                
+                Character ch1 = s1NonIdentifier.charAt(0);
+                Character ch2 = s2NonIdentifier.charAt(0);
+                if (ch1 <= '9') {
+                    if (ch2 <= '9') {
+                        return 0;
+                    }
+                    return 1;
+                }
+                
+                if (ch2 <= '9') {
+                    return -1;
+                }
+                
+                if (s1NonIdentifier.equals(s2NonIdentifier)) {
+                    return s1.substring(0, s1.indexOf(" ")).compareTo(s2.substring(0, s2.indexOf(" ")));
+                } else {
+                    return s1NonIdentifier.compareTo(s2NonIdentifier);
+                }
+            }
+        };
+        
+        Arrays.sort(logs, myComp);
+        
+        return logs;
+    }
+    
+    /**
 	 * There is a new alien language which uses the latin alphabet. However, the
 	 * order among letters are unknown to you. You receive a list of non-empty
 	 * words from the dictionary, where words are sorted lexicographically by
