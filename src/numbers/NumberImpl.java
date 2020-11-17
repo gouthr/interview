@@ -1164,6 +1164,60 @@ public class NumberImpl {
 		return Math.min(partitionUtil(arr, n-1, curTotal + arr[n-1], sumTotal), partitionUtil(arr, n-1, curTotal, sumTotal));
 	}
 	
+	/**
+	 * Given an array of integers nums and a positive integer k, 
+	 * find whether it's possible to divide this array into k non-empty subsets whose sums are all equal.
+
+		Example 1:
+		
+		Input: nums = [4, 3, 2, 3, 5, 2, 1], k = 4
+		Output: True
+		Explanation: It's possible to divide it into 4 subsets (5), (1, 4), (2,3), (2,3) with equal sums.
+
+	 * @param nums
+	 * @param k
+	 * @return
+	 */
+    public boolean canPartitionKSubsets(int[] nums, int k) {
+        if (nums == null || nums.length == 0) {
+            return false;
+        }
+        
+        int sum = 0;
+        int max = Integer.MIN_VALUE;
+        for (int num : nums) {
+            max = Math.max(max, num);
+            sum+=num;
+        }
+        
+        if (sum%k !=0 || max > sum/k) {
+            return false;
+        }
+        boolean[] visited = new boolean[nums.length];
+        return canPartitionUtil(nums, k, 0, sum/k, visited, 0);
+    }
+    
+    private boolean canPartitionUtil(int[] nums, int k, int curSum, int targetSum, boolean[] visited, int startIndex) {
+        if (k == 0) {
+            return true;
+        }
+        
+        if (curSum == targetSum) {
+            return canPartitionUtil(nums, k-1, 0, targetSum, visited, 0);   
+        }
+        
+        for (int i=startIndex; i<nums.length; i++) {
+            if (!visited[i] && nums[i]+curSum<=targetSum) {
+                visited[i] = true;
+                if (canPartitionUtil(nums, k, nums[i]+curSum, targetSum, visited, startIndex+1)) {
+                    return true;
+                }
+                visited[i] = false;
+            }    
+        }
+        return false;
+    }
+	
 	public int rotatedBinarySearch(int[] arr, int key) {
 		if (arr == null || arr.length == 0) {
 			System.out.println("Invalid input.");
