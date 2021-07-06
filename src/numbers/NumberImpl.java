@@ -3159,5 +3159,49 @@ public class NumberImpl {
         return sum + makeSatisfiedMax;
     }
     
+    /**
+    You are given a sorted integer array arr containing 1 and prime numbers, where all the integers of arr are unique. You are also given an integer k.
+
+	For every i and j where 0 <= i < j < arr.length, we consider the fraction arr[i] / arr[j].
+
+	Return the kth smallest fraction considered. Return your answer as an array of integers of size 2, where answer[0] == arr[i] and answer[1] == arr[j].
+
+
+
+	Example 1:
+
+	Input: arr = [1,2,3,5], k = 3
+	Output: [2,5]
+	Explanation: The fractions to be considered in sorted order are:
+	1/5, 1/3, 2/5, 1/2, 3/5, and 2/3.
+	The third fraction is 2/5.
+    */
+    public int[] kthSmallestPrimeFraction(int[] arr, int k) {
+        Queue<int[]> pq = new PriorityQueue<>(new Comparator<int[]>() {
+            public int compare(int[] i1, int[] i2) {
+                int frac1 = arr[i1[0]]*arr[i2[1]];
+                int frac2 = arr[i1[1]]*arr[i2[0]];
+                return frac1 - frac2;
+            }
+        });
+        
+        int n = arr.length;
+        for (int i=0; i<n-1; i++) {
+            pq.add(new int[] {i, n-1});
+        }
+        
+        for (int i=0; i<k-1; i++) {
+            int[] tmp = pq.remove();
+            if (tmp[1]-1 > tmp[0]) {
+                tmp[1]--;
+                pq.add(tmp);
+            }
+        }
+        
+        int[] res = pq.peek();
+        
+        return new int[] {arr[res[0]], arr[res[1]]};
+    }
+    
     public NumberImpl(){}
 }
