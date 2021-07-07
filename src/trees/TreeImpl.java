@@ -359,17 +359,20 @@ public class TreeImpl {
 		}
 	}
 	
-	public boolean bstCheck(TreeNode root) {
-		if (root != null) {
-			bstCheck(root.left);
-			if (prev != null && root.data < prev.data) {
-				return false;
-			}
-			prev = root;
-			bstCheck(root.right);
-		}
-		return true;
-	}
+        private TreeNode prev = null;
+        public boolean isValidBST(TreeNode root) {
+	    if (root != null)  {
+	        if (!isValidBST(root.left)) {
+		    return false;
+	        }
+	        if (prev != null && prev.data > root.data) {
+		    return false;
+	        }
+	        prev = root;
+	        return isValidBST(root.right);
+	    }
+	    return true;
+        }
 	
 	public void levelOrderTraversal(TreeNode root) {
 		if (root == null) {
