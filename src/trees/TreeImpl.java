@@ -682,15 +682,15 @@ public class TreeImpl {
 		
 		return root;
 	}
-	
-	    // Encodes a tree to a single string.
-	    public String serialize(TreeNode root) {
+
+        // Encodes a tree to a single string.
+    	public String serialize(TreeNode root) {
 		StringBuilder sb = new StringBuilder();
 		serializeUtil(root, sb);
 		return sb.toString();
-	    }
+    	}
 
-	    private void serializeUtil(TreeNode root, StringBuilder sb) {
+    	private void serializeUtil(TreeNode root, StringBuilder sb) {
 		if (root != null) {
 		    sb.append(String.valueOf(root.val)).append(" ");
 		    serializeUtil(root.left, sb);
@@ -698,16 +698,16 @@ public class TreeImpl {
 		} else {
 		    sb.append("#").append(" ");
 		}
-	    }
+    	}
 
-	    // Decodes your encoded data to tree.
-	    public TreeNode deserialize(String data) {
+    	// Decodes your encoded data to tree.
+    	public TreeNode deserialize(String data) {
 		String[] parts = data.split(" ");
 		Queue<String> q = new LinkedList<>(Arrays.asList(parts));
 		return deserializeUtil(q);
-	    }
+    	}
 
-	    private TreeNode deserializeUtil(Queue<String> q) {
+    	private TreeNode deserializeUtil(Queue<String> q) {
 		String strVal = q.poll();
 		if (strVal == null || strVal.equals("#")) {
 		    return null;
@@ -716,7 +716,7 @@ public class TreeImpl {
 		root.left = deserializeUtil(q);
 		root.right = deserializeUtil(q);
 		return root;
-	    }
+    	}
 	
 	public TreeNode createTreeFromPreOrderInOrder(int[] preorder, int[] inorder, int startInorder, int endInorder) {
 		if (startInorder > endInorder) {
