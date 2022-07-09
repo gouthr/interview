@@ -876,4 +876,7 @@ Refer to this paper for further details - http://notes.stephenholiday.com/Kafka.
 
 IoT system design:
 =================
+
+Refer to the link - https://medium.com/geekculture/how-does-mqtt-work-in-iot-projects-a32f38383472
+
 ![image](https://user-images.githubusercontent.com/13629031/178116990-0625ca16-70b3-434f-8a97-dcd76aabf288.png)
