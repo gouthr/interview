@@ -873,3 +873,7 @@ Kafka uses Zookeeper for the following tasks: (1) detecting the addition and the
 In this section, we describe how we use Kafka at LinkedIn. Figure3 shows a simplified version of our deployment. We have one Kafka cluster co-located with each datacenter where our userfacing services run. The frontend services generate various kinds of log data and publish it to the local Kafka brokers in batches. We rely on a hardware load-balancer to distribute the publish requests to the set of Kafka brokers evenly. The online consumers of Kafka run in services within the same datacenter.  We also deploy a cluster of Kafka in a separate datacenter for offline analysis, located geographically close to our Hadoop cluster and other data warehouse infrastructure. This instance of Kafka runs a set of embedded consumers to pull data from the Kafka instances in the live datacenters. We then run data load jobs to pull data from this replica cluster of Kafka into Hadoop and our data warehouse, where we run various reporting jobs and analytical process on the data. We also use this Kafka cluster for prototyping and have the ability to run simple scripts against the raw event streams for ad hoc querying. Without too much tuning, the end-to-end latency for the complete pipeline is about 10 seconds on average, good enough for our requirements
 
 Refer to this paper for further details - http://notes.stephenholiday.com/Kafka.pdf
+
+IoT system design:
+=================
+![image](https://user-images.githubusercontent.com/13629031/178116990-0625ca16-70b3-434f-8a97-dcd76aabf288.png)
