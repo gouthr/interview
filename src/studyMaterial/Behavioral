@@ -7,6 +7,17 @@ Strengths:
 	-I take it as a challenge to myself to complete it at the earliest possible
 3. Good communicator and complete team player
 
+Weaknesses/Learnings as a TL:
+==================
+1. Creating more visibility to the team and project is something I've started doing on a more frequent cadence
+	- This has helped create more visibility to the team
+	- Opportunities for new use cases which would otherwise have gone un-noticed. Example- A/B test framework 
+	for internal Twitter experimentation purposes was something that came up due to this effort. They had this use case 
+	to use our A/B test framework to curate targetted ads from a catalog of ads based on targetting criteria.
+2. Helping other team members to grow
+	- Earlier I would take on the critical or the most imporatnt component. But now I let the team chose their areas and I work on the remaining tasks. 
+	That said, actively involved in design, architecture and code reviews.
+	Also, jumping in when needed to unblock and meet the deadlines
 
 Weaknesses:
 ===========
@@ -29,7 +40,11 @@ Accomplishment:
 
 Failed project/ Not so proud:
 =============================
-1. WireTap project 
+1. Unable to promote and retain a good engineer inspite of our efforts to help the engineer grow
+	- Mostly due to the current unstable state of Twitter going through aquisition and changing process
+	- Worked closely to help close the gap and everything was on track. Delays due to the unstable state and 
+	processes led to losing a good enginner on the team
+2. WireTap project 
 	-Had to work on a very tight schedule with no test framework
 	-Lead to some missing functionality on porting
 	-Mismatch in types of the subject header
