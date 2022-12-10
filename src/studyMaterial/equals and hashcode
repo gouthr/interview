@@ -39,7 +39,7 @@ Overriding equals() alone will make your business fail with hashing data structu
 		However, since alex2 has a different hash code, it will be stored in a separate bucket and will be considered a totally different object.
 Overriding hashcode() alone doesn't force Java to ignore memory addresses when comparing two objects.
 
-https://initialcommit.com/blog/working-hashcode-equals-java 
+Reference - https://initialcommit.com/blog/working-hashcode-equals-java 
 
 compareTo method:
 ==================
