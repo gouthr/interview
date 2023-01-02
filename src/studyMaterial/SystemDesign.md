@@ -134,13 +134,13 @@ Design an eCommerce website like amazon:
 2. Concurrency, consistency and Availability are very important when scaling an eCommerce site
 	- Concurrency - suppose there is a single copy of the book remaining. How to ensure concurrency if
 	2 users are trying to buy the same.
-		- Optimistic concurrency control (OCC) - Lock the entire row for the transaction.
-		This approach is better if there are a lot of conflicts.
-		- Pessimistic concurrency control (PCC) - Check the value during the start of the transaction and 
+		- Optimistic concurrency control (OCC) - Check the value during the start of the transaction and 
 		check again before committing the transaction, if the value has changed, roll-back and start over.
+		- Pessimistic concurrency control (PCC) - Lock the entire row for the transaction.
+		This approach is better if there are a lot of conflicts.
 		
 		For a site like amazon with so many products and categories, there being a conflict is less likely, 
-		PCC is better suited here.
+		OCC is better suited here.
 		
 	- Consistency and availability go hand in hand. We need thousands of resources/servers for better availability.
 	Increased availability reduces the consistency as the values need to be consistent across all resources.
