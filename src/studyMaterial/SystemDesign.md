@@ -880,3 +880,43 @@ IoT system design:
 Refer to the link - https://medium.com/geekculture/how-does-mqtt-work-in-iot-projects-a32f38383472
 
 ![image](https://user-images.githubusercontent.com/13629031/178116990-0625ca16-70b3-434f-8a97-dcd76aabf288.png)
+
+Online gaming system design:
+=============================
+
+Requirements:
+Functional
+	- muliple users playing the online game
+	- real time latency for games
+	- match making based on location and skill
+	- leader board
+	- friends list
+	- analytics (to track DAU and revenue etc.)
+Non-functional
+	- Real time low response time
+	- highly available
+	- scalable
+
+Design considerations
+	- Session manager - to handle user sessions
+	- Game matching engine
+	- Fleet of servers to host the games
+	- Leaderboard service
+	- Friends list
+	- Persistence layer to backup game and user states
+
+Numbers estimation
+	- 10M DAU - each user playing one game on average
+	10M per day -> 10M/10^5 = 100 RPS (100 users playing the game at any second)
+
+![image](https://user-images.githubusercontent.com/13629031/213129472-89f69dd5-bdbc-4ebd-ba29-124c0607a01e.png)
+
+![image](https://user-images.githubusercontent.com/13629031/213129529-0fa70bb7-f54b-4753-83a1-ccd2c9e10bb8.png)
+
+![image](https://user-images.githubusercontent.com/13629031/213129587-3839ff37-cce0-47bf-a4f7-9a0345e533d3.png)
+
+References:
+https://www.youtube.com/watch?v=K3Z1PY2vr3Q
+https://www.youtube.com/watch?v=77vYKsXC4IE&t=505s
+
+
