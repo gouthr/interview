@@ -885,20 +885,20 @@ Online gaming system design:
 =============================
 
 Requirements:
-Functional
+-Functional
 	- muliple users playing the online game
 	- real time latency for games
 	- match making based on location and skill
 	- leader board
 	- friends list
 	- analytics (to track DAU and revenue etc.)
-Non-functional
+-Non-functional
 	- Real time low response time
 	- highly available
 	- scalable
 
 Design considerations
-	- Session manager - to handle user sessions
+	- Session manager - to handle user sessions \n
 	- Game matching engine
 	- Fleet of servers to host the games
 	- Leaderboard service
@@ -916,7 +916,7 @@ Numbers estimation
 ![image](https://user-images.githubusercontent.com/13629031/213129587-3839ff37-cce0-47bf-a4f7-9a0345e533d3.png)
 
 References:
-https://www.youtube.com/watch?v=K3Z1PY2vr3Q
-https://www.youtube.com/watch?v=77vYKsXC4IE&t=505s
+	https://www.youtube.com/watch?v=K3Z1PY2vr3Q
+	https://www.youtube.com/watch?v=77vYKsXC4IE&t=505s
 
 
