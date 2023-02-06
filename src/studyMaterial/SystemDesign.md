@@ -915,8 +915,8 @@ Online gaming system design:
 
 ![image](https://user-images.githubusercontent.com/13629031/213129587-3839ff37-cce0-47bf-a4f7-9a0345e533d3.png)
 
-References:
-	https://www.youtube.com/watch?v=K3Z1PY2vr3Q
-	https://www.youtube.com/watch?v=77vYKsXC4IE&t=505s
+## References ##
+* https://www.youtube.com/watch?v=K3Z1PY2vr3Q
+* https://www.youtube.com/watch?v=77vYKsXC4IE&t=505s
 
 
