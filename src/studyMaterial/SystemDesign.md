@@ -884,30 +884,30 @@ Refer to the link - https://medium.com/geekculture/how-does-mqtt-work-in-iot-pro
 Online gaming system design:
 =============================
 
-Markup: #Requirements#
-Markup: ##Functional##
-Markup: *muliple users playing the online game
-	- real time latency for games
-	- match making based on location and skill
-	- leader board
-	- friends list
-	- analytics (to track DAU and revenue etc.)
--Non-functional
-	- Real time low response time
-	- highly available
-	- scalable
+## Requirements ##
+	### Functional ###
+	* muliple users playing the online game
+	* real time latency for games
+	* match making based on location and skill
+	* leader board
+	* friends list
+	* analytics (to track DAU and revenue etc.)
+	### Non-functional ###
+	* Real time low response time
+	* highly available
+	* scalable
 
-Design considerations
-	- Session manager - to handle user sessions \n
-	- Game matching engine
-	- Fleet of servers to host the games
-	- Leaderboard service
-	- Friends list
-	- Persistence layer to backup game and user states
+	### Design considerations for ###
+	* Session manager - to handle user sessions 
+	* Game matching engine
+	* Fleet of servers to host the games
+	* Leaderboard service
+	* Friends list
+	* Persistence layer to backup game and user states
 
-Numbers estimation
-	- 10M DAU - each user playing one game on average
-	10M per day -> 10M/10^5 = 100 RPS (100 users playing the game at any second)
+## Numbers estimation ##
+	* 10M DAU - each user playing one game on average
+	* 10M per day -> 10M/10^5 = 100 RPS (100 users playing the game at any second)
 
 ![image](https://user-images.githubusercontent.com/13629031/213129472-89f69dd5-bdbc-4ebd-ba29-124c0607a01e.png)
 
