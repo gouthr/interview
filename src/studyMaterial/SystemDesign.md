@@ -884,9 +884,9 @@ Refer to the link - https://medium.com/geekculture/how-does-mqtt-work-in-iot-pro
 Online gaming system design:
 =============================
 
-Requirements:
--Functional
-	- muliple users playing the online game
+Markup: #Requirements#
+Markup: ##Functional##
+Markup: *muliple users playing the online game
 	- real time latency for games
 	- match making based on location and skill
 	- leader board
