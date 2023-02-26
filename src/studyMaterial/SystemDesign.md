@@ -919,4 +919,83 @@ Online gaming system design:
 * https://www.youtube.com/watch?v=K3Z1PY2vr3Q
 * https://www.youtube.com/watch?v=77vYKsXC4IE&t=505s
 
+System Design Experimentation platform:
+=======================================
+
+
+The Experimentation platform contains 4 high-level components.
+
+1. Experiment definition, setup, and management via a UI. They are stored in the experiment system configuration.
+2. Experiment deployment to both the server and client-side (covers variant assignment and parameterization as well).
+3. Experiment instrumentation.
+4. Experiment analysis.
+
+## Functional Requirements ##
+* Users of the platform must be able to create, update and delete experiments and configurations.
+* Users of the platform must be able to define their own metrics.
+* Users of the platform must be able to define the variants as well as number of variants for each experiment.
+* Users of the platform must be able to define allocation of resources for each experiment.
+* Users of the platform must be able to define the tests for comparing variants in an experiment.
+
+## Non Functional Requirements ##
+* Durability — Experiments once created should not get lost or corrupted such as the data, metrics, tests and the configurations for the experiment.
+* Low Latency — Clients should not be aware or affected due to experimentations.
+* Availability— System should be highly available.
+
+## Numbers estimation ##
+* Average QPS = 1 million
+* Number of experiments running at any instant = 1000
+* Average number of variants per experiment = 2
+
+## Design considerations ##
+1. Request Routing — Based on the request parameters and environment variables such as user id, country, post id etc. an API request is routed to at-most one variant for each experiment associated with an application. For e.g. if the application is “Friend Suggestions”, then different experiments could be “Number of suggestions”, “Size of images”, “Horizontal or vertical scrolling”, “Recommendation algorithm” etc. Based on user id, we can direct user id ‘ABC123’ to say number of suggestions=10, size of image=160x100 etc.
+
+2. Response Tracking — Based on what actions are taken by clients, we can track a suitable response against an experiment in each application. For e.g. user id ‘ABC123’ clicked 3 recommendations.
+
+3. Running Analysis — Run analysis on the results of the experiments to compare each variant of an experiment and finalize which variant should or should not be productionized for each experiment.
+
+4. Productionizing — After making decision on which variant to productionize or should it be productionized, the last step is to make that variant for an experiment available to all users instead of a random set of users.
+
+5. Filters
+
+## Example Experiment ##
+Here is our current search results page, on the left we have a map of the results and on the right, images of the listings. By default, we show 18 results per page, but we wanted to understand how showing 12 or 24 results would affect user behaviour. Do users prefer getting more information at once? Or is it confusing to show too much?
+
+## Declaring treatments ##
+For declaring experiments we settled on yaml since it provides a nice balance between human and machine readability. To define an experiment, you need two key things–the subject and the treatments. The subject is who you want to run this experiment against. Second, we have to define the treatments; in this case we have the control (of 18 results per page) and our two experimental groups, 12 and 24 results per page. The human_readable fields are what will be used in the UI.
+
+```
+ search_per_page:
+  human_readable: Search results per page
+  subject: visitor
+  treatments:
+    12_per_page:
+      human_readable: 12 per page
+    18_per_page:
+      human_readable: 18 per page
+    24_per_page:
+      human_readable: 24 per page
+  control: 18_per_page
+  
+```
+
+## Deploying ##
+The next step is to implement this experiment in code.
+
+```
+treatment = user.get_treatment("search_page_number")
+if treatment == :12_per_page
+  ...
+elsif treatment == :18_per_page
+  ...
+elsif treatment == :24_per_page
+  ...
+else
+  ...
+```
+
+## Analyzing ##
+Finally, once that’s all done and deployed into the wild, we wait for the results to roll in. Currently we process the experiment results nightly, although it could easily be run more frequently.
+
+![image](https://user-images.githubusercontent.com/13629031/221429811-e3e913c0-73b6-4d2f-8b88-cadc6fc947b9.png)
 
