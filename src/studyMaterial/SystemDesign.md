@@ -958,6 +958,64 @@ The Experimentation platform contains 4 high-level components.
 
 5. Filters
 
+## Data model ##
+A/B Tests are represented as nested structures. There are top level fields for the A/B Test itself and an array of user group objects, each with a set of fields describing it.
+
+At a high level, every A/B Test must include the following information.
+* The test duration, represented by the start_time and end_time fields
+* The level at which the split will occur, represented by the entity_type field
+* At least two (and at most 30) user groups, each represented as an object in the user_groups array
+
+Each user group must include the following information.
+* The percentage of users that should be allocated to the given user group, represented by the size field
+* The campaign IDs that should make up the pool of users for the given user group, represented by the entity_ids array
+
+```
+An example A/B Test entity is shown below.
+{
+  "created_at": "2020-12-01T00:00:00Z",
+  "created_by": {
+    "user_id": "756201191646691328",
+    "username": "apimctestface"
+  },
+  "deleted": false,
+  "description": "documentation example",
+  "end_time": "2020-12-05T01:00:00Z",
+  "entity_type": "CAMPAIGN",
+  "id": "hr7l0",
+  "name": "first AB test",
+  "start_time": "2020-12-01T01:00:00Z",
+  "status": "SCHEDULED",
+  "user_groups": [
+    {
+      "id": "p1bcx",
+      "name": "first group",
+      "description": null,
+      "size": "50.0",
+      "entity_ids": [
+        "f2qcw",
+        "f2tht"
+      ]
+    },
+    {
+      "id": "p1bcy",
+      "name": "second group",
+      "description": "second AB test group",
+      "size": 50,
+      "entity_ids": [
+        "f2rqi",
+        "f2tws"
+      ]
+    }
+  ],
+  "updated_at": "2020-12-01T00:00:00Z",
+  "updated_by": {
+    "user_id": "756201191646691328",
+    "username": "apimctestface"
+  }
+}
+```
+
 ## Example Experiment ##
 Here is our current search results page, on the left we have a map of the results and on the right, images of the listings. By default, we show 18 results per page, but we wanted to understand how showing 12 or 24 results would affect user behaviour. Do users prefer getting more information at once? Or is it confusing to show too much?
 
@@ -998,4 +1056,6 @@ else
 Finally, once that’s all done and deployed into the wild, we wait for the results to roll in. Currently we process the experiment results nightly, although it could easily be run more frequently.
 
 ![image](https://user-images.githubusercontent.com/13629031/221429811-e3e913c0-73b6-4d2f-8b88-cadc6fc947b9.png)
+
+![image](https://user-images.githubusercontent.com/13629031/221433428-898d908d-a9e9-45a3-871e-3271bbb5bde1.png)
 
